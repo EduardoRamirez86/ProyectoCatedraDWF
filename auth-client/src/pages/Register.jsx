@@ -18,7 +18,7 @@ export default function Register() {
     segundoApellido: '',
     fechaNacimiento: '',
     telefono: '',
-    DUI: '',
+    dui: '',
     direccion: ''
   });
   const [error, setError] = useState('');

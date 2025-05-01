@@ -5,95 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/ProductoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/request/ProductoRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/request/UserRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/ProductoResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/UserResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/exception/ResourceNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/ProductoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/TipoProductoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/ProductoServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/request/LoginRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/RegisterRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/request/RegisterRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Carrito.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Carrito.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/CarritoItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/CarritoItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Direccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Direccion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Estado.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Estado.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/EstadoMensaje.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/EstadoMensaje.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/FormaPago.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/FormaPago.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/HistorialPedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/HistorialPedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/HistorialPuntos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/HistorialPuntos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Notificacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Notificacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Pedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Pedido.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Producto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Producto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Resena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Resena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/TipoProducto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/TipoProducto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/InvestigacionDwf-0.0.1-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/DataLoader.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/DataLoaderRopa.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/InvestigacionDwfApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/config/SecurityConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/config/WebConfig$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/config/WebConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/AuthController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/CompraController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/RopaController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/SecureController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/UserController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/LoginRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/RegisterRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/exception/GlobalExceptionHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/exception/UserAlreadyExistException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/Carrito.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/CarritoItem.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/Compra.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/Direccion.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/Estado.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/EstadoMensaje.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/FormaPago.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/HistorialPedido.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/HistorialPuntos.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/Notificacion.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/Pedido.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/Producto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/Resena.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/Role.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/Ropa.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/TipoProducto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/CompraRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/RoleRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/RopaRespository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/UserRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/security/jwt/JwtAuthFilter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/security/jwt/JwtService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/security/jwt/JwtUtils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/AuthService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/RopaService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/UserService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/AuthServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/RopaServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/UserServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/ProductoServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/ProductoServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapper.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/sv/edu/udb/InvestigacionDwf/SecurityTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/sv/edu/udb/InvestigacionDwf/TestConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth-client/src/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/pages/Register.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +73,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.Unnamed.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "Prueba",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -195,7 +113,7 @@
       <updated>1746062788979</updated>
       <workItem from="1746062790393" duration="1796000" />
       <workItem from="1746064599252" duration="6019000" />
-      <workItem from="1746092428988" duration="10885000" />
+      <workItem from="1746092428988" duration="14392000" />
     </task>
     <servers />
   </component>
