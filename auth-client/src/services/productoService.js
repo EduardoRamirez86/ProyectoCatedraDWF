@@ -1,16 +1,11 @@
-// src/services/productoService.js
-
 const API_URL  = "http://localhost:8080/auth/producto";
 const TIPO_URL = "http://localhost:8080/auth/tipoproducto";
 const getToken = () => localStorage.getItem('token');
 
-// GET (público) — Todos los productos
+// GET (público)
 export const getAllProductos = async () => {
   const resp = await fetch(API_URL);
-  if (!resp.ok) {
-    const text = await resp.text();
-    throw new Error(`No se pudo obtener la lista de productos: ${text}`);
-  }
+  if (!resp.ok) throw new Error('No se pudo obtener la lista de productos');
   return resp.json();
 };
 
@@ -18,14 +13,11 @@ export const getAllProductos = async () => {
 export const getProductoById = async (id) => {
   if (!id) throw new Error('ID no proporcionado');
   const resp = await fetch(`${API_URL}/${id}`);
-  if (!resp.ok) {
-    const text = await resp.text();
-    throw new Error(`Producto ${id} no encontrado: ${text}`);
-  }
+  if (!resp.ok) throw new Error(`Producto ${id} no encontrado`);
   return resp.json();
 };
 
-// GET (público) — Todos los tipos de producto
+// GET todos los Tipos de Producto
 export const getAllTiposProductos = async () => {
   const resp = await fetch(TIPO_URL);
   if (!resp.ok) {
@@ -35,29 +27,23 @@ export const getAllTiposProductos = async () => {
   return resp.json();
 };
 
-// POST (ADMIN) — Crear producto
+// POST (ADMIN)
 export const createProducto = async (producto) => {
   const token = getToken();
-  // Armamos el payload con idTipoProducto directamente
+  // El backend espera recibir { ..., tipoProducto: { id: X } }
   const payload = {
-    nombre:          producto.nombre,
-    descripcion:     producto.descripcion,
-    precio:          parseFloat(producto.precio),
-    costo:           parseFloat(producto.costo),
-    cantidad:        parseInt(producto.cantidad, 10),
-    cantidadPuntos:  parseInt(producto.cantidadPuntos, 10),
-    imagen:          producto.imagen,
-    idTipoProducto:  parseInt(producto.idTipoProducto, 10),
+    ...producto,
+    tipoProducto: { id: parseInt(producto.idTipoProducto, 10) }
   };
 
-  if (isNaN(payload.idTipoProducto)) {
+  if (!payload.tipoProducto.id) {
     throw new Error('El campo "ID Tipo Producto" es obligatorio y debe ser un número válido.');
   }
 
   const resp = await fetch(API_URL, {
     method: 'POST',
     headers: {
-      'Content-Type':  'application/json',
+      'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
@@ -70,30 +56,23 @@ export const createProducto = async (producto) => {
   return JSON.parse(text);
 };
 
-// PUT (ADMIN) — Actualizar producto
+// PUT (ADMIN)
 export const updateProducto = async (id, producto) => {
   if (!id) throw new Error('ID no proporcionado para update');
   const token = getToken();
-
   const payload = {
-    nombre:          producto.nombre,
-    descripcion:     producto.descripcion,
-    precio:          parseFloat(producto.precio),
-    costo:           parseFloat(producto.costo),
-    cantidad:        parseInt(producto.cantidad, 10),
-    cantidadPuntos:  parseInt(producto.cantidadPuntos, 10),
-    imagen:          producto.imagen,
-    idTipoProducto:  parseInt(producto.idTipoProducto, 10),
+    ...producto,
+    tipoProducto: { id: parseInt(producto.idTipoProducto, 10) }
   };
 
-  if (isNaN(payload.idTipoProducto)) {
+  if (!payload.tipoProducto.id) {
     throw new Error('El campo "ID Tipo Producto" es obligatorio y debe ser un número válido.');
   }
 
   const resp = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
     headers: {
-      'Content-Type':  'application/json',
+      'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
@@ -106,17 +85,14 @@ export const updateProducto = async (id, producto) => {
   return JSON.parse(text);
 };
 
-// DELETE (ADMIN) — Borrar producto
+// DELETE (ADMIN)
 export const deleteProducto = async (id) => {
   if (!id) throw new Error('ID no proporcionado para delete');
   const token = getToken();
   const resp = await fetch(`${API_URL}/${id}`, {
     method: 'DELETE',
-    headers: { 'Authorization': `Bearer ${token}` },
+    headers: { 'Authorization': `Bearer ${token}` }
   });
-  if (!resp.ok) {
-    const text = await resp.text();
-    throw new Error(`Error al eliminar producto ${id}: ${text}`);
-  }
+  if (!resp.ok) throw new Error(`Error al eliminar producto ${id}`);
   return { success: true };
 };

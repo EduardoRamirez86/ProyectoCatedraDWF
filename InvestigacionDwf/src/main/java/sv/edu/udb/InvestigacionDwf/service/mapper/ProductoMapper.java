@@ -28,7 +28,9 @@ public abstract class ProductoMapper {
 
     // De la entidad a DTO (response)
     @Mapping(target = "idTipoProducto", source = "tipoProducto.idTipoProducto")
+    @Mapping(target = "nombreTipo", source = "tipoProducto.tipo") // Agrega este mapeo
     public abstract ProductoResponse toResponse(Producto producto);
+
 
     // Lista
     public abstract List<ProductoResponse> toResponseList(List<Producto> productos);

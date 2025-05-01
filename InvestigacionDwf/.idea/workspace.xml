@@ -5,28 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/TipoProductoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/request/TipoProductoRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/TipoProductoResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/TipoProductoServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/mapper/TipoProductoMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/ProductoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/ProductoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/ProductoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/ProductoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/TipoProductoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/TipoProductoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/ProductoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/ProductoServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/config/SecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/ProductoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/ProductoController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/TipoProductoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/TipoProductoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/AuthServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/AuthServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/ProductoServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/ProductoServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapperImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapperImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/pages/AdminPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/pages/AdminPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/ProductoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/ProductoResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth-client/src/components/ProductoCrud.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/components/ProductoCrud.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth-client/src/services/TipoProductoService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/services/TipoProductoService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth-client/src/services/productoService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/services/productoService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +112,7 @@
       <updated>1746062788979</updated>
       <workItem from="1746062790393" duration="1796000" />
       <workItem from="1746064599252" duration="6019000" />
-      <workItem from="1746092428988" duration="23056000" />
+      <workItem from="1746092428988" duration="25098000" />
     </task>
     <servers />
   </component>

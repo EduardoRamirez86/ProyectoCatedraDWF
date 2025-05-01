@@ -1,0 +1,303 @@
+/* src/styles/ropaCrud.css */
+
+/* General container */
+.admin-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #333;
+}
+
+/* Titles */
+.admin-container h1, .admin-container h4 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #444;
+  border-bottom: 2px solid #eaeaea;
+  padding-bottom: 0.5rem;
+}
+
+/* Sections */
+.admin-container section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Input placeholders */
+.admin-container input::placeholder,
+.admin-container select::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* General input styles */
+.admin-container input,
+.admin-container select {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-container input:focus,
+.admin-container select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+/* Disabled inputs */
+.admin-container input:disabled,
+.admin-container select:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Buttons */
+.admin-container button {
+  padding: 0.75rem 1.5rem;
+  margin: 0.5rem;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.admin-container button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.admin-container button:active {
+  transform: scale(1);
+}
+
+.admin-container button.delete {
+  background-color: #dc3545;
+}
+
+.admin-container button.delete:hover {
+  background-color: #a71d2a;
+}
+
+.admin-container button.edit {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.admin-container button.edit:hover {
+  background-color: #e0a800;
+}
+
+/* List */
+.admin-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-container li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 6px;
+  transition: box-shadow 0.3s ease;
+}
+
+.admin-container li:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Buttons inside list items */
+.admin-container li button {
+  margin-left: 0.5rem;
+}
+
+/* Tooltip styles */
+.admin-container .tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.admin-container .tooltip .tooltip-text {
+  visibility: hidden;
+  width: 150px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 0.5rem;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position above the element */
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.admin-container .tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-container .fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination button:hover {
+  background: #007bff;
+  color: white;
+}
+
+.pagination button.active {
+  background: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+
+/* Edit section */
+.admin-container .edit-section {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-container .edit-section .edit-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.admin-container .edit-section input {
+  width: 80%;
+}
+
+.admin-container .edit-section button {
+  width: 50%;
+  margin-top: 1rem;
+  align-self: center;
+}
+
+/* Form actions */
+.admin-container .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Table styles */
+.admin-container .table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.admin-container .table th,
+.admin-container .table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.admin-container .table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.admin-container .table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.admin-container .table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .admin-container input,
+  .admin-container select {
+    width: 100%;
+  }
+
+  .admin-container li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-container li button {
+    margin: 0.5rem 0 0;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .admin-container .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-container .table {
+    font-size: 0.9rem;
+  }
+}

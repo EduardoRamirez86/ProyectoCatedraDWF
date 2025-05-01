@@ -25,6 +25,8 @@ public class ProductoResponse {
     // Relaciones como IDs
     private Long idTipoProducto;
 
+    private String nombreTipo;
+
     @Override
     public String toString() {
         return "ProductoResponse{" +

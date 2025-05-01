@@ -2,11 +2,15 @@ const API_URL = "http://localhost:8080/auth/tipoproducto";
 const getToken = () => localStorage.getItem('token');
 
 // GET (público)
-export const getAllTipoProductos = async () => {
-  const resp = await fetch(API_URL);
-  if (!resp.ok) throw new Error('No se pudo obtener la lista de tipos de producto');
-  return resp.json();
-};
+export const getAllTiposProductos = async () => {
+    const resp = await fetch(API_URL);
+    if (!resp.ok) {
+      const text = await resp.text();
+      throw new Error(`No se pudieron obtener tipos: ${text}`);
+    }
+    return resp.json();
+  };
+  
 
 // GET por ID (público)
 export const getTipoProductoById = async (id) => {
