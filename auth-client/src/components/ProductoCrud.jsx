@@ -6,6 +6,7 @@ import {
   deleteProducto,
   getAllTiposProductos,
 } from '../services/productoService';
+import MySwal from '../utils/swal';
 import '../style/Crud.css';
 
 const initialFormState = () => ({
@@ -44,7 +45,13 @@ const ProductoCrud = () => {
         setProductos(productosConTipo);
       } catch (error) {
         console.error(error);
-        alert('Error al cargar datos.');
+        await MySwal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo cargar los datos.',
+          timer: 2000,
+          showConfirmButton: false,
+        });
       } finally {
         setLoading(false);
       }
@@ -60,11 +67,19 @@ const ProductoCrud = () => {
 
   const validateForm = () => {
     if (!form.nombre || !form.descripcion) {
-      alert('Nombre y descripción son obligatorios.');
+      MySwal.fire({
+        icon: 'warning',
+        title: 'Campos requeridos',
+        text: 'Nombre y descripción son obligatorios.',
+      });
       return false;
     }
     if (!form.idTipoProducto || isNaN(+form.idTipoProducto)) {
-      alert('Seleccione un tipo de producto válido.');
+      MySwal.fire({
+        icon: 'warning',
+        title: 'Tipo de producto',
+        text: 'Seleccione un tipo de producto válido.',
+      });
       return false;
     }
     return true;
@@ -85,11 +100,23 @@ const ProductoCrud = () => {
 
     try {
       if (isEditing) {
-        await updateProducto(form.idProducto, buildPayload());
-        alert('Producto actualizado.');
+        const updated = await updateProducto(form.idProducto, buildPayload());
+        await MySwal.fire({
+          icon: 'success',
+          title: '¡Producto actualizado!',
+          text: `El producto "${updated.nombre}" se actualizó correctamente.`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
       } else {
-        await createProducto(buildPayload());
-        alert('Producto creado.');
+        const created = await createProducto(buildPayload());
+        await MySwal.fire({
+          icon: 'success',
+          title: '¡Producto creado!',
+          text: `El producto "${created.nombre}" se creó correctamente.`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
       }
       resetForm();
       // Refrescar productos después de crear/actualizar
@@ -103,7 +130,11 @@ const ProductoCrud = () => {
       setProductos(productosConTipo);
     } catch (error) {
       console.error(error);
-      alert('Hubo un error al guardar el producto.');
+      await MySwal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo guardar el producto.',
+      });
     }
   };
 
@@ -123,22 +154,42 @@ const ProductoCrud = () => {
   };
 
   const handleDelete = async id => {
-    if (!window.confirm('¿Eliminar este producto?')) return;
-    try {
-      await deleteProducto(id);
-      alert('Producto eliminado.');
-      // Refrescar productos después de eliminar
-      const tiposData = await getAllTiposProductos();
-      setTiposProductos(tiposData);
-      const productosData = await getAllProductos();
-      const productosConTipo = productosData.map(producto => ({
-        ...producto,
-        nombreTipo: tiposData.find(tp => tp.idTipoProducto === producto.idTipoProducto)?.tipo || '—',
-      }));
-      setProductos(productosConTipo);
-    } catch (error) {
-      console.error(error);
-      alert('Error al eliminar.');
+    const result = await MySwal.fire({
+      icon: 'warning',
+      title: '¿Eliminar producto?',
+      text: 'Esta acción no se puede deshacer.',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await deleteProducto(id);
+        await MySwal.fire({
+          icon: 'success',
+          title: '¡Producto eliminado!',
+          text: 'El producto ha sido eliminado.',
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        // Refrescar productos después de eliminar
+        const tiposData = await getAllTiposProductos();
+        setTiposProductos(tiposData);
+        const productosData = await getAllProductos();
+        const productosConTipo = productosData.map(producto => ({
+          ...producto,
+          nombreTipo: tiposData.find(tp => tp.idTipoProducto === producto.idTipoProducto)?.tipo || '—',
+        }));
+        setProductos(productosConTipo);
+      } catch (error) {
+        console.error(error);
+        await MySwal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo eliminar el producto.',
+        });
+      }
     }
   };
 
