@@ -1,23 +1,37 @@
+// components/Register.jsx
 import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 import { register as registerService } from '../services/authService';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import '../style/AuthForm.css';
 
 export default function Register() {
-  const [form, setForm] = useState({ username: '', email: '', password: '' });
+  const [form, setForm] = useState({
+    username: '',
+    email: '',
+    password: '',
+    primerNombre: '',
+    segundoNombre: '',
+    primerApellido: '',
+    segundoApellido: '',
+    fechaNacimiento: '',
+    telefono: '',
+    DUI: '',
+    direccion: ''
+  });
   const [error, setError] = useState('');
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = e =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const token = await registerService(form.username, form.email, form.password);
+      const token = await registerService(form);
       login(token);
       const { roles } = jwtDecode(token);
       navigate(roles === 'ROLE_ADMIN' ? '/admin' : '/user');
@@ -37,39 +51,61 @@ export default function Register() {
       {error && <p className="error-message">{error}</p>}
 
       <form onSubmit={handleSubmit}>
+        {/* Usuario, Email y Contraseña */}
+        {['username','email','password'].map(field => (
+          <div className="form-group" key={field}>
+            <input
+              name={field}
+              type={field === 'email' ? 'email' : field === 'password' ? 'password' : 'text'}
+              placeholder=" "
+              value={form[field]}
+              onChange={handleChange}
+              required
+            />
+            <label>
+              {field === 'username'
+                ? 'Usuario'
+                : field.charAt(0).toUpperCase() + field.slice(1)}
+            </label>
+          </div>
+        ))}
+
+        {/* Nombres y Apellidos */}
         <div className="form-group">
-          <input
-            name="username"
-            placeholder=" "
-            value={form.username}
-            onChange={handleChange}
-            required
-          />
-          <label>Usuario</label>
+          <input name="primerNombre" placeholder=" " value={form.primerNombre} onChange={handleChange} required/>
+          <label>Primer Nombre</label>
+        </div>
+        <div className="form-group">
+          <input name="segundoNombre" placeholder=" " value={form.segundoNombre} onChange={handleChange}/>
+          <label>Segundo Nombre</label>
+        </div>
+        <div className="form-group">
+          <input name="primerApellido" placeholder=" " value={form.primerApellido} onChange={handleChange} required/>
+          <label>Primer Apellido</label>
+        </div>
+        <div className="form-group">
+          <input name="segundoApellido" placeholder=" " value={form.segundoApellido} onChange={handleChange}/>
+          <label>Segundo Apellido</label>
         </div>
 
+        {/* Fecha de Nacimiento */}
         <div className="form-group">
-          <input
-            name="email"
-            type="email"
-            placeholder=" "
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-          <label>Email</label>
+          <input name="fechaNacimiento" type="date" placeholder=" " value={form.fechaNacimiento} onChange={handleChange} required/>
+          <label>Fecha de Nacimiento</label>
         </div>
 
+        {/* Teléfono, DUI y Dirección */}
         <div className="form-group">
-          <input
-            name="password"
-            type="password"
-            placeholder=" "
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-          <label>Contraseña</label>
+          <input name="telefono" placeholder=" " value={form.telefono} onChange={handleChange}/>
+          <label>Teléfono</label>
+        </div>
+        <div className="form-group">
+          <input name="DUI" placeholder=" " value={form.DUI} onChange={handleChange}/>
+          <label>DUI</label>
+        </div>
+        <div className="form-group">
+          <input name="direccion" placeholder=" " value={form.direccion} onChange={handleChange}/>
+          <label>Dirección</label>
         </div>
 
         <button className="form-button" type="submit">Registrar</button>
@@ -81,3 +117,4 @@ export default function Register() {
     </motion.div>
   );
 }
+

@@ -32,6 +32,7 @@ public class AuthServiceImpl implements AuthService {
         this.jwtUtils = jwtUtils;
     }
 
+    // src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/AuthServiceImpl.java
     @Override
     public String register(RegisterRequest registerRequest) {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
@@ -49,11 +50,22 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(registerRequest.getEmail());
         user.setRole(userRole);
 
+        // Mapear los nuevos campos
+        user.setPrimerNombre(registerRequest.getPrimerNombre());
+        user.setSegundoNombre(registerRequest.getSegundoNombre());
+        user.setPrimerApellido(registerRequest.getPrimerApellido());
+        user.setSegundoApellido(registerRequest.getSegundoApellido());
+        user.setFechaNacimiento(registerRequest.getFechaNacimiento());
+        user.setTelefono(registerRequest.getTelefono());
+        user.setDUI(registerRequest.getDUI());
+        user.setDireccion(registerRequest.getDireccion());
+
         userRepository.save(user); // Persistir el usuario
 
         // Generar y devolver el token JWT con ROLE_USER
         return jwtUtils.generateToken(user.getUsername(), userRole.getName());
     }
+
 
     @Override
     public String login(LoginRequest loginRequest) {
