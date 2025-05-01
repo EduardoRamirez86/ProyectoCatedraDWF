@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/ProductoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/ProductoResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../auth-client/src/components/ProductoCrud.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/components/ProductoCrud.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/services/TipoProductoService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/services/TipoProductoService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/services/productoService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/services/productoService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +110,7 @@
       <updated>1746062788979</updated>
       <workItem from="1746062790393" duration="1796000" />
       <workItem from="1746064599252" duration="6019000" />
-      <workItem from="1746092428988" duration="25098000" />
+      <workItem from="1746092428988" duration="26308000" />
     </task>
     <servers />
   </component>

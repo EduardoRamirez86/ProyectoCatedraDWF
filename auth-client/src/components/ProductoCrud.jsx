@@ -28,32 +28,30 @@ const ProductoCrud = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchProductos();
-    fetchTiposProductos();
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const tiposData = await getAllTiposProductos();
+        console.log('Tipos de productos:', tiposData);
+        setTiposProductos(tiposData);
+
+        const productosData = await getAllProductos();
+        console.log('Productos:', productosData);
+        const productosConTipo = productosData.map(producto => ({
+          ...producto,
+          nombreTipo: tiposData.find(tp => tp.idTipoProducto === producto.idTipoProducto)?.tipo || '—',
+        }));
+        setProductos(productosConTipo);
+      } catch (error) {
+        console.error(error);
+        alert('Error al cargar datos.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, []);
-
-  const fetchProductos = async () => {
-    setLoading(true);
-    try {
-      const data = await getAllProductos();
-      setProductos(data);
-    } catch (error) {
-      console.error(error);
-      alert('Error al obtener productos.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchTiposProductos = async () => {
-    try {
-      const data = await getAllTiposProductos();
-      setTiposProductos(data);
-    } catch (error) {
-      console.error(error);
-      alert('Error al obtener tipos de productos.');
-    }
-  };
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -74,8 +72,8 @@ const ProductoCrud = () => {
 
   const buildPayload = () => ({
     ...form,
-    precio: parseFloat(form.precio) || 0,
-    costo: parseFloat(form.costo) || 0,
+    precio: form.precio ? parseFloat(form.precio).toString() : '0',
+    costo: form.costo ? parseFloat(form.costo).toString() : '0',
     cantidad: parseInt(form.cantidad, 10) || 0,
     cantidadPuntos: parseInt(form.cantidadPuntos, 10) || 0,
     idTipoProducto: parseInt(form.idTipoProducto, 10),
@@ -94,7 +92,15 @@ const ProductoCrud = () => {
         alert('Producto creado.');
       }
       resetForm();
-      fetchProductos();
+      // Refrescar productos después de crear/actualizar
+      const tiposData = await getAllTiposProductos();
+      setTiposProductos(tiposData);
+      const productosData = await getAllProductos();
+      const productosConTipo = productosData.map(producto => ({
+        ...producto,
+        nombreTipo: tiposData.find(tp => tp.idTipoProducto === producto.idTipoProducto)?.tipo || '—',
+      }));
+      setProductos(productosConTipo);
     } catch (error) {
       console.error(error);
       alert('Hubo un error al guardar el producto.');
@@ -106,12 +112,12 @@ const ProductoCrud = () => {
       idProducto: p.idProducto,
       nombre: p.nombre,
       descripcion: p.descripcion,
-      precio: p.precio?.toString() || '',
-      costo: p.costo?.toString() || '',
+      precio: p.precio ? p.precio.toString() : '',
+      costo: p.costo ? p.costo.toString() : '',
       cantidad: p.cantidad?.toString() || '',
       imagen: p.imagen || '',
       cantidadPuntos: p.cantidadPuntos?.toString() || '',
-      idTipoProducto: p.tipoProducto?.idTipoProducto?.toString() || '',
+      idTipoProducto: p.idTipoProducto?.toString() || '',
     });
     setIsEditing(true);
   };
@@ -121,7 +127,15 @@ const ProductoCrud = () => {
     try {
       await deleteProducto(id);
       alert('Producto eliminado.');
-      fetchProductos();
+      // Refrescar productos después de eliminar
+      const tiposData = await getAllTiposProductos();
+      setTiposProductos(tiposData);
+      const productosData = await getAllProductos();
+      const productosConTipo = productosData.map(producto => ({
+        ...producto,
+        nombreTipo: tiposData.find(tp => tp.idTipoProducto === producto.idTipoProducto)?.tipo || '—',
+      }));
+      setProductos(productosConTipo);
     } catch (error) {
       console.error(error);
       alert('Error al eliminar.');
@@ -152,6 +166,7 @@ const ProductoCrud = () => {
         <input
           name="precio"
           type="number"
+          step="0.01"
           placeholder="Precio"
           value={form.precio}
           onChange={handleInputChange}
@@ -159,6 +174,7 @@ const ProductoCrud = () => {
         <input
           name="costo"
           type="number"
+          step="0.01"
           placeholder="Costo"
           value={form.costo}
           onChange={handleInputChange}
@@ -209,9 +225,15 @@ const ProductoCrud = () => {
         <table className="table">
           <thead>
             <tr>
-              <th>ID</th><th>Nombre</th><th>Descripción</th>
-              <th>Precio</th><th>Costo</th><th>Cantidad</th>
-              <th>Puntos</th><th>Tipo</th><th>Acciones</th>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+              <th>Costo</th>
+              <th>Cantidad</th>
+              <th>Puntos</th>
+              <th>Tipo</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
