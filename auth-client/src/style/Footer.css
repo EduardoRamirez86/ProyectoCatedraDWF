@@ -1,0 +1,36 @@
+.footer {
+  background-color: #fafafa;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #666;
+  border-top: 1px solid #eee;
+}
+
+.footer__links {
+  margin: 0.5rem 0;
+}
+.footer__links a {
+  margin: 0 0.75rem;
+  color: #4caf50;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.footer__links a:hover {
+  color: #388e3c;
+  text-decoration: underline;
+}
+
+.footer__copy {
+  margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
