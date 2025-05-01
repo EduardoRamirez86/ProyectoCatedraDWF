@@ -1,7 +1,7 @@
 // src/pages/AdminPage.jsx
 import React, { useState } from 'react';
 import RopaCrud from '../components/RopaCrud';
-import CompraCrud from '../components/CompraCrud'; // Import the CompraCrud component
+import ProductoCrud from '../components/ProductoCrud'; // Import the CompraCrud component
 import '../style/adminPage.css'; // Asegúrate de importar el CSS
 
 export default function AdminPage() {
@@ -19,17 +19,17 @@ export default function AdminPage() {
             Ropa
           </button>
           <button
-            className={`sidebar__nav-item ${selectedMenu === 'compra' ? 'active' : ''}`}
-            onClick={() => setSelectedMenu('compra')}
+            className={`sidebar__nav-item ${selectedMenu === 'producto' ? 'active' : ''}`}
+            onClick={() => setSelectedMenu('producto')}
           >
-            Compra
+            Producto
           </button>
           {/* Add more menu items here if needed */}
         </nav>
       </aside>
       <main className="main-content">
         {selectedMenu === 'ropa' && <RopaCrud />}
-        {selectedMenu === 'compra' && <CompraCrud />}
+        {selectedMenu === 'producto' && <ProductoCrud />}
         {/* Render other components based on selectedMenu */}
       </main>
     </div>

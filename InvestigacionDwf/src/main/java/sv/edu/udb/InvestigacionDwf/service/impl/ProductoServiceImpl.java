@@ -36,10 +36,11 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional(readOnly = true)
     public ProductoResponse findById(Long id) {
-        Producto producto = productoRepository.findById(id)
+        Producto producto = productoRepository.findByIdWithTipoProducto(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado ID: " + id));
         return productoMapper.toResponse(producto);
     }
+
 
     @Override
     @Transactional

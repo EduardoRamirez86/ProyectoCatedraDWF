@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // b) Rutas públicas
                         .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth/ropa/**", "/auth/compras", "/auth/producto/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/ropa/**", "/auth/compras", "/auth/producto/**", "/auth/tipoproducto/**").permitAll()
                         .requestMatchers("/h2-console/**", "/error").permitAll()
                         // c) Rutas protegidas (ADMIN)
                         .requestMatchers(HttpMethod.POST,   "/auth/ropa/**").hasRole("ADMIN")
@@ -54,6 +54,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,   "/auth/producto/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,    "/auth/producto/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/auth/producto/**").hasRole("ADMIN")
+                        //TipoProducto(ADMIN)
+                        .requestMatchers(HttpMethod.POST,   "/auth/tipoproducto/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/auth/tipoproducto/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/auth/tipoproducto/**").hasRole("ADMIN")
                         // d) El resto requiere autenticación
                         .anyRequest().authenticated()
                 )

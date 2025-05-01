@@ -6,7 +6,7 @@ import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
 
 import java.util.List;
 
-public interface ProductoService {
+public interface ProductoService{
     List<ProductoResponse> findAll();
     ProductoResponse findById(Long id);
     ProductoResponse save(ProductoRequest request);

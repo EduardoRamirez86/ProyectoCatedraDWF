@@ -11,8 +11,8 @@ import sv.edu.udb.InvestigacionDwf.model.TipoProducto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-01T07:37:06-0600",
-    comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.42.0.z20250331-1358, environment: Java 21.0.6 (Eclipse Adoptium)"
+    date = "2025-05-01T09:15:40-0600",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.42.0.z20250331-1358, environment: Java 21.0.6 (Eclipse Adoptium)"
 )
 @Component
 public class ProductoMapperImpl extends ProductoMapper {
@@ -105,10 +105,17 @@ public class ProductoMapperImpl extends ProductoMapper {
     }
 
     private Long productoTipoProductoIdTipoProducto(Producto producto) {
+        if ( producto == null ) {
+            return null;
+        }
         TipoProducto tipoProducto = producto.getTipoProducto();
         if ( tipoProducto == null ) {
             return null;
         }
-        return tipoProducto.getIdTipoProducto();
+        Long idTipoProducto = tipoProducto.getIdTipoProducto();
+        if ( idTipoProducto == null ) {
+            return null;
+        }
+        return idTipoProducto;
     }
 }
