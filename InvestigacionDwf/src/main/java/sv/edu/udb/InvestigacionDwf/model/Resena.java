@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Resena {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idResena;
+    private Long idResena;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")

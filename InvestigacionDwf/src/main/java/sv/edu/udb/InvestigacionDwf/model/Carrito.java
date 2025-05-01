@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Carrito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCarrito;
+    private Long idCarrito;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class FormaPago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idFormaPago;
+    private Long idFormaPago;
 
     @Column(nullable = false)
     private String tipo;

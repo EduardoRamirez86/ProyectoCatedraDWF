@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class TipoProducto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idTipoProducto;
+    private Long idTipoProducto; // Ensure this property exists
 
     @Column(nullable = false)
     private String tipo;

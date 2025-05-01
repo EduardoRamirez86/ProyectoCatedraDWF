@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Notificacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idNotificacion;
+    private Long idNotificacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")

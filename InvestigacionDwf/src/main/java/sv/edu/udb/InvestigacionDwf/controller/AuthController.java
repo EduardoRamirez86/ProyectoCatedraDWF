@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import sv.edu.udb.InvestigacionDwf.dto.LoginRequest;
-import sv.edu.udb.InvestigacionDwf.dto.RegisterRequest;
+import sv.edu.udb.InvestigacionDwf.dto.request.LoginRequest;
+import sv.edu.udb.InvestigacionDwf.dto.request.RegisterRequest;
 import sv.edu.udb.InvestigacionDwf.service.AuthService;
 
 @RestController

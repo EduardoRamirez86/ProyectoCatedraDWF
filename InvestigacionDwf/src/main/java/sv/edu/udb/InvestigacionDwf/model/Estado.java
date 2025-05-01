@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class Estado {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idEstado;
+    private Long idEstado;
 
     @Column(nullable = false)
     private String tipo;

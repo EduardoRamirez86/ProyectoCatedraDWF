@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class HistorialPuntos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idHistorialPuntos;
+    private Long idHistorialPuntos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")

@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import sv.edu.udb.InvestigacionDwf.dto.LoginRequest;
-import sv.edu.udb.InvestigacionDwf.dto.RegisterRequest;
+import sv.edu.udb.InvestigacionDwf.dto.request.LoginRequest;
+import sv.edu.udb.InvestigacionDwf.dto.request.RegisterRequest;
 import sv.edu.udb.InvestigacionDwf.exception.UserAlreadyExistException;
 import sv.edu.udb.InvestigacionDwf.model.Role;
 import sv.edu.udb.InvestigacionDwf.model.User;
