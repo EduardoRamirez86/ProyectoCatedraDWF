@@ -18,10 +18,6 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPedido;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user", nullable = false)
-    private User user;
-
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFinal;
     private BigDecimal total;

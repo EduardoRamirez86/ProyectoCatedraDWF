@@ -11,8 +11,8 @@ import sv.edu.udb.InvestigacionDwf.model.TipoProducto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-01T09:15:40-0600",
-    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.42.0.z20250331-1358, environment: Java 21.0.6 (Eclipse Adoptium)"
+    date = "2025-05-02T01:45:54-0600",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
 public class ProductoMapperImpl extends ProductoMapper {
@@ -25,13 +25,13 @@ public class ProductoMapperImpl extends ProductoMapper {
 
         Producto producto = new Producto();
 
-        producto.setCantidad( request.getCantidad() );
-        producto.setCantidadPuntos( request.getCantidadPuntos() );
-        producto.setCosto( request.getCosto() );
-        producto.setDescripcion( request.getDescripcion() );
-        producto.setImagen( request.getImagen() );
         producto.setNombre( request.getNombre() );
+        producto.setDescripcion( request.getDescripcion() );
         producto.setPrecio( request.getPrecio() );
+        producto.setCosto( request.getCosto() );
+        producto.setCantidad( request.getCantidad() );
+        producto.setImagen( request.getImagen() );
+        producto.setCantidadPuntos( request.getCantidadPuntos() );
 
         producto.setTipoProducto( request.getIdTipoProducto() != null ? tipoProductoRepository.getReferenceById(request.getIdTipoProducto()) : null );
 
@@ -47,14 +47,15 @@ public class ProductoMapperImpl extends ProductoMapper {
         ProductoResponse.ProductoResponseBuilder productoResponse = ProductoResponse.builder();
 
         productoResponse.idTipoProducto( productoTipoProductoIdTipoProducto( producto ) );
-        productoResponse.cantidad( producto.getCantidad() );
-        productoResponse.cantidadPuntos( producto.getCantidadPuntos() );
-        productoResponse.costo( producto.getCosto() );
-        productoResponse.descripcion( producto.getDescripcion() );
+        productoResponse.nombreTipo( productoTipoProductoTipo( producto ) );
         productoResponse.idProducto( producto.getIdProducto() );
-        productoResponse.imagen( producto.getImagen() );
         productoResponse.nombre( producto.getNombre() );
+        productoResponse.descripcion( producto.getDescripcion() );
         productoResponse.precio( producto.getPrecio() );
+        productoResponse.costo( producto.getCosto() );
+        productoResponse.cantidad( producto.getCantidad() );
+        productoResponse.imagen( producto.getImagen() );
+        productoResponse.cantidadPuntos( producto.getCantidadPuntos() );
 
         return productoResponse.build();
     }
@@ -79,43 +80,44 @@ public class ProductoMapperImpl extends ProductoMapper {
             return;
         }
 
-        if ( request.getCantidad() != null ) {
-            producto.setCantidad( request.getCantidad() );
-        }
-        if ( request.getCantidadPuntos() != null ) {
-            producto.setCantidadPuntos( request.getCantidadPuntos() );
-        }
-        if ( request.getCosto() != null ) {
-            producto.setCosto( request.getCosto() );
+        if ( request.getNombre() != null ) {
+            producto.setNombre( request.getNombre() );
         }
         if ( request.getDescripcion() != null ) {
             producto.setDescripcion( request.getDescripcion() );
         }
+        if ( request.getPrecio() != null ) {
+            producto.setPrecio( request.getPrecio() );
+        }
+        if ( request.getCosto() != null ) {
+            producto.setCosto( request.getCosto() );
+        }
+        if ( request.getCantidad() != null ) {
+            producto.setCantidad( request.getCantidad() );
+        }
         if ( request.getImagen() != null ) {
             producto.setImagen( request.getImagen() );
         }
-        if ( request.getNombre() != null ) {
-            producto.setNombre( request.getNombre() );
-        }
-        if ( request.getPrecio() != null ) {
-            producto.setPrecio( request.getPrecio() );
+        if ( request.getCantidadPuntos() != null ) {
+            producto.setCantidadPuntos( request.getCantidadPuntos() );
         }
 
         producto.setTipoProducto( request.getIdTipoProducto() != null ? tipoProductoRepository.getReferenceById(request.getIdTipoProducto()) : null );
     }
 
     private Long productoTipoProductoIdTipoProducto(Producto producto) {
-        if ( producto == null ) {
-            return null;
-        }
         TipoProducto tipoProducto = producto.getTipoProducto();
         if ( tipoProducto == null ) {
             return null;
         }
-        Long idTipoProducto = tipoProducto.getIdTipoProducto();
-        if ( idTipoProducto == null ) {
+        return tipoProducto.getIdTipoProducto();
+    }
+
+    private String productoTipoProductoTipo(Producto producto) {
+        TipoProducto tipoProducto = producto.getTipoProducto();
+        if ( tipoProducto == null ) {
             return null;
         }
-        return idTipoProducto;
+        return tipoProducto.getTipo();
     }
 }

@@ -25,6 +25,5 @@ public class CarritoItem {
     private Producto producto;
 
     private Integer cantidad;
-    private BigDecimal precioUnitario;
 }
 
