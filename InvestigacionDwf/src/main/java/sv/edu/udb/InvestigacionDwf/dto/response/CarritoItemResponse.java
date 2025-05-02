@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 // CarritoItemResponse.java
+// CarritoItemResponse.java
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,4 +16,5 @@ public class CarritoItemResponse {
     private Long idCarrito;
     private Long idProducto;
     private Integer cantidad;
+    private ProductoResponse producto; // Nuevo campo agregado
 }

@@ -4,13 +4,14 @@ import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import sv.edu.udb.InvestigacionDwf.dto.request.CarritoItemRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.CarritoItemResponse;
+import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
 import sv.edu.udb.InvestigacionDwf.model.Carrito;
 import sv.edu.udb.InvestigacionDwf.model.CarritoItem;
 import sv.edu.udb.InvestigacionDwf.model.Producto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-02T02:54:07-0600",
+    date = "2025-05-02T06:00:45-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -44,6 +45,7 @@ public class CarritoItemMapperImpl extends CarritoItemMapper {
         carritoItemResponse.idProducto( itemProductoIdProducto( item ) );
         carritoItemResponse.idCarritoItem( item.getIdCarritoItem() );
         carritoItemResponse.cantidad( item.getCantidad() );
+        carritoItemResponse.producto( productoToProductoResponse( item.getProducto() ) );
 
         return carritoItemResponse.build();
     }
@@ -62,5 +64,24 @@ public class CarritoItemMapperImpl extends CarritoItemMapper {
             return null;
         }
         return producto.getIdProducto();
+    }
+
+    protected ProductoResponse productoToProductoResponse(Producto producto) {
+        if ( producto == null ) {
+            return null;
+        }
+
+        ProductoResponse.ProductoResponseBuilder productoResponse = ProductoResponse.builder();
+
+        productoResponse.idProducto( producto.getIdProducto() );
+        productoResponse.nombre( producto.getNombre() );
+        productoResponse.descripcion( producto.getDescripcion() );
+        productoResponse.precio( producto.getPrecio() );
+        productoResponse.costo( producto.getCosto() );
+        productoResponse.cantidad( producto.getCantidad() );
+        productoResponse.imagen( producto.getImagen() );
+        productoResponse.cantidadPuntos( producto.getCantidadPuntos() );
+
+        return productoResponse.build();
     }
 }

@@ -21,5 +21,19 @@ export const getCarritoItems = async (idCarrito) => {
   });
   const text = await resp.text();
   if (!resp.ok) throw new Error(`Error al obtener ítems del carrito: ${text}`);
-  return JSON.parse(text);
+  const items = JSON.parse(text);
+
+  // Debugging log to verify the structure of the response
+  console.log('Response from API (Carrito Items):', items);
+
+  // Ensure each item has a valid producto object
+  return items.map((item) => ({
+    ...item,
+    producto: {
+      ...item.producto,
+      nombre: item.producto?.nombre || 'Producto desconocido',
+      imagen: item.producto?.imagen || 'placeholder.jpg',
+      precio: item.producto?.precio || 0,
+    },
+  }));
 };
