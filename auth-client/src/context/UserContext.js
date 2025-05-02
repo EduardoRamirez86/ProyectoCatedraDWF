@@ -9,6 +9,11 @@ export const UserProvider = ({ children }) => {
     return storedUserId ? parseInt(storedUserId, 10) : null;
   });
 
+  const [carritoId, setCarritoId] = useState(() => {
+    const storedCarritoId = localStorage.getItem('carritoId');
+    return storedCarritoId ? parseInt(storedCarritoId, 10) : null;
+  });
+
   useEffect(() => {
     if (userId) {
       localStorage.setItem('userId', userId);
@@ -17,8 +22,16 @@ export const UserProvider = ({ children }) => {
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (carritoId) {
+      localStorage.setItem('carritoId', carritoId);
+    } else {
+      localStorage.removeItem('carritoId');
+    }
+  }, [carritoId]);
+
   return (
-    <UserContext.Provider value={{ userId, setUserId }}>
+    <UserContext.Provider value={{ userId, setUserId, carritoId, setCarritoId }}>
       {children}
     </UserContext.Provider>
   );

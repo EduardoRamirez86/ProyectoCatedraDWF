@@ -26,7 +26,7 @@ export default function Products() {
 
         if (!carritoId) {
           const cart = await getOrCreateCarrito(userId);
-          setCarritoId(cart.idCarrito);
+          setCarritoId(cart.idCarrito); // Ensure setCarritoId is called correctly
           localStorage.setItem('carritoId', cart.idCarrito);
         }
       } catch (e) {
