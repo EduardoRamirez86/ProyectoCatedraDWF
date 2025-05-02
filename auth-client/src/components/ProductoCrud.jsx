@@ -202,71 +202,116 @@ const ProductoCrud = () => {
     <div className="admin-container">
       <h1>Gestión de Productos</h1>
       <form onSubmit={handleSubmit} className="form">
-        <input
-          name="nombre"
-          placeholder="Nombre*"
-          value={form.nombre}
-          onChange={handleInputChange}
-        />
-        <input
-          name="descripcion"
-          placeholder="Descripción*"
-          value={form.descripcion}
-          onChange={handleInputChange}
-        />
-        <input
-          name="precio"
-          type="number"
-          step="0.01"
-          placeholder="Precio"
-          value={form.precio}
-          onChange={handleInputChange}
-        />
-        <input
-          name="costo"
-          type="number"
-          step="0.01"
-          placeholder="Costo"
-          value={form.costo}
-          onChange={handleInputChange}
-        />
-        <input
-          name="cantidad"
-          type="number"
-          placeholder="Cantidad"
-          value={form.cantidad}
-          onChange={handleInputChange}
-        />
-        <input
-          name="imagen"
-          placeholder="URL Imagen"
-          value={form.imagen}
-          onChange={handleInputChange}
-        />
-        <input
-          name="cantidadPuntos"
-          type="number"
-          placeholder="Puntos"
-          value={form.cantidadPuntos}
-          onChange={handleInputChange}
-        />
-
-        <select
-          name="idTipoProducto"
-          value={form.idTipoProducto}
-          onChange={handleInputChange}
-        >
-          <option value="">-- Seleccione un tipo --</option>
-          {tiposProductos.map(tp => (
-            <option key={tp.idTipoProducto} value={tp.idTipoProducto}>
-              {tp.tipo}
-            </option>
-          ))}
-        </select>
-
+        <div className="input-group">
+          <label htmlFor="nombre">Nombre*</label>
+          <input
+            id="nombre"
+            name="nombre"
+            value={form.nombre}
+            onChange={handleInputChange}
+            className="input-field"
+          />
+        </div>
+  
+        <div className="input-group">
+          <label htmlFor="descripcion">Descripción*</label>
+          <input
+            id="descripcion"
+            name="descripcion"
+            value={form.descripcion}
+            onChange={handleInputChange}
+            className="input-field"
+          />
+        </div>
+  
+        <div className="input-group">
+          <label htmlFor="precio">Precio (USD)</label>
+          <input
+            id="precio"
+            name="precio"
+            type="number"
+            step="0.01"
+            value={form.precio}
+            onChange={handleInputChange}
+            className="input-field"
+          />
+        </div>
+  
+        <div className="input-group">
+          <label htmlFor="costo">Costo (USD)</label>
+          <input
+            id="costo"
+            name="costo"
+            type="number"
+            step="0.01"
+            value={form.costo}
+            onChange={handleInputChange}
+            className="input-field"
+          />
+        </div>
+  
+        <div className="input-group">
+          <label htmlFor="cantidad">Stock Disponible</label>
+          <input
+            id="cantidad"
+            name="cantidad"
+            type="number"
+            value={form.cantidad}
+            onChange={handleInputChange}
+            className="input-field"
+          />
+        </div>
+  
+        <div className="input-group">
+          <label htmlFor="imagen">URL de la Imagen</label>
+          <input
+            id="imagen"
+            name="imagen"
+            value={form.imagen}
+            onChange={handleInputChange}
+            className="input-field"
+          />
+        </div>
+  
+        <div className="input-group">
+          <label htmlFor="cantidadPuntos">Puntos de Recompensa</label>
+          <input
+            id="cantidadPuntos"
+            name="cantidadPuntos"
+            type="number"
+            value={form.cantidadPuntos}
+            onChange={handleInputChange}
+            className="input-field"
+          />
+        </div>
+  
+        <div className="input-group">
+          <label htmlFor="idTipoProducto">Tipo de Producto*</label>
+          <select
+            id="idTipoProducto"
+            name="idTipoProducto"
+            value={form.idTipoProducto}
+            onChange={handleInputChange}
+            className="input-field"
+          >
+            <option value="">-- Seleccione un tipo --</option>
+            {tiposProductos.map(tp => (
+              <option key={tp.idTipoProducto} value={tp.idTipoProducto}>
+                {tp.tipo}
+              </option>
+            ))}
+          </select>
+        </div>
+  
         <div className="form-actions">
-          <button type="submit">{isEditing ? 'Actualizar' : 'Crear'}</button>
-          {isEditing && <button type="button" onClick={resetForm}>Cancelar</button>}
+          <button type="submit" className="submit-btn">
+            {isEditing ? 'Actualizar Producto' : 'Crear Nuevo Producto'}
+          </button>
+          {isEditing && (
+            <button type="button" onClick={resetForm} className="cancel-btn">
+              Cancelar Edición
+            </button>
+          )}
         </div>
       </form>
 
