@@ -1,12 +1,16 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({
+  token: null,
+  role: null,
+  login: () => {},
+  logout: () => {},
+});
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token'));
 
-// Cuando cambie `token`, lo guardamos/eliminamos de localStorage
   useEffect(() => {
     if (token) {
       localStorage.setItem('token', token);
@@ -15,12 +19,14 @@ export function AuthProvider({ children }) {
     }
   }, [token]);
 
-  // Derivamos el rol del token
   const [role, setRole] = useState(null);
   useEffect(() => {
     if (token) {
-      try { setRole(jwtDecode(token).roles); }
-      catch { setRole(null); }
+      try {
+        setRole(jwtDecode(token).roles);
+      } catch {
+        setRole(null);
+      }
     } else {
       setRole(null);
     }

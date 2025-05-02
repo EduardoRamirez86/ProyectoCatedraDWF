@@ -62,10 +62,9 @@ public class AuthServiceImpl implements AuthService {
 
         userRepository.save(user); // Persistir el usuario
 
-        // Generar y devolver el token JWT con ROLE_USER
-        return jwtUtils.generateToken(user.getUsername(), userRole.getName());
+        // Generar y devolver el token JWT con USER_ID y ROLE_USER
+        return jwtUtils.generateToken(user.getUsername(), user.getIdUser(), userRole.getName());
     }
-
 
     @Override
     public String login(LoginRequest loginRequest) {
@@ -82,7 +81,8 @@ public class AuthServiceImpl implements AuthService {
 
         String role = user.getRole().getName();
 
-        // Generar y devolver el token JWT con el rol de la base de datos
-        return jwtUtils.generateToken(user.getUsername(), role);
+        // Generar y devolver el token JWT con el userId y el rol
+        return jwtUtils.generateToken(user.getUsername(), user.getIdUser(), role);
     }
+
 }

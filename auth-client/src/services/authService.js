@@ -1,3 +1,5 @@
+import { jwtDecode } from 'jwt-decode'; // Use named import for jwtDecode
+
 const API_URL = 'http://localhost:8080/auth'; // Eliminamos la barra final para evitar duplicados
 
 export async function register({
@@ -63,7 +65,15 @@ export async function login(username, password) {
       throw new Error(err.message || 'Error al iniciar sesión');
     }
 
-    return await res.text(); // el token
+    const token = await res.text();
+    const decoded = jwtDecode(token);
+
+    if (!decoded || !decoded.userId) {
+      throw new Error('El token no contiene un userId válido.');
+    }
+
+    localStorage.setItem('userId', decoded.userId); // Store userId in localStorage
+    return token;
   } catch (error) {
     console.error('Error en login:', error.message);
     throw error;

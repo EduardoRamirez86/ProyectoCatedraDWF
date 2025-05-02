@@ -28,13 +28,13 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public List<ProductoResponse> findAll() {
         return productoMapper.toResponseList(productoRepository.findAll());
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public ProductoResponse findById(Long id) {
         Producto producto = productoRepository.findByIdWithTipoProducto(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado ID: " + id));
