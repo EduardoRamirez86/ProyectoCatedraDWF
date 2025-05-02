@@ -5,6 +5,7 @@ const getToken = () => localStorage.getItem('token');
 export const addCarritoItem = async (item) => {
   const { idCarrito, idProducto, cantidad } = item;
   if (!idCarrito || !idProducto || !cantidad) {
+    console.error('Error: Faltan campos en el ítem:', { idCarrito, idProducto, cantidad });
     throw new Error('Faltan campos en el ítem (idCarrito, idProducto, cantidad)');
   }
   const resp = await fetch(API_URL, {

@@ -1,12 +1,14 @@
 // src/components/Products.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { getAllProductos } from '../services/productoService';
 import { addCarritoItem } from '../services/carritoItemService';
 import MySwal from '../utils/swal';
 import '../style/Products.css';
+import UserContext from '../context/UserContext'; // Import UserContext to get carritoId
 
 export default function Products({ searchQuery }) {
   const [productos, setProductos] = useState([]);
+  const { carritoId } = useContext(UserContext); // Get carritoId from context
 
   useEffect(() => {
     (async () => {
@@ -25,8 +27,18 @@ export default function Products({ searchQuery }) {
   );
 
   const handleAdd = async (prod) => {
+    if (!carritoId) {
+      console.error('ID de carrito no disponible.');
+      await MySwal.fire('Error', 'El carrito no está disponible.', 'error');
+      return;
+    }
+
     try {
-      await addCarritoItem({ idProducto: prod.idProducto, cantidad: 1 });
+      await addCarritoItem({
+        idCarrito: carritoId,
+        idProducto: prod.idProducto,
+        cantidad: 1,
+      });
       await MySwal.fire('Agregado', `"${prod.nombre}" añadido al carrito.`, 'success');
     } catch (e) {
       console.error(e);
