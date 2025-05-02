@@ -1,0 +1,38 @@
+/* src/style/userPage.css */
+.user-page {
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+  }
+  
+  .user-page-header {
+    background-color: #111;
+    color: white;
+    padding: 1rem 2rem;
+  }
+  
+  .user-page-nav button {
+    margin-right: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .user-page-nav button.active {
+    text-decoration: underline;
+  }
+  
+  .search-bar {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 4px;
+    border: none;
+  }
+  
+  .user-page-content {
+    padding: 2rem;
+  }
+  

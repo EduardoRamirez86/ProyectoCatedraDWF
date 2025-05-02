@@ -1,3 +1,4 @@
+// src/components/Header.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -26,21 +27,22 @@ export default function Header() {
           </>
         )}
         {token && (
-          <>
+          <div className="header__user-actions">
             {role === 'ROLE_ADMIN' && <Link to="/admin">Admin</Link>}
-            {role === 'ROLE_USER'  && <Link to="/user">User</Link>}
+            {role === 'ROLE_USER' && <Link to="/user">User</Link>}
             <button
               className="header__logout-btn"
               onClick={() => {
-                logout();           // quita token del estado y del localStorage
-                navigate('/login'); // redirige a login
+                logout(); // Clear token and localStorage
+                navigate('/login'); // Redirect to login
               }}
             >
-              Logout
+              Cerrar Sesión
             </button>
-          </>
+          </div>
         )}
       </nav>
     </motion.header>
   );
 }
+

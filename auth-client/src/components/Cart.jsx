@@ -1,5 +1,4 @@
-// src/components/Cart.jsx
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { getCarritoItems } from '../services/carritoService';
 import { removeCarritoItem, addCarritoItem } from '../services/carritoItemService';
 import UserContext from '../context/UserContext';
@@ -7,9 +6,9 @@ import '../style/userPage.css';
 
 export default function Cart() {
   const [items, setItems] = useState([]);
-  const { userId } = useContext(UserContext); // Get userId from context
+  const { userId } = useContext(UserContext); // Obtener userId del contexto
 
-  const load = async () => {
+  const load = useCallback(async () => {
     if (!userId) {
       console.error('ID de usuario no disponible.');
       return;
@@ -20,11 +19,11 @@ export default function Cart() {
     } catch (error) {
       console.error('Error al cargar los ítems del carrito:', error.message);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     load();
-  }, [userId]);
+  }, [load]);
 
   const handleRemove = async (id) => {
     await removeCarritoItem(id);

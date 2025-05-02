@@ -2,17 +2,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import Header from './Header';
 import '../style/Landing.css';
 
 export default function Landing() {
   const products = [
     { id: 1, name: 'Camiseta Clásica', price: '$19.99', image: 'https://via.placeholder.com/300?text=Camiseta' },
-    { id: 2, name: 'Jeans Comfort',    price: '$49.99', image: 'https://via.placeholder.com/300?text=Jeans' },
-    { id: 3, name: 'Chaqueta Urbana',  price: '$89.99', image: 'https://via.placeholder.com/300?text=Chaqueta' },
+    { id: 2, name: 'Jeans Comfort', price: '$49.99', image: 'https://via.placeholder.com/300?text=Jeans' },
+    { id: 3, name: 'Chaqueta Urbana', price: '$89.99', image: 'https://via.placeholder.com/300?text=Chaqueta' },
   ];
 
   return (
     <div className="landing">
+      <Header />
       <section className="hero">
         <div className="hero__overlay" />
         <motion.div

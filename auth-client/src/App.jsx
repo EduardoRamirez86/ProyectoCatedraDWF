@@ -23,32 +23,41 @@ export default function App() {
     <AuthProvider>
       <CartProvider>
         <BrowserRouter>
-          <Header />
-          <main style={{ minHeight: 'calc(100vh - 160px)' }}>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/user"
-                element={
-                  <PrivateRoute requiredRole="ROLE_USER">
-                    <UserPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/admin"
-                element={
-                  <PrivateRoute requiredRole="ROLE_ADMIN">
-                    <AdminPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </main>
-          <Footer />
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route
+              path="*"
+              element={
+                <>
+                  <Header />
+                  <main style={{ minHeight: 'calc(100vh - 160px)' }}>
+                    <Routes>
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route
+                        path="/user"
+                        element={
+                          <PrivateRoute requiredRole="ROLE_USER">
+                            <UserPage />
+                          </PrivateRoute>
+                        }
+                      />
+                      <Route
+                        path="/admin"
+                        element={
+                          <PrivateRoute requiredRole="ROLE_ADMIN">
+                            <AdminPage />
+                          </PrivateRoute>
+                        }
+                      />
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                </>
+              }
+            />
+          </Routes>
         </BrowserRouter>
       </CartProvider>
     </AuthProvider>
