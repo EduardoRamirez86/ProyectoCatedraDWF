@@ -1,6 +1,6 @@
 // src/App.jsx
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 
@@ -12,10 +12,28 @@ import Register from './pages/Register';
 import UserPage from './pages/UserPage';
 import AdminPage from './pages/AdminPage';
 
-function PrivateRoute({ children, requiredRole }) {
-  const { token, role } = React.useContext(AuthContext);
-  if (!token) return <Navigate to="/login" replace />;
-  return role === requiredRole ? children : <Navigate to="/" replace />;
+function PrivateRoute({ requiredRole, children }) {
+  const { token, userData } = useContext(AuthContext);
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+  // userData.roles puede ser string o array
+  const roles = Array.isArray(userData?.roles) ? userData.roles : [userData?.roles];
+  return roles.includes(requiredRole) ? children : <Navigate to="/" replace />;
+}
+
+function Layout() {
+  const location = useLocation();
+  const hideHeaderFooter = location.pathname === '/';
+  return (
+    <>
+      {!hideHeaderFooter && <Header />}
+      <main style={{ minHeight: 'calc(100vh - 160px)' }}>
+        <Outlet />
+      </main>
+      {!hideHeaderFooter && <Footer />}
+    </>
+  );
 }
 
 export default function App() {
@@ -25,38 +43,27 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route
-              path="*"
-              element={
-                <>
-                  <Header />
-                  <main style={{ minHeight: 'calc(100vh - 160px)' }}>
-                    <Routes>
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/register" element={<Register />} />
-                      <Route
-                        path="/user"
-                        element={
-                          <PrivateRoute requiredRole="ROLE_USER">
-                            <UserPage />
-                          </PrivateRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin"
-                        element={
-                          <PrivateRoute requiredRole="ROLE_ADMIN">
-                            <AdminPage />
-                          </PrivateRoute>
-                        }
-                      />
-                      <Route path="*" element={<Navigate to="/" replace />} />
-                    </Routes>
-                  </main>
-                  <Footer />
-                </>
-              }
-            />
+            <Route element={<Layout />}>  
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/user"
+                element={
+                  <PrivateRoute requiredRole="ROLE_USER">
+                    <UserPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <PrivateRoute requiredRole="ROLE_ADMIN">
+                    <AdminPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </CartProvider>

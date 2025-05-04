@@ -6,8 +6,13 @@ import { AuthContext } from '../context/AuthContext';
 import '../style/Header.css';
 
 export default function Header() {
-  const { token, role, logout } = React.useContext(AuthContext);
+  const { token, userData, logout } = React.useContext(AuthContext);
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout(); // Limpia el token y userData
+    navigate('/login', { replace: true }); // Redirección forzada
+  };
 
   return (
     <motion.header
@@ -26,16 +31,13 @@ export default function Header() {
             <Link to="/register">Register</Link>
           </>
         )}
-        {token && (
+        {token && userData && (
           <div className="header__user-actions">
-            {role === 'ROLE_ADMIN' && <Link to="/admin">Admin</Link>}
-            {role === 'ROLE_USER' && <Link to="/user">User</Link>}
+            {userData.roles.includes('ROLE_ADMIN') && <Link to="/admin">Admin</Link>}
+            {userData.roles.includes('ROLE_USER') && <Link to="/user">User</Link>}
             <button
               className="header__logout-btn"
-              onClick={() => {
-                logout(); // Clear token and localStorage
-                navigate('/login'); // Redirect to login
-              }}
+              onClick={handleLogout}
             >
               Cerrar Sesión
             </button>
@@ -45,4 +47,3 @@ export default function Header() {
     </motion.header>
   );
 }
-

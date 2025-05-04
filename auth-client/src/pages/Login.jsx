@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+// src/pages/Login.jsx
+import React, { useState, useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { jwtDecode } from 'jwt-decode';
 import { login as loginService } from '../services/authService';
 import { getOrCreateCarrito } from '../services/carritoService';
 import { AuthContext } from '../context/AuthContext';
@@ -11,32 +11,60 @@ import '../style/AuthForm.css';
 export default function Login() {
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
-  const { login } = useContext(AuthContext);
+  const { userData, login } = useContext(AuthContext);
   const { setCarrito } = useContext(CartContext);
   const navigate = useNavigate();
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  // Efecto para manejar la redirección y carga del carrito
+  useEffect(() => {
+    const handlePostLogin = async () => {
+      if (!userData) return;
 
-  const handleSubmit = async e => {
+      try {
+        // 1. Obtener carrito
+        const cart = await getOrCreateCarrito(userData.userId);
+        
+        // 2. Actualizar contexto del carrito
+        setCarrito(cart);
+        localStorage.setItem('carritoId', cart.idCarrito);
+        
+        // 3. Redirección final
+        const targetRoute = userData.roles.includes('ROLE_ADMIN') 
+          ? '/admin' 
+          : '/user';
+        
+        console.log('Redirigiendo a:', targetRoute);
+        navigate(targetRoute, { replace: true });
+        
+      } catch (error) {
+        console.error('Error post-login:', error);
+        setError('Error al cargar la sesión');
+      }
+    };
+
+    handlePostLogin();
+  }, [userData, navigate, setCarrito]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // 1. Obtener token
       const token = await loginService(form.username, form.password);
-      login(token);
-      const decoded = jwtDecode(token);
       
-      // Almacenar usuario en localStorage
-      localStorage.setItem('userId', decoded.userId);
-
-      // Manejar carrito
-      const cart = await getOrCreateCarrito(decoded.userId);
-      setCarrito(cart);
-      localStorage.setItem('carritoId', cart.idCarrito);
-
-      // Navegación según rol
-      navigate(decoded.roles.includes('ROLE_ADMIN') ? '/admin' : '/user');
+      // 2. Actualizar contexto de autenticación
+      login(token);
+      
+      console.log('Login exitoso, token recibido:', token);
+      
     } catch (err) {
-      setError(err.message);
+      console.error('Error en login:', err);
+      setError(err.message || 'Error de autenticación');
+      localStorage.removeItem('token');
     }
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   return (
