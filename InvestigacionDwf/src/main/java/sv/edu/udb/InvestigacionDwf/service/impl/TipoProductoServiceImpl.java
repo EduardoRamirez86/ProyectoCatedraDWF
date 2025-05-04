@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sv.edu.udb.InvestigacionDwf.dto.request.TipoProductoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.TipoProductoResponse;
-import sv.edu.udb.InvestigacionDwf.model.TipoProducto;
+import sv.edu.udb.InvestigacionDwf.model.entity.TipoProducto;
 import sv.edu.udb.InvestigacionDwf.repository.TipoProductoRepository;
 import sv.edu.udb.InvestigacionDwf.service.TipoProductoService;
 import sv.edu.udb.InvestigacionDwf.service.mapper.TipoProductoMapper;

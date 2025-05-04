@@ -4,12 +4,12 @@ import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import sv.edu.udb.InvestigacionDwf.dto.request.CarritoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.CarritoResponse;
-import sv.edu.udb.InvestigacionDwf.model.Carrito;
-import sv.edu.udb.InvestigacionDwf.model.User;
+import sv.edu.udb.InvestigacionDwf.model.entity.Carrito;
+import sv.edu.udb.InvestigacionDwf.model.entity.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-02T02:54:07-0600",
+    date = "2025-05-03T21:42:05-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component

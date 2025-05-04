@@ -5,8 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.mapstruct.Mapping;
 import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
-import sv.edu.udb.InvestigacionDwf.model.Producto;
-import sv.edu.udb.InvestigacionDwf.model.TipoProducto;
+import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 import sv.edu.udb.InvestigacionDwf.repository.TipoProductoRepository;
 
 import java.util.List;

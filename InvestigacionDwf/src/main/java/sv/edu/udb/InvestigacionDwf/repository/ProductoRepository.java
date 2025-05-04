@@ -2,7 +2,7 @@ package sv.edu.udb.InvestigacionDwf.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import sv.edu.udb.InvestigacionDwf.model.Producto;
+import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 
 import java.util.List;
 import java.util.Optional;

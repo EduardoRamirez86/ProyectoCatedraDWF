@@ -3,7 +3,7 @@ package sv.edu.udb.InvestigacionDwf;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import sv.edu.udb.InvestigacionDwf.model.Role;
+import sv.edu.udb.InvestigacionDwf.model.entity.Role;
 import sv.edu.udb.InvestigacionDwf.repository.RoleRepository;
 
 @Component

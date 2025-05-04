@@ -7,7 +7,7 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import sv.edu.udb.InvestigacionDwf.dto.request.CarritoItemRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.CarritoItemResponse;
-import sv.edu.udb.InvestigacionDwf.model.CarritoItem;
+import sv.edu.udb.InvestigacionDwf.model.entity.CarritoItem;
 import sv.edu.udb.InvestigacionDwf.repository.CarritoRepository;
 import sv.edu.udb.InvestigacionDwf.repository.ProductoRepository;
 

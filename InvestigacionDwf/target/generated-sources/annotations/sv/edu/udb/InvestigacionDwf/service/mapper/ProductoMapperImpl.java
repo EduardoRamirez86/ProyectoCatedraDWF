@@ -6,12 +6,12 @@ import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
-import sv.edu.udb.InvestigacionDwf.model.Producto;
-import sv.edu.udb.InvestigacionDwf.model.TipoProducto;
+import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
+import sv.edu.udb.InvestigacionDwf.model.entity.TipoProducto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-02T01:45:54-0600",
+    date = "2025-05-03T20:41:23-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component

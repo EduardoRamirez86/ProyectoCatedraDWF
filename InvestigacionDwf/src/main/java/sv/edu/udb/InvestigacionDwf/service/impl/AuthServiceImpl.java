@@ -4,12 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import sv.edu.udb.InvestigacionDwf.dto.request.LoginRequest;
 import sv.edu.udb.InvestigacionDwf.dto.request.RegisterRequest;
 import sv.edu.udb.InvestigacionDwf.exception.UserAlreadyExistException;
-import sv.edu.udb.InvestigacionDwf.model.Role;
-import sv.edu.udb.InvestigacionDwf.model.User;
+import sv.edu.udb.InvestigacionDwf.model.entity.Role;
+import sv.edu.udb.InvestigacionDwf.model.entity.User;
 import sv.edu.udb.InvestigacionDwf.repository.RoleRepository;
 import sv.edu.udb.InvestigacionDwf.repository.UserRepository;
 import sv.edu.udb.InvestigacionDwf.security.jwt.JwtUtils;
@@ -32,15 +31,17 @@ public class AuthServiceImpl implements AuthService {
         this.jwtUtils = jwtUtils;
     }
 
-    // src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/AuthServiceImpl.java
     @Override
     public String register(RegisterRequest registerRequest) {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             logger.error("El usuario ya existe: {}", registerRequest.getUsername());
             throw new UserAlreadyExistException("El usuario ya existe");
         }
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
+            logger.error("El correo ya existe: {}", registerRequest.getEmail());
+            throw new UserAlreadyExistException("El correo ya existe");
+        }
 
-        // Asignar ROLE_USER por defecto
         Role userRole = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Rol ROLE_USER no encontrado"));
 
@@ -49,8 +50,6 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
         user.setRole(userRole);
-
-        // Mapear los nuevos campos
         user.setPrimerNombre(registerRequest.getPrimerNombre());
         user.setSegundoNombre(registerRequest.getSegundoNombre());
         user.setPrimerApellido(registerRequest.getPrimerApellido());
@@ -60,9 +59,8 @@ public class AuthServiceImpl implements AuthService {
         user.setDUI(registerRequest.getDUI());
         user.setDireccion(registerRequest.getDireccion());
 
-        userRepository.save(user); // Persistir el usuario
+        userRepository.save(user);
 
-        // Generar y devolver el token JWT con USER_ID y ROLE_USER
         return jwtUtils.generateToken(user.getUsername(), user.getIdUser(), userRole.getName());
     }
 
@@ -80,9 +78,6 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String role = user.getRole().getName();
-
-        // Generar y devolver el token JWT con el userId y el rol
         return jwtUtils.generateToken(user.getUsername(), user.getIdUser(), role);
     }
-
 }

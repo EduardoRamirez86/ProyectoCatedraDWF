@@ -7,7 +7,7 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import sv.edu.udb.InvestigacionDwf.dto.request.PedidoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.PedidoResponse;
-import sv.edu.udb.InvestigacionDwf.model.Pedido;
+import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
 import sv.edu.udb.InvestigacionDwf.repository.CarritoRepository;
 import sv.edu.udb.InvestigacionDwf.repository.FormaPagoRepository;
 

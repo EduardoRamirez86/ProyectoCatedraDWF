@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
 import sv.edu.udb.InvestigacionDwf.exception.ResourceNotFoundException;
-import sv.edu.udb.InvestigacionDwf.model.Producto;
+import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 import sv.edu.udb.InvestigacionDwf.repository.ProductoRepository;
 import sv.edu.udb.InvestigacionDwf.service.ProductoService;
 import sv.edu.udb.InvestigacionDwf.service.mapper.ProductoMapper;

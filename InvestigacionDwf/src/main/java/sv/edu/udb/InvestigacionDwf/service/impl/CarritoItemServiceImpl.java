@@ -1,10 +1,11 @@
 package sv.edu.udb.InvestigacionDwf.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sv.edu.udb.InvestigacionDwf.dto.request.CarritoItemRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.CarritoItemResponse;
-import sv.edu.udb.InvestigacionDwf.model.CarritoItem;
+import sv.edu.udb.InvestigacionDwf.model.entity.CarritoItem;
 import sv.edu.udb.InvestigacionDwf.repository.CarritoItemRepository;
 import sv.edu.udb.InvestigacionDwf.repository.CarritoRepository;
 import sv.edu.udb.InvestigacionDwf.repository.ProductoRepository;
@@ -12,7 +13,6 @@ import sv.edu.udb.InvestigacionDwf.service.CarritoItemService;
 import sv.edu.udb.InvestigacionDwf.service.mapper.CarritoItemMapper;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
