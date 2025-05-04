@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAllProductos } from '../services/productoService';
 import { addCarritoItem } from '../services/carritoItemService';
 import MySwal from '../utils/swal';
@@ -8,6 +9,7 @@ import '../style/Products.css';
 export default function Products({ searchQuery }) {
   const [productos, setProductos] = useState([]);
   const { carrito } = useContext(CartContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -15,8 +17,8 @@ export default function Products({ searchQuery }) {
         const prods = await getAllProductos();
         setProductos(prods);
       } catch (e) {
-        console.error(e);
-        await MySwal.fire('Error', 'No se pudieron cargar productos.', 'error');
+        console.error('Error al cargar productos:', e);
+        await MySwal.fire('Error', 'No se pudieron cargar los productos.', 'error');
       }
     })();
   }, []);
@@ -34,9 +36,13 @@ export default function Products({ searchQuery }) {
       await addCarritoItem({ idCarrito: carrito.idCarrito, idProducto: prod.idProducto, cantidad: 1 });
       await MySwal.fire('Agregado', `"${prod.nombre}" añadido al carrito.`, 'success');
     } catch (e) {
-      console.error(e);
+      console.error('Error al añadir al carrito:', e);
       await MySwal.fire('Error', 'No se pudo añadir al carrito.', 'error');
     }
+  };
+
+  const handleProductClick = (idProducto) => {
+    navigate(`/producto/${idProducto}`);
   };
 
   return (
@@ -44,14 +50,28 @@ export default function Products({ searchQuery }) {
       {filteredProducts.map((p) => (
         <div key={p.idProducto} className="product-card">
           <div className="product-image-container">
-            <img src={p.imagen} alt={p.nombre} className="product-image" />
+            <img
+              src={p.imagen}
+              alt={p.nombre}
+              className="product-image"
+              onClick={() => handleProductClick(p.idProducto)}
+              style={{ cursor: 'pointer' }}
+            />
             <div className="product-hover-info">
               <p className="product-description">{p.descripcion}</p>
-              <button className="add-to-cart-btn" onClick={() => handleAdd(p)}>Añadir al carrito</button>
+              <button className="add-to-cart-btn" onClick={() => handleAdd(p)}>
+                Añadir al carrito
+              </button>
             </div>
           </div>
           <div className="product-details">
-            <h3 className="product-name">{p.nombre}</h3>
+            <h3
+              className="product-name"
+              onClick={() => handleProductClick(p.idProducto)}
+              style={{ cursor: 'pointer' }}
+            >
+              {p.nombre}
+            </h3>
             <span className="product-price">${p.precio}</span>
           </div>
         </div>

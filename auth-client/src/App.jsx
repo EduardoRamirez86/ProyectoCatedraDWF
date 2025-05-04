@@ -1,9 +1,7 @@
-// src/App.jsx
 import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Landing from './components/Landing';
@@ -11,6 +9,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UserPage from './pages/UserPage';
 import AdminPage from './pages/AdminPage';
+import ProductDetail from './components/ProductDetail';
 
 function PrivateRoute({ requiredRole, children }) {
   const { token, userData } = useContext(AuthContext);
@@ -43,7 +42,7 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route element={<Layout />}>  
+            <Route element={<Layout />}>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route
@@ -59,6 +58,14 @@ export default function App() {
                 element={
                   <PrivateRoute requiredRole="ROLE_ADMIN">
                     <AdminPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/producto/:idProducto"
+                element={
+                  <PrivateRoute requiredRole="ROLE_USER">
+                    <ProductDetail />
                   </PrivateRoute>
                 }
               />

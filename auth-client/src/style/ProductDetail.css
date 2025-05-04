@@ -1,0 +1,148 @@
+.product-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .back-btn {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .product-detail {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  
+  .product-detail-image {
+    max-width: 400px;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .product-info {
+    flex: 1;
+  }
+  
+  .product-info h2 {
+    margin-top: 0;
+  }
+  
+  .product-description {
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .product-price {
+    font-size: 24px;
+    color: #28a745;
+    margin-bottom: 20px;
+  }
+  
+  .add-to-cart-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .add-to-cart-btn:hover {
+    background-color: #218838;
+  }
+  
+  .resena-section {
+    margin-top: 40px;
+  }
+  
+  .resena-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .resena-form textarea {
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .resena-form select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .resena-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+  
+  .resena-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .resenas-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .resena-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 4px;
+  }
+  
+  .resena-item p {
+    margin: 5px 0;
+  }
+
+  .product-detail-container {
+    padding: 20px;
+  }
+  
+  .rating-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .rating-container .star-svg {
+    width: 24px;
+    height: 24px;
+    margin-right: 4px;
+  }
+  
+  .rating-container .star-svg-filled {
+    fill: #f5c518; /* Gold color for filled stars */
+  }
+  
+  .rating-container .star-svg-empty {
+    fill: #ccc; /* Gray color for empty stars */
+  }
+  
+  .rating-container .star-svg:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .rating-value {
+    margin-left: 10px;
+    font-size: 18px;
+    color: #333;
+  }
