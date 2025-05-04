@@ -1,14 +1,16 @@
+// src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse.java
 package sv.edu.udb.InvestigacionDwf.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido;
+import sv.edu.udb.InvestigacionDwf.model.enums.TipoPago;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-// PedidoResponse.java
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,5 +22,6 @@ public class PedidoResponse {
     private BigDecimal total;
     private Integer puntosTotales;
     private Long idCarrito;
-    private Long idFormaPago;
+    private TipoPago tipoPago;
+    private EstadoPedido estado;
 }

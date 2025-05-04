@@ -5,16 +5,15 @@ import org.springframework.stereotype.Component;
 import sv.edu.udb.InvestigacionDwf.dto.request.PedidoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.PedidoResponse;
 import sv.edu.udb.InvestigacionDwf.model.entity.Carrito;
-import sv.edu.udb.InvestigacionDwf.model.entity.FormaPago;
 import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-03T20:41:23-0600",
+    date = "2025-05-04T01:15:08-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
-public class PedidoMapperImpl extends PedidoMapper {
+public class PedidoMapperImpl implements PedidoMapper {
 
     @Override
     public Pedido toEntity(PedidoRequest request) {
@@ -24,8 +23,8 @@ public class PedidoMapperImpl extends PedidoMapper {
 
         Pedido pedido = new Pedido();
 
-        pedido.setCarrito( carritoRepository.getReferenceById(request.getIdCarrito()) );
-        pedido.setFormaPago( formaPagoRepository.getReferenceById(request.getIdFormaPago()) );
+        pedido.setCarrito( pedidoRequestToCarrito( request ) );
+        pedido.setTipoPago( request.getTipoPago() );
 
         return pedido;
     }
@@ -39,7 +38,8 @@ public class PedidoMapperImpl extends PedidoMapper {
         PedidoResponse.PedidoResponseBuilder pedidoResponse = PedidoResponse.builder();
 
         pedidoResponse.idCarrito( pedidoCarritoIdCarrito( pedido ) );
-        pedidoResponse.idFormaPago( pedidoFormaPagoIdFormaPago( pedido ) );
+        pedidoResponse.tipoPago( pedido.getTipoPago() );
+        pedidoResponse.estado( pedido.getEstado() );
         pedidoResponse.idPedido( pedido.getIdPedido() );
         pedidoResponse.fechaInicio( pedido.getFechaInicio() );
         pedidoResponse.fechaFinal( pedido.getFechaFinal() );
@@ -49,19 +49,23 @@ public class PedidoMapperImpl extends PedidoMapper {
         return pedidoResponse.build();
     }
 
+    protected Carrito pedidoRequestToCarrito(PedidoRequest pedidoRequest) {
+        if ( pedidoRequest == null ) {
+            return null;
+        }
+
+        Carrito carrito = new Carrito();
+
+        carrito.setIdCarrito( pedidoRequest.getIdCarrito() );
+
+        return carrito;
+    }
+
     private Long pedidoCarritoIdCarrito(Pedido pedido) {
         Carrito carrito = pedido.getCarrito();
         if ( carrito == null ) {
             return null;
         }
         return carrito.getIdCarrito();
-    }
-
-    private Long pedidoFormaPagoIdFormaPago(Pedido pedido) {
-        FormaPago formaPago = pedido.getFormaPago();
-        if ( formaPago == null ) {
-            return null;
-        }
-        return formaPago.getIdFormaPago();
     }
 }

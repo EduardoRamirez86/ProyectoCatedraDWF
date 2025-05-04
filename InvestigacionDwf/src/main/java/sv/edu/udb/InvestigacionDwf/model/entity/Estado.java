@@ -19,8 +19,5 @@ public class Estado {
     @Column(nullable = false)
     private String tipo;
 
-    @OneToMany(mappedBy = "estado", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<HistorialPedido> historialPedidos;
 }
 

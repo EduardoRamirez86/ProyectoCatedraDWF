@@ -1,58 +1,130 @@
 // src/components/Checkout.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { checkoutPedido } from '../services/pedidoService';
 import MySwal from '../utils/swal';
 import '../style/userPage.css';
 
+const paymentOptions = [
+  { label: 'Tarjeta de Crédito', value: 'TARJETA_CREDITO' },
+  { label: 'PayPal', value: 'PAYPAL' },
+  { label: 'Efectivo', value: 'EFECTIVO' },
+  { label: 'Transferencia Bancaria', value: 'TRANSFERENCIA_BANCARIA' }
+];
+
+// Configuración de campos dinámicos según tipo de pago
+const fieldConfigs = {
+  TARJETA_CREDITO: [
+    { name: 'card', placeholder: '1234-5678-9012-3456', regex: /^\d{4}-\d{4}-\d{4}-\d{4}$/ },
+    { name: 'expiry', placeholder: 'MM/AA', regex: /^(0[1-9]|1[0-2])\/\d{2}$/ }
+  ],
+  PAYPAL: [
+    { name: 'paypalAccount', placeholder: 'email@ejemplo.com', regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }
+  ],
+  TRANSFERENCIA_BANCARIA: [
+    { name: 'transferencia', placeholder: '00012345678901234567', regex: /^\d{20}$/ }
+  ],
+  EFECTIVO: []
+};
+
 export default function Checkout() {
-  const [form, setForm] = useState({ name: '', dui: '', card: '', expiry: '', email: '' });
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ nombre: '', tipoPago: '' });
   const [errors, setErrors] = useState({});
 
-  const regexes = {
-    dui: /^\d{8}-\d{1}$/,  card: /^\d{4}-\d{4}-\d{4}-\d{4}$/,  expiry: /^(0[1-9]|1[0-2])\/\d{2}$/,  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  };
-
   const handleChange = e => {
-    let { name, value } = e.target;
-    // formatting
-    if (name === 'dui') value = value.replace(/\D/g, '').replace(/(\d{8})(\d)/, '$1-$2');
-    if (name === 'card') {
-      value = value.replace(/\D/g, '').substring(0,16)
-        .replace(/(\d{4})(?=\d)/g, '$1-');
-    }
-    if (name === 'expiry') value = value.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2').substring(0,5);
-    setForm({ ...form, [name]: value });
-    setErrors({ ...errors, [name]: !regexes[name]?.test(value) });
+    const { name, value: raw } = e.target;
+    let value = raw;
+
+    // Formateo de campos específicos
+    if (name === 'card') value = raw.replace(/\D/g, '').substring(0, 16).replace(/(\d{4})(?=\d)/g, '$1-');
+    if (name === 'expiry') value = raw.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2').substring(0, 5);
+
+    setForm(prev => ({ ...prev, [name]: value }));
+
+    // Validación de regex para campos dinámicos
+    const cfgs = fieldConfigs[form.tipoPago] || [];
+    const cfg = cfgs.find(f => f.name === name);
+    if (cfg) setErrors(prev => ({ ...prev, [name]: !cfg.regex.test(value) }));
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const invalid = Object.keys(regexes).filter(k => !regexes[k].test(form[k]));
-    if (invalid.length) {
-      MySwal.fire('Error','Corrige los campos marcados','error');
+    // Validar nombre y tipo de pago
+    if (!form.nombre || !form.tipoPago) {
+      MySwal.fire('Error', 'Ingresa nombre y forma de pago', 'error');
       return;
     }
-    const idCarrito = parseInt(localStorage.getItem('carritoId'),10);
+    // Validar campos dinámicos
+    const cfgs = fieldConfigs[form.tipoPago] || [];
+    for (let cfg of cfgs) {
+      if (!cfg.regex.test(form[cfg.name] || '')) {
+        MySwal.fire('Error', `Revisa el campo ${cfg.name}`, 'error');
+        return;
+      }
+    }
+    const idCarrito = parseInt(localStorage.getItem('carritoId'), 10);
     try {
-      const resp = await checkoutPedido({ idCarrito, idFormaPago:1 });
+      const resp = await checkoutPedido({ idCarrito, tipoPago: form.tipoPago });
       sessionStorage.setItem('orderNumber', resp.idPedido);
       sessionStorage.setItem('orderTotal', resp.total);
-      setForm({ name:'', dui:'', card:'', expiry:'', email:'' });
-      setErrors({});
+      MySwal.fire('¡Éxito!', 'Tu pedido ha sido procesado', 'success')
+        .then(() => navigate('/confirmation'));
     } catch {
-      MySwal.fire('Error','No se pudo procesar el pedido','error');
+      MySwal.fire('Error', 'No se pudo procesar el pedido', 'error');
     }
+  };
+
+  // Renderiza solo los inputs dinámicos según el tipo de pago
+  const renderFields = () => {
+    if (!form.tipoPago) return null;
+    return fieldConfigs[form.tipoPago].map(cfg => (
+      <div key={cfg.name} className={`form-group ${errors[cfg.name] ? 'error' : ''}`}>
+        <input
+          name={cfg.name}
+          value={form[cfg.name] || ''}
+          onChange={handleChange}
+          placeholder={cfg.placeholder}
+          required
+        />
+        {errors[cfg.name] && <span className="error-message">Formato inválido</span>}
+      </div>
+    ));
   };
 
   return (
     <form className="checkout-form" onSubmit={handleSubmit}>
-      {['name','dui','card','expiry','email'].map(field => (
-        <div key={field} className={`form-group ${errors[field] ? 'error' : ''}`}>          
-          <label htmlFor={field}>{field.toUpperCase()}</label>
-          <input id={field} name={field} value={form[field]} onChange={handleChange} required />
-          {errors[field] && <span className="error-message">Valor inválido</span>}
-        </div>
-      ))}
+      <div className="form-group">
+        <input
+          name="nombre"
+          value={form.nombre}
+          onChange={handleChange}
+          placeholder="Nombre Completo"
+          required
+        />
+      </div>
+
+      <div className="form-group">
+        <select
+          name="tipoPago"
+          value={form.tipoPago}
+          onChange={e => {
+            setForm({ nombre: form.nombre, tipoPago: e.target.value });
+            setErrors({});
+          }}
+          required
+        >
+          <option value="">Selecciona forma de pago</option>
+          {paymentOptions.map(opt => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {renderFields()}
+
       <button type="submit">Confirmar Compra</button>
     </form>
   );

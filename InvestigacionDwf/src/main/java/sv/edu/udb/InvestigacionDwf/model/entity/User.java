@@ -1,4 +1,3 @@
-// User.java
 package sv.edu.udb.InvestigacionDwf.model.entity;
 
 import java.time.LocalDate;
@@ -13,12 +12,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "User")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUser;
+    private Long idUser; // Nombre original
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_rol", nullable = false)
+    @JoinColumn(name = "id_rol", nullable = false) // Nombre original
     private Role role;
 
     @Column(name = "primer_nombre", nullable = false)
@@ -45,14 +45,17 @@ public class User {
     private String password;
 
     private String telefono;
-    private String DUI;
+    private String DUI; // Nombre original
     private String direccion;
 
+    // NUEVO: campo de puntos acumulados del usuario
+    @Column(nullable = false)
+    private int puntos = 0;
 
+    // Relaciones (nombres originales)
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Carrito carrito;
-
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -73,7 +76,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Direccion> direcciones;
+
+    // Métodos getter y setter de puntos ya los genera Lombok con @Data
 }
-
-
-

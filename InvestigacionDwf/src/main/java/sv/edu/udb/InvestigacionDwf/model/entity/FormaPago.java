@@ -19,8 +19,5 @@ public class FormaPago {
     @Column(nullable = false)
     private String tipo;
 
-    @OneToMany(mappedBy = "formaPago", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Pedido> pedidos;
 }
 

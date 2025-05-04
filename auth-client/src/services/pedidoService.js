@@ -1,10 +1,11 @@
+// src/services/pedidoService.js
 const API_URL = "http://localhost:8080/auth/pedido";
 const getToken = () => localStorage.getItem('token');
 
 // Realiza el checkout del carrito
-export const checkoutPedido = async ({ idCarrito, idFormaPago }) => {
-  if (!idCarrito || !idFormaPago) {
-    throw new Error('idCarrito e idFormaPago son obligatorios');
+export const checkoutPedido = async ({ idCarrito, tipoPago }) => {
+  if (!idCarrito || !tipoPago) {
+    throw new Error('idCarrito y tipoPago son obligatorios');
   }
   const resp = await fetch(`${API_URL}/checkout`, {
     method: 'POST',
@@ -12,7 +13,7 @@ export const checkoutPedido = async ({ idCarrito, idFormaPago }) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${getToken()}`,
     },
-    body: JSON.stringify({ idCarrito, idFormaPago }),
+    body: JSON.stringify({ idCarrito, tipoPago }),
   });
   const text = await resp.text();
   if (!resp.ok) throw new Error(`Error en checkout: ${text}`);
