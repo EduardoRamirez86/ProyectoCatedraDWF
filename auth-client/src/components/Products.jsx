@@ -48,30 +48,33 @@ export default function Products({ searchQuery }) {
   return (
     <div className="products-grid">
       {filteredProducts.map((p) => (
-        <div key={p.idProducto} className="product-card">
+        <div
+          key={p.idProducto}
+          className="product-card"
+          onClick={() => handleProductClick(p.idProducto)}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="product-image-container">
             <img
               src={p.imagen}
               alt={p.nombre}
               className="product-image"
-              onClick={() => handleProductClick(p.idProducto)}
-              style={{ cursor: 'pointer' }}
             />
             <div className="product-hover-info">
               <p className="product-description">{p.descripcion}</p>
-              <button className="add-to-cart-btn" onClick={() => handleAdd(p)}>
+              <button
+                className="add-to-cart-btn"
+                onClick={(e) => {
+                  e.stopPropagation(); // evita que el click se propague y redirija
+                  handleAdd(p);
+                }}
+              >
                 Añadir al carrito
               </button>
             </div>
           </div>
           <div className="product-details">
-            <h3
-              className="product-name"
-              onClick={() => handleProductClick(p.idProducto)}
-              style={{ cursor: 'pointer' }}
-            >
-              {p.nombre}
-            </h3>
+            <h3 className="product-name">{p.nombre}</h3>
             <span className="product-price">${p.precio}</span>
           </div>
         </div>
