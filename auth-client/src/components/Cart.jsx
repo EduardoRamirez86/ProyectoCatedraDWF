@@ -6,128 +6,189 @@ import '../style/userPage.css';
 
 export default function Cart() {
   const [items, setItems] = useState([]);
-  const { carrito, loading } = useContext(CartContext);
   const [subtotal, setSubtotal] = useState(0);
+  const [total, setTotal] = useState(0);
   const envio = 5;
+  const { carrito, loading } = useContext(CartContext);
 
-  const agruparItems = (itemsOriginales) => {
-    const agrupados = [];
+  // Función para agrupar items optimizada con useCallback
+  // Corrige la función agruparItems
+const agruparItems = useCallback((itemsOriginales) => {
+  const itemsMap = new Map();
 
-    itemsOriginales.forEach((item) => {
-      const existente = agrupados.find(
-        (i) => i.producto?.idProducto === item.producto?.idProducto
-      );
-
-      if (existente) {
-        existente.cantidad += item.cantidad;
-        existente.idCarritoItem = item.idCarritoItem; // último ID usado
-      } else {
-        agrupados.push({ ...item });
-      }
-    });
-
-    return agrupados;
-  };
-
-  const load = useCallback(async () => {
-    if (loading) return; // Esperar a que el carrito esté listo
-    if (!carrito || !carrito.idCarrito) {
-      console.error('ID de carrito no disponible.');
-      return;
+  itemsOriginales.forEach((item) => {
+    const key = item.producto?.idProducto;
+    if (itemsMap.has(key)) {
+      const existente = itemsMap.get(key);
+      existente.cantidad += item.cantidad;
+    } else {
+      itemsMap.set(key, { ...item });
     }
+  });
 
+  return Array.from(itemsMap.values());
+}, []);
+
+  // Función para calcular totales
+  const calculateTotals = useCallback((itemsList) => {
+    const newSubtotal = itemsList.reduce(
+      (sum, i) => sum + (i.cantidad * (i.producto?.precio || 0)),
+      0
+    );
+    const newTotal = newSubtotal + envio;
+    setSubtotal(newSubtotal);
+    setTotal(newTotal);
+  }, [envio]);
+
+  // Carga inicial de items
+  const load = useCallback(async () => {
+    if (loading || !carrito?.idCarrito) return;
+    
     try {
       const cartItems = await getCarritoItems(carrito.idCarrito);
-      const agrupados = agruparItems(cartItems);
-      setItems(agrupados);
+      const groupedItems = agruparItems(cartItems);
+      setItems(groupedItems);
+      calculateTotals(groupedItems);
     } catch (error) {
       console.error('Error al cargar ítems:', error.message);
     }
-  }, [carrito, loading]);
+  }, [carrito, loading, agruparItems, calculateTotals]);
 
   useEffect(() => {
     load();
   }, [load]);
 
-  useEffect(() => {
-    const nuevoSubtotal = items.reduce((sum, i) => {
-      const precio = i.producto?.precio || 0;
-      return sum + i.cantidad * precio;
-    }, 0);
-    setSubtotal(nuevoSubtotal);
-  }, [items]);
-
+  // Manejar eliminación de item
   const handleRemove = async (idProducto) => {
-    const item = items.find(i => i.producto?.idProducto === idProducto);
-    if (!item) return;
+    const itemToRemove = items.find((i) => i.producto?.idProducto === idProducto);
+    if (!itemToRemove) return;
 
     try {
-      await removeCarritoItem(item.idCarritoItem);
-      load();
+      // Actualización optimista
+      const updatedItems = items.filter((i) => i.producto.idProducto !== idProducto);
+      setItems(updatedItems);
+      calculateTotals(updatedItems);
+      
+      await removeCarritoItem(itemToRemove.idCarritoItem);
     } catch (error) {
       console.error('Error al eliminar ítem:', error.message);
+      load(); // Recargar datos originales
     }
   };
 
+  // Manejar cambio de cantidad
   const handleQty = async (item, delta) => {
     const nuevaCantidad = item.cantidad + delta;
     if (nuevaCantidad < 1) return;
 
     try {
+      // Actualización optimista
+      const updatedItems = items.map((i) =>
+        i.producto.idProducto === item.producto.idProducto
+          ? { ...i, cantidad: nuevaCantidad }
+          : i
+      );
+      
+      setItems(updatedItems);
+      calculateTotals(updatedItems);
+
+      // Persistir cambios en el servidor
       await updateCarritoItem({
         idCarritoItem: item.idCarritoItem,
         idCarrito: carrito.idCarrito,
         idProducto: item.producto.idProducto,
-        cantidad: nuevaCantidad
+        cantidad: nuevaCantidad,
       });
-
-      load();
     } catch (error) {
       console.error('Error al actualizar cantidad:', error.message);
+      load(); // Recargar datos originales
     }
   };
 
-  const total = subtotal + envio;
-
-  if (loading) return <div>Cargando carrito...</div>;
+  if (loading) return <div className="loading-message">Cargando carrito...</div>;
 
   return (
     <div className="cart-container">
       {items.length === 0 ? (
-        <p>Tu carrito está vacío.</p>
+        <p className="empty-cart-message">Tu carrito está vacío.</p>
       ) : (
         <>
           <ul className="items-list">
             {items.map((item) => (
-              <li key={item.producto?.idProducto} className="cart-item">
-                <img
-                  src={item.producto?.imagen || 'placeholder.jpg'}
-                  alt={item.producto?.nombre || 'Producto'}
-                  className="cart-item-image"
-                />
-                <div className="cart-item-details">
-                  <h4>{item.producto?.nombre || 'Producto desconocido'}</h4>
-                  <p>Precio: ${item.producto?.precio?.toFixed(2) || '0.00'}</p>
-                  <div className="qty-controls">
-                    <button onClick={() => handleQty(item, -1)}>-</button>
-                    <span>{item.cantidad}</span>
-                    <button onClick={() => handleQty(item, 1)}>+</button>
-                  </div>
-                  <p>Total: ${(item.cantidad * (item.producto?.precio || 0)).toFixed(2)}</p>
+              <li
+                key={item.producto.idProducto}
+                className="cart-item"
+              >
+                <div className="image-container">
+                  <img
+                    src={item.producto.imagen || '/placeholder-product.jpg'}
+                    alt={item.producto.nombre}
+                    className="cart-item-image"
+                  />
                 </div>
+                
+                <div className="cart-item-details">
+                  <h4 className="product-name">{item.producto.nombre}</h4>
+                  <p className="product-price">
+                    Precio unitario: ${item.producto.precio.toFixed(2)}
+                  </p>
+                  
+                  <div className="qty-controls-container">
+                    <div className="qty-controls">
+                      <button
+                        className="qty-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleQty(item, -1);
+                        }}
+                        disabled={item.cantidad <= 1}
+                      >
+                        -
+                      </button>
+                      <span className="qty-display">{item.cantidad}</span>
+                      <button
+                        className="qty-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleQty(item, 1);
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                    
+                    <p className="item-total">
+                      Total: ${(item.cantidad * item.producto.precio).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+                
                 <button
-                  onClick={() => handleRemove(item.producto?.idProducto)}
-                  className="remove-item-btn"
+                  className="remove-item-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemove(item.producto.idProducto);
+                  }}
                 >
-                  🗑️
+                  Eliminar
                 </button>
               </li>
             ))}
           </ul>
+
           <div className="cart-summary">
-            <p>Subtotal: ${subtotal.toFixed(2)}</p>
-            <p>Envío: ${envio.toFixed(2)}</p>
-            <h3>Total: ${total.toFixed(2)}</h3>
+            <div className="summary-row">
+              <span>Subtotal:</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="summary-row">
+              <span>Envío:</span>
+              <span>${envio.toFixed(2)}</span>
+            </div>
+            <div className="summary-row total">
+              <span>Total:</span>
+              <span>${total.toFixed(2)}</span>
+            </div>
           </div>
         </>
       )}

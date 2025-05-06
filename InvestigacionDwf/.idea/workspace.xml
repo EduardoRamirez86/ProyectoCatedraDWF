@@ -6,19 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/components/Checkout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/components/Checkout.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/components/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/components/Header.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/context/AuthContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/context/AuthContext.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../auth-client/src/context/CartContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/context/CartContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/context/UserContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/context/UserContext.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/context/UserContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/context/UserContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/pages/Login.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/pages/Register.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/services/carritoService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/services/carritoService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/services/notificationService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/services/notificationService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,33 +56,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.InvestigacionDwf [clean].executor": "Run",
-    "Maven.InvestigacionDwf [install].executor": "Run",
-    "Maven.InvestigacionDwf [package].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.Unnamed.executor": "Run",
-    "git-widget-placeholder": "EncriptadoLS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.InvestigacionDwf [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InvestigacionDwf [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.InvestigacionDwf [package].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;EncriptadoLS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Unnamed" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="InvestigacionDwf" />
@@ -127,6 +115,7 @@
       <workItem from="1746333444732" duration="16113000" />
       <workItem from="1746354029204" duration="45000" />
       <workItem from="1746531825024" duration="17656000" />
+      <workItem from="1746554876066" duration="1733000" />
     </task>
     <servers />
   </component>
