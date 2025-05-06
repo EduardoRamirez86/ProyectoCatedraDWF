@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React, { useState, useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { login as loginService } from '../services/authService';
@@ -6,6 +5,7 @@ import { getOrCreateCarrito } from '../services/carritoService';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { secureSetItem, secureRemoveItem } from '../utils/secureStorage';
 import '../style/AuthForm.css';
 
 export default function Login() {
@@ -15,27 +15,18 @@ export default function Login() {
   const { setCarrito } = useContext(CartContext);
   const navigate = useNavigate();
 
-  // Efecto para manejar la redirección y carga del carrito
   useEffect(() => {
     const handlePostLogin = async () => {
       if (!userData) return;
 
       try {
-        // 1. Obtener carrito
         const cart = await getOrCreateCarrito(userData.userId);
-        
-        // 2. Actualizar contexto del carrito
         setCarrito(cart);
-        localStorage.setItem('carritoId', cart.idCarrito);
-        
-        // 3. Redirección final
-        const targetRoute = userData.roles.includes('ROLE_ADMIN') 
-          ? '/admin' 
-          : '/user';
-        
+        secureSetItem('carritoId', cart.idCarrito.toString());
+
+        const targetRoute = userData.roles.includes('ROLE_ADMIN') ? '/admin' : '/user';
         console.log('Redirigiendo a:', targetRoute);
         navigate(targetRoute, { replace: true });
-        
       } catch (error) {
         console.error('Error post-login:', error);
         setError('Error al cargar la sesión');
@@ -48,18 +39,13 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 1. Obtener token
       const token = await loginService(form.username, form.password);
-      
-      // 2. Actualizar contexto de autenticación
       login(token);
-      
       console.log('Login exitoso, token recibido:', token);
-      
     } catch (err) {
       console.error('Error en login:', err);
       setError(err.message || 'Error de autenticación');
-      localStorage.removeItem('token');
+      secureRemoveItem('token');
     }
   };
 

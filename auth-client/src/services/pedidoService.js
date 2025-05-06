@@ -1,5 +1,4 @@
-const API_URL = "http://localhost:8080/auth/pedido";
-const getToken = () => localStorage.getItem("token");
+import { secureGetItem } from '../utils/secureStorage';
 
 /**
  * Función auxiliar para manejar respuestas
@@ -17,6 +16,9 @@ const handleResponse = async (resp) => {
   return data;
 };
 
+const API_URL = "http://localhost:8080/auth/pedido";
+const getToken = () => secureGetItem("token");
+
 /**
  * Realiza el checkout del carrito
  */
@@ -25,12 +27,17 @@ export const checkoutPedido = async ({ idCarrito, tipoPago, cuponCodigo }) => {
     throw new Error("idCarrito y tipoPago son obligatorios");
   }
 
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+
+  const headers = new Headers({
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+  });
+
   const resp = await fetch(`${API_URL}/checkout`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${getToken()}`,
-    },
+    headers: headers,
     body: JSON.stringify({ idCarrito, tipoPago, cuponCodigo }),
   });
 
@@ -43,10 +50,15 @@ export const checkoutPedido = async ({ idCarrito, tipoPago, cuponCodigo }) => {
 export const getPedidosByUser = async (idUser) => {
   if (!idUser) throw new Error("ID de usuario no proporcionado");
 
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+
+  const headers = new Headers({
+    "Authorization": `Bearer ${token}`,
+  });
+
   const resp = await fetch(`${API_URL}/user/${idUser}`, {
-    headers: {
-      "Authorization": `Bearer ${getToken()}`
-    }
+    headers: headers,
   });
 
   return handleResponse(resp);
@@ -56,10 +68,15 @@ export const getPedidosByUser = async (idUser) => {
  * Obtiene todos los pedidos del sistema (ADMIN)
  */
 export const getAllPedidos = async () => {
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+
+  const headers = new Headers({
+    "Authorization": `Bearer ${token}`,
+  });
+
   const resp = await fetch(`${API_URL}/all`, {
-    headers: {
-      "Authorization": `Bearer ${getToken()}`
-    }
+    headers: headers,
   });
 
   return handleResponse(resp);
@@ -80,14 +97,18 @@ export const updatePedidoEstado = async (idPedido, newEstado) => {
   const action = endpointMap[newEstado];
   if (!action) throw new Error("Estado inválido");
 
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+
+  const headers = new Headers({
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`,
+  });
+
   const resp = await fetch(`${API_URL}/${idPedido}/${action}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${getToken()}`,
-    },
+    headers: headers,
   });
 
   return handleResponse(resp);
 };
-

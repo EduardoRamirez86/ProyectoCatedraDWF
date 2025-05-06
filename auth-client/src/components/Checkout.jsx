@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkoutPedido } from '../services/pedidoService';
 import MySwal from '../utils/swal';
+import { secureGetItem } from '../utils/secureStorage';
 import '../style/Checkout.css';
 
 const paymentOptions = [
@@ -13,32 +14,32 @@ const paymentOptions = [
 
 const fieldConfigs = {
   TARJETA_CREDITO: [
-    { 
-      name: 'card', 
+    {
+      name: 'card',
       label: 'Número de Tarjeta',
-      placeholder: '1234 5678 9012 3456', 
+      placeholder: '1234 5678 9012 3456',
       regex: /^\d{4} \d{4} \d{4} \d{4}$/
     },
-    { 
-      name: 'expiry', 
+    {
+      name: 'expiry',
       label: 'Fecha de Expiración',
-      placeholder: 'MM/AA', 
+      placeholder: 'MM/AA',
       regex: /^(0[1-9]|1[0-2])\/\d{2}$/
     }
   ],
   PAYPAL: [
-    { 
-      name: 'paypalAccount', 
+    {
+      name: 'paypalAccount',
       label: 'Correo de PayPal',
-      placeholder: 'email@ejemplo.com', 
+      placeholder: 'email@ejemplo.com',
       regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     }
   ],
   TRANSFERENCIA_BANCARIA: [
-    { 
-      name: 'transferencia', 
+    {
+      name: 'transferencia',
       label: 'Número de Cuenta',
-      placeholder: '00012345678901234567', 
+      placeholder: '00012345678901234567',
       regex: /^\d{20}$/
     }
   ],
@@ -47,18 +48,18 @@ const fieldConfigs = {
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ 
-    nombre: '', 
-    tipoPago: '', 
+  const [form, setForm] = useState({
+    nombre: '',
+    tipoPago: '',
     cuponCodigo: '',
     card: '',
     expiry: '',
     paypalAccount: '',
     transferencia: ''
   });
-  
   const [errors, setErrors] = useState({});
   const [hasCupon, setHasCupon] = useState(false);
+  const [loading, setLoading] = useState(false); // Estado de carga
 
   const handleChange = e => {
     const { name, value: rawValue } = e.target;
@@ -119,11 +120,13 @@ export default function Checkout() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    
     if (!validateForm()) return;
 
+    setLoading(true); // Iniciar carga
     try {
-      const idCarrito = parseInt(localStorage.getItem('carritoId'), 10);
+      const idCarrito = parseInt(secureGetItem('carritoId'), 10);
+      if (!idCarrito) throw new Error('ID de carrito no disponible');
+
       const pedidoData = {
         idCarrito,
         tipoPago: form.tipoPago,
@@ -142,17 +145,20 @@ export default function Checkout() {
       }).then(() => navigate('/confirmation'));
       
     } catch (error) {
+      console.error('Error en la compra:', error);
       MySwal.fire({
         icon: 'error',
         title: 'Error en la compra',
-        text: error.response?.data?.message || 'Error al procesar el pedido'
+        text: error.message || 'Error al procesar el pedido'
       });
+    } finally {
+      setLoading(false); // Finalizar carga
     }
   };
 
   const renderPaymentFields = () => {
     if (!form.tipoPago || !fieldConfigs[form.tipoPago]) return null;
-    
+
     return fieldConfigs[form.tipoPago].map(field => (
       <div key={field.name} className="input-group">
         <input
@@ -176,9 +182,8 @@ export default function Checkout() {
   return (
     <div className="checkout-container">
       <h1>Finalizar Compra</h1>
-      
+
       <form onSubmit={handleSubmit}>
-        {/* Sección de información personal */}
         <div className="form-section">
           <h2>Información Personal</h2>
           <div className="input-group">
@@ -199,7 +204,6 @@ export default function Checkout() {
           </div>
         </div>
 
-        {/* Sección de método de pago */}
         <div className="form-section">
           <h2>Método de Pago</h2>
           <div className="input-group">
@@ -228,7 +232,6 @@ export default function Checkout() {
           {renderPaymentFields()}
         </div>
 
-        {/* Sección de cupones */}
         <div className="form-section">
           <div className="coupon-section">
             <label className="coupon-toggle">
@@ -261,8 +264,8 @@ export default function Checkout() {
           </div>
         </div>
 
-        <button type="submit" className="submit-button">
-          Confirmar y Pagar
+        <button type="submit" className="submit-button" disabled={loading}>
+          {loading ? 'Procesando...' : 'Confirmar y Pagar'}
         </button>
       </form>
     </div>

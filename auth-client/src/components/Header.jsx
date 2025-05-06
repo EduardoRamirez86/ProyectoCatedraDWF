@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
-import "../style/Header.css";
 import { getUserNotifications, markNotificationRead } from "../services/notificationService";
 import { Bell, User } from "react-feather";
+import '../style/Header.css';
 
 export default function Header() {
   const { token, userData, logout } = useContext(AuthContext);
@@ -23,7 +23,6 @@ export default function Header() {
     }
   }, [token, userId]);
 
-  // Cerrar dropdowns al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = e => {
       if (notifRef.current && !notifRef.current.contains(e.target)) {
@@ -83,7 +82,6 @@ export default function Header() {
           </>
         ) : (
           <>
-            {/* Notificaciones */}
             <div className="notification-wrapper" ref={notifRef}>
               <button
                 className="notification-btn"
@@ -132,7 +130,6 @@ export default function Header() {
               )}
             </div>
 
-            {/* Menú de usuario */}
             <div className="user-menu-wrapper" ref={menuRef}>
               <button
                 className="user-menu-btn"

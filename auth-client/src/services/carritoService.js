@@ -1,16 +1,21 @@
+import { secureGetItem } from '../utils/secureStorage';
+
 const API_URL = "http://localhost:8080/auth/carrito";
-const getToken = () => localStorage.getItem('token');
+const getToken = () => {
+  const token = secureGetItem('token');
+  return token ? `Bearer ${token}` : null;
+};
 
 // Obtiene o crea el carrito del usuario
 export const getOrCreateCarrito = async (idUser) => {
   const token = getToken();
   if (!token) throw new Error('No se encontró el token de autenticación');
   
-  const userId = idUser || parseInt(localStorage.getItem('userId'), 10); // Fallback to localStorage
+  const userId = idUser || parseInt(secureGetItem('userId'), 10); // Fallback to secure-ls
   if (!userId) throw new Error('ID de usuario no proporcionado');
   
   const resp = await fetch(`${API_URL}/${userId}`, {
-    headers: { 'Authorization': `Bearer ${token}` }
+    headers: { 'Authorization': token }
   });
   const text = await resp.text();
   if (!resp.ok) throw new Error(`Error al obtener/crear carrito: ${text}`);
@@ -24,7 +29,7 @@ export const getCarritoItems = async (idCarrito) => {
   
   if (!idCarrito) throw new Error('ID de carrito no proporcionado');
   const resp = await fetch(`${API_URL}/${idCarrito}/items`, {
-    headers: { 'Authorization': `Bearer ${token}` }
+    headers: { 'Authorization': token }
   });
   const text = await resp.text();
   if (!resp.ok) throw new Error(`Error al obtener ítems del carrito: ${text}`);

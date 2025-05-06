@@ -1,7 +1,6 @@
-// components/Register.jsx
 import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { register as registerService } from '../services/authService';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -33,8 +32,9 @@ export default function Register() {
     try {
       const token = await registerService(form);
       login(token);
-      const { roles } = jwtDecode(token);
-      navigate(roles === 'ROLE_ADMIN' ? '/admin' : '/user');
+      const decoded = jwtDecode(token);
+      const roles = decoded.roles || [];
+      navigate(roles.includes('ROLE_ADMIN') ? '/admin' : '/user');
     } catch (err) {
       setError(err.message);
     }
@@ -51,8 +51,7 @@ export default function Register() {
       {error && <p className="error-message">{error}</p>}
 
       <form onSubmit={handleSubmit}>
-        {/* Usuario, Email y Contraseña */}
-        {['username','email','password'].map(field => (
+        {['username', 'email', 'password'].map(field => (
           <div className="form-group" key={field}>
             <input
               name={field}
@@ -70,7 +69,6 @@ export default function Register() {
           </div>
         ))}
 
-        {/* Nombres y Apellidos */}
         <div className="form-group">
           <input name="primerNombre" placeholder=" " value={form.primerNombre} onChange={handleChange} required/>
           <label>Primer Nombre</label>
@@ -88,13 +86,11 @@ export default function Register() {
           <label>Segundo Apellido</label>
         </div>
 
-        {/* Fecha de Nacimiento */}
         <div className="form-group">
           <input name="fechaNacimiento" type="date" placeholder=" " value={form.fechaNacimiento} onChange={handleChange} required/>
           <label>Fecha de Nacimiento</label>
         </div>
 
-        {/* Teléfono, DUI y Dirección */}
         <div className="form-group">
           <input name="telefono" placeholder=" " value={form.telefono} onChange={handleChange}/>
           <label>Teléfono</label>
@@ -117,4 +113,3 @@ export default function Register() {
     </motion.div>
   );
 }
-

@@ -1,24 +1,32 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { secureGetItem, secureSetItem, secureRemoveItem } from '../utils/secureStorage';
 
-const UserContext = createContext();
+const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
-  const [userId, setUserId] = useState(() => parseInt(localStorage.getItem('userId'), 10) || null);
-  const [carritoId, setCarritoId] = useState(() => parseInt(localStorage.getItem('carritoId'), 10) || null);
+  const [userId, setUserId] = useState(() => {
+    const storedUserId = secureGetItem('userId');
+    return storedUserId ? parseInt(storedUserId, 10) : null;
+  });
+
+  const [carritoId, setCarritoId] = useState(() => {
+    const storedCarritoId = secureGetItem('carritoId');
+    return storedCarritoId ? parseInt(storedCarritoId, 10) : null;
+  });
 
   useEffect(() => {
     if (userId) {
-      localStorage.setItem('userId', userId);
+      secureSetItem('userId', userId.toString());
     } else {
-      localStorage.removeItem('userId');
+      secureRemoveItem('userId');
     }
   }, [userId]);
 
   useEffect(() => {
     if (carritoId) {
-      localStorage.setItem('carritoId', carritoId);
+      secureSetItem('carritoId', carritoId.toString());
     } else {
-      localStorage.removeItem('carritoId');
+      secureRemoveItem('carritoId');
     }
   }, [carritoId]);
 

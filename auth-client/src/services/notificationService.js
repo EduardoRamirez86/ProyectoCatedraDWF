@@ -1,6 +1,7 @@
-// src/services/notificationService.js
+import { secureGetItem } from '../utils/secureStorage';
+
 const API_URL = "http://localhost:8080/auth/notificacion";
-const getToken = () => localStorage.getItem("token");
+const getToken = () => secureGetItem("token"); // Usar secure-ls
 
 /**
  * Obtiene todas las notificaciones de un usuario.
@@ -9,10 +10,13 @@ const getToken = () => localStorage.getItem("token");
  */
 export const getUserNotifications = async (userId) => {
   if (!userId) throw new Error("ID de usuario no proporcionado");
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+
   const resp = await fetch(`${API_URL}/usuario/${userId}`, {
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${getToken()}`
+      "Authorization": `Bearer ${token}`
     },
   });
   if (!resp.ok) {
@@ -29,10 +33,13 @@ export const getUserNotifications = async (userId) => {
  */
 export const markNotificationRead = async (notificationId) => {
   if (!notificationId) throw new Error("ID de notificación no proporcionado");
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+
   const resp = await fetch(`${API_URL}/leer/${notificationId}`, {
     method: "PUT",
     headers: {
-      "Authorization": `Bearer ${getToken()}`,
+      "Authorization": `Bearer ${token}`,
     },
   });
   if (!resp.ok) {

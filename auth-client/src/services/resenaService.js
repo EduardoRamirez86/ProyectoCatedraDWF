@@ -1,5 +1,6 @@
+import { secureGetItem } from '../utils/secureStorage';
+
 const API_URL = "http://localhost:8080/auth/resenas";
-const getToken = () => localStorage.getItem('token');
 
 // Mapea números a RatingEnum
 const mapRatingToEnum = (rating) => {
@@ -15,24 +16,27 @@ const mapRatingToEnum = (rating) => {
 
 // Crea una reseña para un producto
 export const crearResena = async ({ idProducto, comentario, rating }) => {
-  const token = getToken();
-  const idUser = localStorage.getItem('userId');
+  const token = secureGetItem('token');
+  const idUser = secureGetItem('userId');
   if (!token) throw new Error('No se encontró el token de autenticación');
-  if (!idUser) throw new Error('No se encontró el ID de usuario en localStorage');
+  if (!idUser) throw new Error('No se encontró el ID de usuario en secure-ls');
   if (!idProducto || !comentario || !rating) {
     throw new Error('idProducto, comentario y rating son obligatorios');
   }
 
   const ratingEnum = mapRatingToEnum(parseInt(rating, 10));
 
+  const headers = new Headers({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  });
+
   const resp = await fetch(API_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
+    headers: headers,
     body: JSON.stringify({ idProducto, comentario, rating: ratingEnum, idUser: parseInt(idUser, 10) }),
   });
+
   const text = await resp.text();
   if (!resp.ok) throw new Error(`Error al crear reseña: ${text}`);
   return JSON.parse(text);
@@ -40,13 +44,18 @@ export const crearResena = async ({ idProducto, comentario, rating }) => {
 
 // Obtiene las reseñas de un producto
 export const obtenerResenasPorProducto = async (idProducto) => {
-  const token = getToken();
+  const token = secureGetItem('token');
   if (!token) throw new Error('No se encontró el token de autenticación');
   if (!idProducto) throw new Error('ID de producto no proporcionado');
 
-  const resp = await fetch(`${API_URL}/producto/${idProducto}`, {
-    headers: { 'Authorization': `Bearer ${token}` },
+  const headers = new Headers({
+    'Authorization': `Bearer ${token}`,
   });
+
+  const resp = await fetch(`${API_URL}/producto/${idProducto}`, {
+    headers: headers,
+  });
+
   const text = await resp.text();
   if (!resp.ok) throw new Error(`Error al obtener reseñas: ${text}`);
   return JSON.parse(text);

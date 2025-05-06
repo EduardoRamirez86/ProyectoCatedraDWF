@@ -15,6 +15,7 @@ export default function ProductDetail() {
   const [resenas, setResenas] = useState([]);
   const [form, setForm] = useState({ comentario: '', rating: 0 });
   const [cantidad, setCantidad] = useState(1); // Estado para la cantidad
+  const [loading, setLoading] = useState(true); // Estado de carga
   const { carrito } = useContext(CartContext);
   const { userData } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -32,6 +33,8 @@ export default function ProductDetail() {
       } catch (error) {
         console.error('Error al cargar producto o reseñas:', error);
         MySwal.fire('Error', 'No se pudo cargar el producto o las reseñas.', 'error');
+      } finally {
+        setLoading(false);
       }
     };
     fetchProductoYResenas();
@@ -39,7 +42,7 @@ export default function ProductDetail() {
 
   const handleAddToCart = async () => {
     try {
-      if (!carrito) {
+      if (!carrito || !carrito.idCarrito) {
         await MySwal.fire('Error', 'Carrito no disponible.', 'error');
         return;
       }
@@ -87,8 +90,12 @@ export default function ProductDetail() {
     setCantidad((prevCantidad) => (prevCantidad > 1 ? prevCantidad - 1 : 1)); // No permitir que la cantidad sea menor a 1
   };
 
-  if (!producto) {
+  if (loading) {
     return <div>Cargando...</div>;
+  }
+
+  if (!producto) {
+    return <div>Producto no encontrado.</div>;
   }
 
   return (
@@ -153,4 +160,3 @@ export default function ProductDetail() {
     </div>
   );
 }
-

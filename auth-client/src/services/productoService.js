@@ -1,6 +1,8 @@
-const API_URL  = "http://localhost:8080/auth/producto";
+import { secureGetItem } from '../utils/secureStorage';
+
+const API_URL = "http://localhost:8080/auth/producto";
 const TIPO_URL = "http://localhost:8080/auth/tipoproducto";
-const getToken = () => localStorage.getItem('token');
+const getToken = () => secureGetItem('token');
 
 // GET (público)
 export const getAllProductos = async () => {
@@ -40,12 +42,14 @@ export const createProducto = async (producto) => {
     throw new Error('El campo "ID Tipo Producto" es obligatorio y debe ser un número válido.');
   }
 
+  const headers = new Headers({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  });
+
   const resp = await fetch(API_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
+    headers: headers,
     body: JSON.stringify(payload),
   });
 
@@ -69,12 +73,14 @@ export const updateProducto = async (id, producto) => {
     throw new Error('El campo "ID Tipo Producto" es obligatorio y debe ser un número válido.');
   }
 
+  const headers = new Headers({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  });
+
   const resp = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
+    headers: headers,
     body: JSON.stringify(payload),
   });
 
@@ -89,10 +95,15 @@ export const updateProducto = async (id, producto) => {
 export const deleteProducto = async (id) => {
   if (!id) throw new Error('ID no proporcionado para delete');
   const token = getToken();
+  const headers = new Headers({
+    'Authorization': `Bearer ${token}`,
+  });
+
   const resp = await fetch(`${API_URL}/${id}`, {
     method: 'DELETE',
-    headers: { 'Authorization': `Bearer ${token}` }
+    headers: headers,
   });
+
   if (!resp.ok) throw new Error(`Error al eliminar producto ${id}`);
   return { success: true };
 };

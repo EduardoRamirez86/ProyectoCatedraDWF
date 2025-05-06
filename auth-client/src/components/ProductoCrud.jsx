@@ -98,6 +98,7 @@ const ProductoCrud = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    setLoading(true); // Iniciar carga
     try {
       if (isEditing) {
         const updated = await updateProducto(form.idProducto, buildPayload());
@@ -129,12 +130,14 @@ const ProductoCrud = () => {
       }));
       setProductos(productosConTipo);
     } catch (error) {
-      console.error(error);
+      console.error('Error al guardar producto:', error);
       await MySwal.fire({
         icon: 'error',
         title: 'Error',
         text: 'No se pudo guardar el producto.',
       });
+    } finally {
+      setLoading(false); // Finalizar carga
     }
   };
 
@@ -164,6 +167,7 @@ const ProductoCrud = () => {
     });
 
     if (result.isConfirmed) {
+      setLoading(true);
       try {
         await deleteProducto(id);
         await MySwal.fire({
@@ -183,12 +187,14 @@ const ProductoCrud = () => {
         }));
         setProductos(productosConTipo);
       } catch (error) {
-        console.error(error);
+        console.error('Error al eliminar producto:', error);
         await MySwal.fire({
           icon: 'error',
           title: 'Error',
           text: 'No se pudo eliminar el producto.',
         });
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -304,11 +310,11 @@ const ProductoCrud = () => {
         </div>
   
         <div className="form-actions">
-          <button type="submit" className="submit-btn">
+          <button type="submit" className="submit-btn" disabled={loading}>
             {isEditing ? 'Actualizar Producto' : 'Crear Nuevo Producto'}
           </button>
           {isEditing && (
-            <button type="button" onClick={resetForm} className="cancel-btn">
+            <button type="button" onClick={resetForm} className="cancel-btn" disabled={loading}>
               Cancelar Edición
             </button>
           )}
@@ -344,8 +350,8 @@ const ProductoCrud = () => {
                 <td>{p.cantidadPuntos}</td>
                 <td>{p.nombreTipo || '—'}</td>
                 <td>
-                  <button onClick={() => handleEdit(p)}>✏️</button>
-                  <button onClick={() => handleDelete(p.idProducto)}>🗑️</button>
+                  <button onClick={() => handleEdit(p)} disabled={loading}>✏️</button>
+                  <button onClick={() => handleDelete(p.idProducto)} disabled={loading}>🗑️</button>
                 </td>
               </tr>
             ))}

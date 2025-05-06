@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { getCarritoItems } from '../services/carritoService';
 import { removeCarritoItem, updateCarritoItem } from '../services/carritoItemService';
-import UserContext from '../context/UserContext';
+import { CartContext } from '../context/CartContext';
 import '../style/userPage.css';
 
 export default function Cart() {
   const [items, setItems] = useState([]);
-  const { carritoId } = useContext(UserContext);
+  const { carrito, loading } = useContext(CartContext);
   const [subtotal, setSubtotal] = useState(0);
   const envio = 5;
 
@@ -30,19 +30,20 @@ export default function Cart() {
   };
 
   const load = useCallback(async () => {
-    if (!carritoId) {
+    if (loading) return; // Esperar a que el carrito esté listo
+    if (!carrito || !carrito.idCarrito) {
       console.error('ID de carrito no disponible.');
       return;
     }
 
     try {
-      const cartItems = await getCarritoItems(carritoId);
+      const cartItems = await getCarritoItems(carrito.idCarrito);
       const agrupados = agruparItems(cartItems);
       setItems(agrupados);
     } catch (error) {
       console.error('Error al cargar ítems:', error.message);
     }
-  }, [carritoId]);
+  }, [carrito, loading]);
 
   useEffect(() => {
     load();
@@ -75,11 +76,10 @@ export default function Cart() {
     try {
       await updateCarritoItem({
         idCarritoItem: item.idCarritoItem,
-        idCarrito: carritoId,
+        idCarrito: carrito.idCarrito,
         idProducto: item.producto.idProducto,
         cantidad: nuevaCantidad
       });
-      
 
       load();
     } catch (error) {
@@ -88,6 +88,8 @@ export default function Cart() {
   };
 
   const total = subtotal + envio;
+
+  if (loading) return <div>Cargando carrito...</div>;
 
   return (
     <div className="cart-container">
