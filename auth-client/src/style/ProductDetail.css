@@ -1,281 +1,292 @@
-/* ===========================
-   VARIABLES DE DISEÑO
+/* =========================== 
+   VARIABLES DE DISEÑO 
 ============================= */
 :root {
-    --primary: #0d6efd;
-    --secondary: #6c757d;
-    --success: #198754;
-    --danger: #dc3545;
-    --light: #f8f9fa;
-    --dark: #212529;
-  
-    --bg: #f1f3f5;
-    --text: #1c1f23;
-    --accent: #e0e0e0;
-  
-    --radius: 12px;
-    --transition: 0.3s ease;
-    --shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-    --font-base: 'Poppins', sans-serif;
-  }
-  
-  /* ===========================
-     RESET GLOBAL Y TIPOGRAFÍA
-  ============================= */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  body {
-    font-family: var(--font-base);
-    background-color: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    padding: 40px 20px;
-  }
-  
-  /* ===========================
-     BOTÓN DE REGRESO
-  ============================= */
-  .back-btn {
-    font-size: 1rem;
-    color: var(--primary);
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-bottom: 30px;
-    transition: color var(--transition);
-  }
-  
-  .back-btn:hover {
-    color: var(--dark);
-    text-decoration: underline;
-  }
-  
-  /* ===========================
-     CONTENEDOR PRINCIPAL
-  ============================= */
-  .product-detail-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 40px;
-    backdrop-filter: blur(10px);
-    transition: all var(--transition);
-  }
-  
-  /* ===========================
-     DETALLE DEL PRODUCTO
-  ============================= */
-  .product-detail {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-  
-  @media (min-width: 768px) {
-    .product-detail {
-      flex-direction: row;
-      align-items: center;
-    }
-  }
-  
-  /* ===========================
-     IMAGEN DEL PRODUCTO
-  ============================= */
-  .product-detail-image {
-    max-width: 500px;
-    width: 100%;
-    border-radius: var(--radius);
-    object-fit: cover;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    transition: transform var(--transition), box-shadow var(--transition);
-  }
-  
-  .product-detail-image:hover {
-    transform: scale(1.015);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* ===========================
-     INFORMACIÓN DEL PRODUCTO
-  ============================= */
-  .product-info {
-    flex: 1;
-    padding: 0 20px;
-  }
-  
-  .product-info h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-  }
-  
-  .product-description {
-    font-size: 1.1rem;
-    color: var(--secondary);
-    margin-bottom: 24px;
-  }
-  
-  .product-price {
-    font-size: 1.6rem;
-    color: var(--success);
-    font-weight: bold;
-    margin-bottom: 30px;
-  }
-  
-  /* ===========================
-     BOTÓN DE COMPRAR
-  ============================= */
-  .add-to-cart-btn {
-    background: var(--primary);
-    color: #fff;
-    padding: 14px 30px;
-    border: none;
-    font-size: 1rem;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: background var(--transition), transform var(--transition);
-    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
-  }
-  
-  .add-to-cart-btn:hover {
-    background: #0b5ed7;
-    transform: translateY(-2px);
-  }
-  
-  .add-to-cart-btn:active {
-    transform: scale(0.98);
-  }
-  
-  /* ===========================
-     SECCIÓN DE RESEÑAS
-  ============================= */
-  .resena-section {
-    margin-top: 50px;
-  }
-  
-  .resena-section h3 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    color: var(--dark);
-  }
-  
-  /* ===========================
-     FORMULARIO DE RESEÑA
-  ============================= */
-  .resena-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 40px;
-  }
-  
-  .resena-form textarea {
-    height: 120px;
-    border: 1px solid #ddd;
-    padding: 12px;
-    font-size: 1rem;
-    border-radius: var(--radius);
-    resize: vertical;
-    transition: border-color var(--transition), box-shadow var(--transition);
-  }
-  
-  .resena-form textarea:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 6px rgba(13, 110, 253, 0.4);
-    outline: none;
-  }
-  
-  .resena-form button {
-    background: var(--dark);
-    color: #fff;
-    padding: 12px 28px;
-    border: none;
-    font-size: 1rem;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: background var(--transition), transform var(--transition);
-  }
-  
-  .resena-form button:hover {
-    background: #000;
-    transform: scale(1.02);
-  }
-  
-  /* ===========================
-     LISTA DE RESEÑAS
-  ============================= */
-  .resenas-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .resena-item {
-    padding: 20px;
-    border-radius: var(--radius);
-    background-color: #ffffff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-    transition: box-shadow var(--transition);
-  }
-  
-  .resena-item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  }
-  
-  .resena-item p {
-    margin: 6px 0;
-    font-size: 1rem;
-    color: var(--text);
-  }
-  
-  /* ===========================
-     ACCESIBILIDAD Y RESPONSIVE
-  ============================= */
-  :focus-visible {
-    outline: 3px solid var(--primary);
-    outline-offset: 3px;
-  }
-  
-  @media (max-width: 600px) {
-    .product-detail-container {
-      padding: 20px;
-    }
-  
-    .add-to-cart-btn,
-    .resena-form button {
-      width: 100%;
-      text-align: center;
-    }
-  }
-  
+  --primary: #0d6efd;
+  --secondary: #6c757d;
+  --success: #198754;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --bg: #f1f3f5;
+  --text: #1c1f23;
+  --accent: #e0e0e0;
+  --radius: 12px;
+  --transition: 0.3s ease;
+  --shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  --font-base: 'Poppins', sans-serif;
+}
 
-  .quantity-container {
-    display: flex;
+/* =========================== 
+ RESET GLOBAL Y TIPOGRAFÍA 
+============================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-base);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 40px 20px;
+}
+
+/* ===========================
+   BOTÓN DE REGRESO
+============================= */
+.back-btn {
+  font-size: 1rem;
+  color: var(--primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 30px;
+  transition: color var(--transition);
+}
+
+.back-btn:hover {
+  color: var(--dark);
+  text-decoration: underline;
+}
+
+/* ===========================
+   CONTENEDOR PRINCIPAL
+============================= */
+.product-detail-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  transition: all var(--transition);
+}
+
+/* ===========================
+   DETALLE DEL PRODUCTO
+============================= */
+.product-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+@media (min-width: 768px) {
+  .product-detail {
+    flex-direction: row;
     align-items: center;
-    gap: 10px;
   }
-  
-  .quantity-btn {
-    background-color: #f1f1f1;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    font-size: 18px;
-    cursor: pointer;
+}
+
+/* ===========================
+   IMAGEN DEL PRODUCTO
+============================= */
+.product-detail-image {
+  max-width: 500px;
+  width: 100%;
+  border-radius: var(--radius);
+  object-fit: cover;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.product-detail-image:hover {
+  transform: scale(1.015);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* ===========================
+   INFORMACIÓN DEL PRODUCTO
+============================= */
+.product-info {
+  flex: 1;
+  padding: 0 20px;
+}
+
+.product-info h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.product-description {
+  font-size: 1.1rem;
+  color: var(--secondary);
+  margin-bottom: 24px;
+}
+
+.product-price {
+  font-size: 1.6rem;
+  color: var(--success);
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+/* ===========================
+   BOTÓN DE COMPRAR
+============================= */
+.add-to-cart-btn {
+  background: var(--primary);
+  color: #fff;
+  padding: 14px 30px;
+  border: none;
+  font-size: 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+  margin-top: 20px; /* Se agrega espacio entre el botón y los elementos anteriores */
+}
+
+.add-to-cart-btn:hover {
+  background: #0b5ed7;
+  transform: translateY(-2px);
+}
+
+.add-to-cart-btn:active {
+  transform: scale(0.98);
+}
+
+/* ===========================
+   SECCIÓN DE RESEÑAS
+============================= */
+.resena-section {
+  margin-top: 50px;
+}
+
+.resena-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: var(--dark);
+}
+
+/* ===========================
+   FORMULARIO DE RESEÑA
+============================= */
+.resena-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.resena-form textarea {
+  height: 120px;
+  border: 1px solid #ddd;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: var(--radius);
+  resize: vertical;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.resena-form textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.4);
+  outline: none;
+}
+
+.resena-form button {
+  background: var(--dark);
+  color: #fff;
+  padding: 12px 28px;
+  border: none;
+  font-size: 1rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.resena-form button:hover {
+  background: #000;
+  transform: scale(1.02);
+}
+
+/* ===========================
+   LISTA DE RESEÑAS
+============================= */
+.resenas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.resena-item {
+  padding: 20px;
+  border-radius: var(--radius);
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: box-shadow var(--transition);
+}
+
+.resena-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.resena-item p {
+  margin: 6px 0;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+/* ===========================
+   ACCESIBILIDAD Y RESPONSIVE
+============================= */
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .product-detail-container {
+    padding: 20px;
   }
-  
-  .quantity-display {
-    font-size: 18px;
-    font-weight: bold;
+
+  .add-to-cart-btn,
+  .resena-form button {
+    width: 100%;
+    text-align: center;
   }
-  
+}
+
+/* ===========================
+   CANTIDAD (botones + y -)
+============================= */
+.quantity-container {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Aumentamos el espacio entre los botones */
+  margin-bottom: 20px; /* Agregamos un margen inferior para separarlo del siguiente bloque */
+}
+
+.quantity-btn {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  padding: 8px 15px; /* Tamaño mayor para mayor facilidad de clic */
+  font-size: 20px; /* Se aumenta ligeramente el tamaño de la fuente */
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.quantity-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.quantity-btn:active {
+  transform: scale(0.98);
+}
+
+.quantity-display {
+  font-size: 20px;
+  font-weight: bold;
+}

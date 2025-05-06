@@ -7,19 +7,10 @@ import sv.edu.udb.InvestigacionDwf.dto.request.PagoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.request.PedidoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.PedidoResponse;
 import sv.edu.udb.InvestigacionDwf.exception.ResourceNotFoundException;
-import sv.edu.udb.InvestigacionDwf.model.entity.Cupon;
-import sv.edu.udb.InvestigacionDwf.model.entity.HistorialPuntos;
-import sv.edu.udb.InvestigacionDwf.model.entity.Notificacion;
-import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
-import sv.edu.udb.InvestigacionDwf.model.entity.User;
+import sv.edu.udb.InvestigacionDwf.model.entity.*;
 import sv.edu.udb.InvestigacionDwf.model.enums.EstadoNotificacion;
 import sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido;
-import sv.edu.udb.InvestigacionDwf.repository.CarritoItemRepository;
-import sv.edu.udb.InvestigacionDwf.repository.CarritoRepository;
-import sv.edu.udb.InvestigacionDwf.repository.CuponRepository;
-import sv.edu.udb.InvestigacionDwf.repository.NotificacionRepository;
-import sv.edu.udb.InvestigacionDwf.repository.PedidoRepository;
-import sv.edu.udb.InvestigacionDwf.repository.UserRepository;
+import sv.edu.udb.InvestigacionDwf.repository.*;
 import sv.edu.udb.InvestigacionDwf.service.CuponService;
 import sv.edu.udb.InvestigacionDwf.service.mapper.PedidoMapper;
 
@@ -47,6 +38,12 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
         var carrito = carritoRepository.findById(req.getIdCarrito())
                 .orElseThrow(() -> new ResourceNotFoundException("Carrito no encontrado ID: " + req.getIdCarrito()));
         var items = carritoItemRepository.findByCarrito_IdCarrito(carrito.getIdCarrito());
+
+        // Validación: No permitir checkout con carrito vacío
+        if (items.isEmpty()) {
+            throw new IllegalStateException("No se puede realizar la compra con el carrito vacío.");
+        }
+
         BigDecimal total = items.stream()
                 .map(i -> i.getProducto().getPrecio().multiply(BigDecimal.valueOf(i.getCantidad())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -122,7 +119,6 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
         p.actualizarEstado(EstadoPedido.PAGADO, p.getCarrito().getUser());
         p.setFechaFinal(null);
         var saved = pedidoRepository.save(p);
-
         crearNotificacion(p.getCarrito().getUser(), saved, "PAGADO");
         return pedidoMapper.toResponse(saved);
     }
@@ -133,7 +129,6 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
         Pedido p = getPedidoOrThrow(idPedido);
         p.actualizarEstado(EstadoPedido.PAGADO, pagoReq.getUsuario());
         var saved = pedidoRepository.save(p);
-
         crearNotificacion(p.getCarrito().getUser(), saved, "PAGADO");
         return pedidoMapper.toResponse(saved);
     }
@@ -144,7 +139,6 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
         Pedido p = getPedidoOrThrow(idPedido);
         p.actualizarEstado(EstadoPedido.EN_PROCESO, p.getCarrito().getUser());
         var saved = pedidoRepository.save(p);
-
         crearNotificacion(p.getCarrito().getUser(), saved, "EN_PROCESO");
         return pedidoMapper.toResponse(saved);
     }
@@ -156,7 +150,6 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
         p.actualizarEstado(EstadoPedido.ENTREGADO, p.getCarrito().getUser());
         p.setFechaFinal(LocalDateTime.now());
         var saved = pedidoRepository.save(p);
-
         crearNotificacion(p.getCarrito().getUser(), saved, "ENTREGADO");
         return pedidoMapper.toResponse(saved);
     }
@@ -168,7 +161,6 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
         p.actualizarEstado(EstadoPedido.CANCELADO, p.getCarrito().getUser());
         p.setFechaFinal(LocalDateTime.now());
         var saved = pedidoRepository.save(p);
-
         crearNotificacion(p.getCarrito().getUser(), saved, "CANCELADO");
         return pedidoMapper.toResponse(saved);
     }
