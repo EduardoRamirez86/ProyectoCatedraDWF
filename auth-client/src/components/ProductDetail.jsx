@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Rating } from 'react-simple-star-rating'; // O usa tu propio componente StarRating
+import { Rating } from 'react-simple-star-rating';
 import { getAllProductos } from '../services/productoService';
 import { addCarritoItem } from '../services/carritoItemService';
 import { crearResena, obtenerResenasPorProducto } from '../services/resenaService';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import MySwal from '../utils/swal';
-import '../style/ProductDetail.css';
+import '../style/ProductDetail.modules.css';
 
 export default function ProductDetail() {
   const { idProducto } = useParams();
@@ -46,10 +46,10 @@ export default function ProductDetail() {
         await MySwal.fire('Error', 'Carrito no disponible.', 'error');
         return;
       }
-      await addCarritoItem({ 
-        idCarrito: carrito.idCarrito, 
-        idProducto: producto.idProducto, 
-        cantidad 
+      await addCarritoItem({
+        idCarrito: carrito.idCarrito,
+        idProducto: producto.idProducto,
+        cantidad,
       });
       await MySwal.fire('Agregado', `"${producto.nombre}" añadido al carrito.`, 'success');
     } catch (error) {
@@ -116,9 +116,9 @@ export default function ProductDetail() {
       </button>
 
       <div className="product-detail">
-        <img 
-          src={producto.imagen} 
-          alt={producto.nombre} 
+        <img
+          src={producto.imagen}
+          alt={producto.nombre}
           className="product-detail-image"
           loading="lazy"
         />
@@ -129,18 +129,18 @@ export default function ProductDetail() {
           <p className="product-price">${producto.precio.toFixed(2)}</p>
 
           <div className="quantity-container">
-            <button 
-              type="button" 
-              className="quantity-btn" 
+            <button
+              type="button"
+              className="quantity-btn"
               onClick={handleDecrease}
               disabled={cantidad <= 1}
             >
               -
             </button>
             <span className="quantity-display">{cantidad}</span>
-            <button 
-              type="button" 
-              className="quantity-btn" 
+            <button
+              type="button"
+              className="quantity-btn"
               onClick={handleIncrease}
               disabled={cantidad >= 99}
             >
@@ -148,7 +148,7 @@ export default function ProductDetail() {
             </button>
           </div>
 
-          <button 
+          <button
             className="add-to-cart-btn"
             onClick={handleAddToCart}
             disabled={!carrito}
@@ -184,11 +184,7 @@ export default function ProductDetail() {
             />
           </div>
 
-          <button 
-            type="submit" 
-            className="add-to-cart-btn"
-            disabled={!userData}
-          >
+          <button type="submit" className="add-to-cart-btn" disabled={!userData}>
             Publicar reseña
           </button>
         </form>
@@ -198,30 +194,14 @@ export default function ProductDetail() {
             <p className="no-reviews">No hay reseñas disponibles</p>
           ) : (
             resenas.map((resena, index) => {
-              const ratingString = resena.rating;
-              let ratingValue = 0;
-
-              // Mapeo de ratingString a ratingValue
-              switch (ratingString) {
-                case 'ONE':
-                  ratingValue = 1;
-                  break;
-                case 'TWO':
-                  ratingValue = 2;
-                  break;
-                case 'THREE':
-                  ratingValue = 3;
-                  break;
-                case 'FOUR':
-                  ratingValue = 4;
-                  break;
-                case 'FIVE':
-                  ratingValue = 5;
-                  break;
-                default:
-                  ratingValue = 0;
-                  break;
-              }
+              const ratings = {
+                ONE: 1,
+                TWO: 2,
+                THREE: 3,
+                FOUR: 4,
+                FIVE: 5,
+              };
+              const ratingValue = ratings[resena.rating] || 0;
 
               return (
                 <article key={index} className="review-item">
