@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Rating } from 'react-simple-star-rating';
+import { Rating } from 'react-simple-star-rating'; // O usa tu propio componente StarRating
 import { getAllProductos } from '../services/productoService';
 import { addCarritoItem } from '../services/carritoItemService';
 import { crearResena, obtenerResenasPorProducto } from '../services/resenaService';
@@ -14,8 +14,8 @@ export default function ProductDetail() {
   const [producto, setProducto] = useState(null);
   const [resenas, setResenas] = useState([]);
   const [form, setForm] = useState({ comentario: '', rating: 0 });
-  const [cantidad, setCantidad] = useState(1); // Estado para la cantidad
-  const [loading, setLoading] = useState(true); // Estado de carga
+  const [cantidad, setCantidad] = useState(1);
+  const [loading, setLoading] = useState(true);
   const { carrito } = useContext(CartContext);
   const { userData } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -42,12 +42,15 @@ export default function ProductDetail() {
 
   const handleAddToCart = async () => {
     try {
-      if (!carrito || !carrito.idCarrito) {
+      if (!carrito?.idCarrito) {
         await MySwal.fire('Error', 'Carrito no disponible.', 'error');
         return;
       }
-      // Se asegura de usar el valor correcto de la cantidad
-      await addCarritoItem({ idCarrito: carrito.idCarrito, idProducto: producto.idProducto, cantidad });
+      await addCarritoItem({ 
+        idCarrito: carrito.idCarrito, 
+        idProducto: producto.idProducto, 
+        cantidad 
+      });
       await MySwal.fire('Agregado', `"${producto.nombre}" añadido al carrito.`, 'success');
     } catch (error) {
       console.error('Error al añadir al carrito:', error);
@@ -83,80 +86,165 @@ export default function ProductDetail() {
   };
 
   const handleIncrease = () => {
-    setCantidad((prevCantidad) => prevCantidad + 1); // Usar el valor anterior para asegurar la actualización correcta
+    setCantidad(prev => Math.min(prev + 1, 99));
   };
 
   const handleDecrease = () => {
-    setCantidad((prevCantidad) => (prevCantidad > 1 ? prevCantidad - 1 : 1)); // No permitir que la cantidad sea menor a 1
+    setCantidad(prev => Math.max(prev - 1, 1));
   };
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return (
+      <div className="container">
+        <div className="loading-message">Cargando producto...</div>
+      </div>
+    );
   }
 
   if (!producto) {
-    return <div>Producto no encontrado.</div>;
+    return (
+      <div className="container">
+        <div className="error-message">Producto no encontrado</div>
+      </div>
+    );
   }
 
   return (
-    <div className="product-detail-container">
-      <button className="back-btn" onClick={() => navigate('/user')}>
+    <div className="product-detail-container surface">
+      <button className="back-btn" onClick={() => navigate(-1)}>
         ← Volver
       </button>
+
       <div className="product-detail">
-        <img src={producto.imagen} alt={producto.nombre} className="product-detail-image" />
+        <img 
+          src={producto.imagen} 
+          alt={producto.nombre} 
+          className="product-detail-image"
+          loading="lazy"
+        />
+
         <div className="product-info">
-          <h2>{producto.nombre}</h2>
+          <h1>{producto.nombre}</h1>
           <p className="product-description">{producto.descripcion}</p>
           <p className="product-price">${producto.precio.toFixed(2)}</p>
-          
+
           <div className="quantity-container">
-            <button onClick={handleDecrease} className="quantity-btn">-</button>
+            <button 
+              type="button" 
+              className="quantity-btn" 
+              onClick={handleDecrease}
+              disabled={cantidad <= 1}
+            >
+              -
+            </button>
             <span className="quantity-display">{cantidad}</span>
-            <button onClick={handleIncrease} className="quantity-btn">+</button>
+            <button 
+              type="button" 
+              className="quantity-btn" 
+              onClick={handleIncrease}
+              disabled={cantidad >= 99}
+            >
+              +
+            </button>
           </div>
 
-          <button className="add-to-cart-btn" onClick={handleAddToCart}>
+          <button 
+            className="add-to-cart-btn"
+            onClick={handleAddToCart}
+            disabled={!carrito}
+          >
             Añadir al carrito
           </button>
         </div>
       </div>
 
-      <div className="resena-section">
-        <h3>Reseñas</h3>
+      <section className="reviews-section">
+        <h2>Reseñas</h2>
+
         <form onSubmit={handleResenaSubmit} className="resena-form">
           <textarea
             name="comentario"
             value={form.comentario}
             onChange={handleChange}
-            placeholder="Escribe tu comentario..."
+            placeholder="Escribe tu reseña..."
             required
+            rows="4"
           />
+
           <div className="rating-container">
             <Rating
               onClick={handleRatingChange}
-              ratingValue={form.rating}
-              size={24}
+              initialValue={form.rating}
+              size={28}
               allowHalfIcon
+              transition
+              fillColor={userData ? 'var(--primary-500)' : 'var(--surface-400)'}
+              emptyColor="var(--surface-200)"
+              readonly={!userData}
             />
           </div>
-          <button type="submit">Enviar reseña</button>
+
+          <button 
+            type="submit" 
+            className="add-to-cart-btn"
+            disabled={!userData}
+          >
+            Publicar reseña
+          </button>
         </form>
 
-        <div className="resenas-list">
+        <div className="reviews-list">
           {resenas.length === 0 ? (
-            <p>No hay reseñas para este producto.</p>
+            <p className="no-reviews">No hay reseñas disponibles</p>
           ) : (
-            resenas.map((resena, index) => (
-              <div key={index} className="resena-item">
-                <p><strong>Usuario:</strong> {resena.username || 'Anónimo'}</p>
-                <p><strong>Rating:</strong> {resena.rating} estrellas</p>
-                <p>{resena.comentario}</p>
-              </div>
-            ))
+            resenas.map((resena, index) => {
+              const ratingString = resena.rating;
+              let ratingValue = 0;
+
+              // Mapeo de ratingString a ratingValue
+              switch (ratingString) {
+                case 'ONE':
+                  ratingValue = 1;
+                  break;
+                case 'TWO':
+                  ratingValue = 2;
+                  break;
+                case 'THREE':
+                  ratingValue = 3;
+                  break;
+                case 'FOUR':
+                  ratingValue = 4;
+                  break;
+                case 'FIVE':
+                  ratingValue = 5;
+                  break;
+                default:
+                  ratingValue = 0;
+                  break;
+              }
+
+              return (
+                <article key={index} className="review-item">
+                  <div className="review-header">
+                    <span className="review-author">{resena.username || 'Anónimo'}</span>
+                    <div className="review-rating">
+                      <Rating
+                        readonly
+                        size={20}
+                        initialValue={ratingValue}
+                        allowHalfIcon
+                        fillColor="var(--primary-500)"
+                        emptyColor="var(--surface-300)"
+                      />
+                    </div>
+                  </div>
+                  <p className="review-content">{resena.comentario}</p>
+                </article>
+              );
+            })
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

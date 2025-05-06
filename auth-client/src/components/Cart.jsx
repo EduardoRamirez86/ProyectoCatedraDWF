@@ -12,7 +12,6 @@ export default function Cart() {
   const { carrito, loading } = useContext(CartContext);
 
   // Función para agrupar items optimizada con useCallback
-  // Corrige la función agruparItems
 const agruparItems = useCallback((itemsOriginales) => {
   const itemsMap = new Map();
 

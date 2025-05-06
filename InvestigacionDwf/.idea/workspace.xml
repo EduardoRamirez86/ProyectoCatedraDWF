@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/context/CartContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/context/CartContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth-client/src/components/Cart.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/components/Cart.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,6 +116,7 @@
       <workItem from="1746354029204" duration="45000" />
       <workItem from="1746531825024" duration="17656000" />
       <workItem from="1746554876066" duration="1733000" />
+      <workItem from="1746556720903" duration="1797000" />
     </task>
     <servers />
   </component>
