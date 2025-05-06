@@ -15,6 +15,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sv.edu.udb.InvestigacionDwf.model.enums.EstadoNotificacion;
 import sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido;
 import sv.edu.udb.InvestigacionDwf.model.enums.TipoPago;
 
@@ -64,6 +65,7 @@ public class Pedido {
         if (this.historialPedidos == null) {
             this.historialPedidos = new ArrayList<>();
         }
+
         HistorialPedido historial = new HistorialPedido();
         historial.setFecha(LocalDateTime.now());
         historial.setEstado(nuevoEstado);
@@ -71,7 +73,18 @@ public class Pedido {
         historial.setPedido(this);
         this.historialPedidos.add(historial);
         this.estado = nuevoEstado;
+
+        // Crear notificación automática
+        Notificacion notificacion = new Notificacion();
+        notificacion.setUser(usuario);
+        notificacion.setMensaje("Estado del pedido #" + this.idPedido + " actualizado a: " + nuevoEstado);
+        notificacion.setFechaEnvio(LocalDateTime.now());
+        notificacion.setEstado(EstadoNotificacion.ENVIADA);
+        notificacion.setPedido(this);
+
+        // Aquí guardarías la notificación con NotificacionRepository (inyéctalo desde fuera)
     }
+
 }
 
 // (Other files remain unchanged)

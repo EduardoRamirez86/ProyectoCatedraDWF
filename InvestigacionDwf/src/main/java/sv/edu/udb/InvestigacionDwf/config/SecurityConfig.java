@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // b) Rutas públicas
                         .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth/ropa/**", "/auth/compras", "/auth/producto/**", "/auth/tipoproducto/**", "/auth/carrito/**" , "auth/carrito-item/**" , "auth/pedido/**", "/auth/resenas/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/ropa/**", "/auth/compras", "/auth/producto/**", "/auth/tipoproducto/**", "/auth/carrito/**" , "auth/carrito-item/**" , "auth/pedido/**", "/auth/resenas/**", "/auth/notificacion").permitAll()
                         .requestMatchers("/h2-console/**", "/error").permitAll()
                         // c) Rutas protegidas (ADMIN)
                         .requestMatchers(HttpMethod.POST,   "/auth/ropa/**").hasRole("ADMIN")
@@ -74,6 +74,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,   "/auth/resenas/**").hasAnyRole("ADMIN","USER")
                         .requestMatchers(HttpMethod.PUT,    "/auth/resenas/**").hasAnyRole("ADMIN","USER")
                         .requestMatchers(HttpMethod.DELETE, "/auth/resenas/**").hasAnyRole("ADMIN","USER")
+                        //Notificacion (USER)(ADMIN)
+                        .requestMatchers(HttpMethod.POST,   "/auth/notificacion").hasAnyRole("ADMIN","USER")
+                        .requestMatchers(HttpMethod.PUT,    "/auth/notificacion").hasAnyRole("ADMIN","USER")
+                        .requestMatchers(HttpMethod.DELETE, "/auth/notificacion").hasAnyRole("ADMIN","USER")
+
                         // d) El resto requiere autenticación
                         .anyRequest().authenticated()
                 )

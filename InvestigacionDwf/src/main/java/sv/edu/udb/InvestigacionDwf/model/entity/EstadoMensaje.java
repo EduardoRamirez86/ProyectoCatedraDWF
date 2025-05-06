@@ -19,7 +19,4 @@ public class EstadoMensaje {
     @Column(nullable = false)
     private String estado;
 
-    @OneToMany(mappedBy = "estadoMensaje", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Notificacion> notificaciones;
 }

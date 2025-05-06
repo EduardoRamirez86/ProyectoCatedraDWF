@@ -14,4 +14,6 @@ public interface PedidoService {
     PedidoResponse marcarEntregado(Long idPedido);
     PedidoResponse cancelar(Long idPedido, String motivo);
     List<PedidoResponse> findAllByUser(Long idUser);
+    List<PedidoResponse> findAll();
 }
+

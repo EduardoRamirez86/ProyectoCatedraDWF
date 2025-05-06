@@ -1,4 +1,3 @@
-/* src/style/Header.css */
 .header {
   position: sticky;
   top: 0;
@@ -55,3 +54,156 @@
 .header__nav a:hover {
   color: #007bff;
 }
+
+/* ============================= */
+/* Estilos para notificaciones   */
+/* ============================= */
+
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  color: white;
+}
+
+.notification-btn .badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  padding: 2px 5px;
+}
+
+.notification-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 280px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  z-index: 100;
+  padding-top: 0;
+}
+
+.notif-tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.notif-tabs button {
+  flex: 1;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.notif-tabs button.active {
+  background: #f0f0f0;
+}
+
+.notif-list {
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.notif-item {
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.notif-item.unread {
+  background: #e6f7ff !important;
+  font-weight: bold;
+}
+
+.notif-item.read {
+  background: #fff !important;
+  color: #666;
+}
+
+.notif-item small {
+  display: block;
+  color: #888;
+  font-size: 0.75rem;
+}
+
+.no-notifs {
+  padding: 1rem;
+  text-align: center;
+  color: #666;
+}
+
+/* Combobox de usuario */
+.user-combobox {
+  background: #222;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.user-combobox:focus {
+  outline: none;
+  background: #333;
+}
+
+/* ================================= */
+/* Menú de usuario con ícono y dropdown */
+/* ================================= */
+
+.user-menu-wrapper {
+  position: relative;
+}
+
+.user-menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  padding: 0.25rem;
+}
+
+.user-menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.5rem;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  list-style: none;
+  padding: 0;
+  min-width: 150px;
+  z-index: 100;
+}
+
+/* Aquí garantizamos que el texto sea siempre negro */
+.user-menu-dropdown li {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: #111;            /* texto negro */
+  font-weight: 500;       /* opcional: ligeramente más grueso */
+}
+
+.user-menu-dropdown li:hover {
+  background: #f0f0f0;
+  /* dejamos el texto en negro también al hover */
+  color: #111;
+}
+

@@ -54,6 +54,11 @@ public class PedidoController {
     public ResponseEntity<List<PedidoResponse>> getByUser(@PathVariable Long idUser) {
         return ResponseEntity.ok(pedidoService.findAllByUser(idUser));
     }
+    @GetMapping("/all")
+    public ResponseEntity<List<PedidoResponse>> getAllPedidos() {
+        return ResponseEntity.ok(pedidoService.findAll());
+    }
+
 }
 
 
