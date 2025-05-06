@@ -1,41 +1,53 @@
-/* src/style/userPage.css */
 .user-page {
-    display: flex;
-    flex-direction: column;
-    background-color: #f5f5f5;
-  }
-  
-  .user-page-header {
-    background-color: #111;
-    color: white;
-    padding: 1rem 2rem;
-  }
-  
-  .user-page-nav button {
-    margin-right: 1rem;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .user-page-nav button.active {
-    text-decoration: underline;
-  }
-  
-  .search-bar {
-    margin-top: 1rem;
-    padding: 0.5rem;
-    width: 100%;
-    max-width: 300px;
-    border-radius: 4px;
-    border: none;
-  }
-  
-  .user-page-content {
-    padding: 2rem;
-  }
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+}
 
+.user-page-header {
+  background-color: #111;
+  color: white;
+  padding: 1rem 2rem;
+}
+
+.user-page-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.user-page-nav button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.user-page-nav button.active {
+  text-decoration: underline;
+}
+
+.search-bar {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: none;
+  width: 250px;
+  max-width: 100%;
+}
+
+/* Main content layout */
+.user-page-content {
+  padding: 2rem;
+}
+
+/* Carrito de compras */
 .cart-container {
   padding: 2rem;
   background-color: #fff;

@@ -1,4 +1,3 @@
-// src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/PedidoServiceImpl.java
 package sv.edu.udb.InvestigacionDwf.service.impl;
 
 import lombok.RequiredArgsConstructor;
@@ -8,6 +7,7 @@ import sv.edu.udb.InvestigacionDwf.dto.request.PagoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.request.PedidoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.PedidoResponse;
 import sv.edu.udb.InvestigacionDwf.exception.ResourceNotFoundException;
+import sv.edu.udb.InvestigacionDwf.model.entity.Cupon;
 import sv.edu.udb.InvestigacionDwf.model.entity.HistorialPuntos;
 import sv.edu.udb.InvestigacionDwf.model.entity.Notificacion;
 import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
@@ -16,9 +16,11 @@ import sv.edu.udb.InvestigacionDwf.model.enums.EstadoNotificacion;
 import sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido;
 import sv.edu.udb.InvestigacionDwf.repository.CarritoItemRepository;
 import sv.edu.udb.InvestigacionDwf.repository.CarritoRepository;
+import sv.edu.udb.InvestigacionDwf.repository.CuponRepository;
 import sv.edu.udb.InvestigacionDwf.repository.NotificacionRepository;
 import sv.edu.udb.InvestigacionDwf.repository.PedidoRepository;
 import sv.edu.udb.InvestigacionDwf.repository.UserRepository;
+import sv.edu.udb.InvestigacionDwf.service.CuponService;
 import sv.edu.udb.InvestigacionDwf.service.mapper.PedidoMapper;
 
 import java.math.BigDecimal;
@@ -35,7 +37,9 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
     private final CarritoItemRepository carritoItemRepository;
     private final PedidoMapper pedidoMapper;
     private final UserRepository userRepository;
-    private final NotificacionRepository notificacionRepository;  // <-- inyectado
+    private final NotificacionRepository notificacionRepository;
+    private final CuponService cuponService;
+    private final CuponRepository cuponRepository;
 
     @Override
     @Transactional
@@ -47,6 +51,20 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
                 .map(i -> i.getProducto().getPrecio().multiply(BigDecimal.valueOf(i.getCantidad())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        // Aplicar cupón si se proporciona
+        if (req.getCuponCodigo() != null && !req.getCuponCodigo().isEmpty()) {
+            User user = carrito.getUser();
+            if (cuponService.validateCoupon(req.getCuponCodigo(), user)) {
+                Cupon cupon = cuponRepository.findByCodigo(req.getCuponCodigo())
+                        .orElseThrow(() -> new ResourceNotFoundException("Cupón no encontrado: " + req.getCuponCodigo()));
+                BigDecimal descuento = total.multiply(BigDecimal.valueOf(cupon.getPorcentajeDescuento() / 100));
+                total = total.subtract(descuento);
+                cuponService.redeemCoupon(req.getCuponCodigo(), user);
+            } else {
+                throw new IllegalStateException("Cupón inválido o no aplicable");
+            }
+        }
+
         Pedido pedido = new Pedido();
         pedido.setCarrito(carrito);
         pedido.setFechaInicio(LocalDateTime.now());
@@ -55,7 +73,7 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
         pedido.getHistorialPedidos().clear();
         pedido.actualizarEstado(EstadoPedido.PENDIENTE, carrito.getUser());
 
-        // lógica de puntos...
+        // Calcular puntos ganados
         int puntosGanados = items.stream()
                 .mapToInt(item -> item.getProducto().getCantidadPuntos() * item.getCantidad())
                 .sum();
@@ -73,11 +91,25 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
         historialPuntos.setCantidadNueva(puntosNuevos);
         pedido.getHistorialPuntos().add(historialPuntos);
 
-        // guardamos pedido y usuario
         var savedPedido = pedidoRepository.save(pedido);
         userRepository.save(user);
 
-        // **CREAR Y GUARDAR NOTIFICACIÓN**
+        // Generar cupón si se alcanzan 30 puntos
+        if (puntosNuevos >= 30) {
+            Cupon cupon = cuponService.generateCouponForUser(user);
+            user.setPuntos(puntosNuevos - 30);
+            HistorialPuntos historialPuntosCupon = new HistorialPuntos();
+            historialPuntosCupon.setPedido(savedPedido);
+            historialPuntosCupon.setUser(user);
+            historialPuntosCupon.setFecha(LocalDateTime.now());
+            historialPuntosCupon.setCantidadAnterior(puntosNuevos);
+            historialPuntosCupon.setCantidadNueva(user.getPuntos());
+            savedPedido.getHistorialPuntos().add(historialPuntosCupon);
+            userRepository.save(user);
+            crearNotificacionCupon(user, savedPedido, cupon.getCodigo());
+        }
+
+        // Crear notificación de pedido
         crearNotificacion(user, savedPedido, "PENDIENTE");
 
         return pedidoMapper.toResponse(savedPedido);
@@ -149,12 +181,19 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<PedidoResponse> findAll() {
+        return pedidoRepository.findAll().stream()
+                .map(pedidoMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
     private Pedido getPedidoOrThrow(Long id) {
         return pedidoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pedido no encontrado ID: " + id));
     }
 
-    /** Método helper para crear y guardar la notificación */
     private void crearNotificacion(User user, Pedido pedido, String estadoStr) {
         Notificacion notif = new Notificacion();
         notif.setUser(user);
@@ -164,13 +203,14 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
         notif.setPedido(pedido);
         notificacionRepository.save(notif);
     }
-    @Override
-    @Transactional(readOnly = true)
-    public List<PedidoResponse> findAll() {
-        return pedidoRepository.findAll().stream()
-                .map(pedidoMapper::toResponse)
-                .collect(Collectors.toList());
+
+    private void crearNotificacionCupon(User user, Pedido pedido, String codigoCupon) {
+        Notificacion notif = new Notificacion();
+        notif.setUser(user);
+        notif.setMensaje("¡Felicidades! Has alcanzado 30 puntos. Usa el cupón " + codigoCupon + " para un 15% de descuento en tu próxima compra. Válido hasta " + LocalDateTime.now().plusDays(30).toLocalDate() + ".");
+        notif.setFechaEnvio(LocalDateTime.now());
+        notif.setEstado(EstadoNotificacion.ENVIADA);
+        notif.setPedido(pedido);
+        notificacionRepository.save(notif);
     }
-
 }
-

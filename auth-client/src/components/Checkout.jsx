@@ -1,4 +1,3 @@
-// src/components/Checkout.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkoutPedido } from '../services/pedidoService';
@@ -12,7 +11,6 @@ const paymentOptions = [
   { label: 'Transferencia Bancaria', value: 'TRANSFERENCIA_BANCARIA' }
 ];
 
-// Configuración de campos dinámicos según tipo de pago
 const fieldConfigs = {
   TARJETA_CREDITO: [
     { name: 'card', placeholder: '1234-5678-9012-3456', regex: /^\d{4}-\d{4}-\d{4}-\d{4}$/ },
@@ -29,20 +27,18 @@ const fieldConfigs = {
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ nombre: '', tipoPago: '' });
+  const [form, setForm] = useState({ nombre: '', tipoPago: '', cuponCodigo: '' });
   const [errors, setErrors] = useState({});
 
   const handleChange = e => {
     const { name, value: raw } = e.target;
     let value = raw;
 
-    // Formateo de campos específicos
     if (name === 'card') value = raw.replace(/\D/g, '').substring(0, 16).replace(/(\d{4})(?=\d)/g, '$1-');
     if (name === 'expiry') value = raw.replace(/\D/g, '').replace(/(\d{2})(\d)/, '$1/$2').substring(0, 5);
 
     setForm(prev => ({ ...prev, [name]: value }));
 
-    // Validación de regex para campos dinámicos
     const cfgs = fieldConfigs[form.tipoPago] || [];
     const cfg = cfgs.find(f => f.name === name);
     if (cfg) setErrors(prev => ({ ...prev, [name]: !cfg.regex.test(value) }));
@@ -50,12 +46,10 @@ export default function Checkout() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    // Validar nombre y tipo de pago
     if (!form.nombre || !form.tipoPago) {
       MySwal.fire('Error', 'Ingresa nombre y forma de pago', 'error');
       return;
     }
-    // Validar campos dinámicos
     const cfgs = fieldConfigs[form.tipoPago] || [];
     for (let cfg of cfgs) {
       if (!cfg.regex.test(form[cfg.name] || '')) {
@@ -65,17 +59,20 @@ export default function Checkout() {
     }
     const idCarrito = parseInt(localStorage.getItem('carritoId'), 10);
     try {
-      const resp = await checkoutPedido({ idCarrito, tipoPago: form.tipoPago });
+      const resp = await checkoutPedido({
+        idCarrito,
+        tipoPago: form.tipoPago,
+        cuponCodigo: form.cuponCodigo || null
+      });
       sessionStorage.setItem('orderNumber', resp.idPedido);
       sessionStorage.setItem('orderTotal', resp.total);
       MySwal.fire('¡Éxito!', 'Tu pedido ha sido procesado', 'success')
         .then(() => navigate('/confirmation'));
-    } catch {
-      MySwal.fire('Error', 'No se pudo procesar el pedido', 'error');
+    } catch (error) {
+      MySwal.fire('Error', `No se pudo procesar el pedido: ${error.message}`, 'error');
     }
   };
 
-  // Renderiza solo los inputs dinámicos según el tipo de pago
   const renderFields = () => {
     if (!form.tipoPago) return null;
     return fieldConfigs[form.tipoPago].map(cfg => (
@@ -109,7 +106,7 @@ export default function Checkout() {
           name="tipoPago"
           value={form.tipoPago}
           onChange={e => {
-            setForm({ nombre: form.nombre, tipoPago: e.target.value });
+            setForm({ nombre: form.nombre, tipoPago: e.target.value, cuponCodigo: form.cuponCodigo });
             setErrors({});
           }}
           required
@@ -124,6 +121,15 @@ export default function Checkout() {
       </div>
 
       {renderFields()}
+
+      <div className="form-group">
+        <input
+          name="cuponCodigo"
+          value={form.cuponCodigo}
+          onChange={handleChange}
+          placeholder="Código de Cupón"
+        />
+      </div>
 
       <button type="submit">Confirmar Compra</button>
     </form>

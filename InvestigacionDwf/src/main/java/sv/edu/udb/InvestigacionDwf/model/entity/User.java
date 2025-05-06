@@ -77,5 +77,9 @@ public class User {
     @JsonIgnore
     private List<Direccion> direcciones;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Cupon> cupones;
+
     // Métodos getter y setter de puntos ya los genera Lombok con @Data
 }

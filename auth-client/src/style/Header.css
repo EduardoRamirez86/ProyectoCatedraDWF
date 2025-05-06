@@ -125,9 +125,11 @@
 }
 
 .notif-item.unread {
-  background: #e6f7ff !important;
+  background: #fff !important;   
+  color: #111 !important;         
   font-weight: bold;
 }
+
 
 .notif-item.read {
   background: #fff !important;

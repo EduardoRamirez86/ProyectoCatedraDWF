@@ -24,32 +24,34 @@ export default function UserPage() {
     <div className="user-page">
       <header className="user-page-header">
         <nav className="user-page-nav">
-          <button
-            className={activeComponent === 'products' ? 'active' : ''}
-            onClick={() => setActiveComponent('products')}
-          >
-            Productos
-          </button>
-          <button
-            className={activeComponent === 'cart' ? 'active' : ''}
-            onClick={() => setActiveComponent('cart')}
-          >
-            Carrito
-          </button>
-          <button
-            className={activeComponent === 'checkout' ? 'active' : ''}
-            onClick={() => setActiveComponent('checkout')}
-          >
-            Checkout
-          </button>
+          <div className="nav-buttons">
+            <button
+              className={activeComponent === 'products' ? 'active' : ''}
+              onClick={() => setActiveComponent('products')}
+            >
+              Productos
+            </button>
+            <button
+              className={activeComponent === 'cart' ? 'active' : ''}
+              onClick={() => setActiveComponent('cart')}
+            >
+              Carrito
+            </button>
+            <button
+              className={activeComponent === 'checkout' ? 'active' : ''}
+              onClick={() => setActiveComponent('checkout')}
+            >
+              Checkout
+            </button>
+          </div>
+          <input
+            type="text"
+            placeholder="Buscar productos..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-bar"
+          />
         </nav>
-        <input
-          type="text"
-          placeholder="Buscar productos..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-bar"
-        />
       </header>
 
       <main className="user-page-content">

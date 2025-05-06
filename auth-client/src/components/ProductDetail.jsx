@@ -14,6 +14,7 @@ export default function ProductDetail() {
   const [producto, setProducto] = useState(null);
   const [resenas, setResenas] = useState([]);
   const [form, setForm] = useState({ comentario: '', rating: 0 });
+  const [cantidad, setCantidad] = useState(1); // Estado para la cantidad
   const { carrito } = useContext(CartContext);
   const { userData } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -42,7 +43,8 @@ export default function ProductDetail() {
         await MySwal.fire('Error', 'Carrito no disponible.', 'error');
         return;
       }
-      await addCarritoItem({ idCarrito: carrito.idCarrito, idProducto: producto.idProducto, cantidad: 1 });
+      // Se asegura de usar el valor correcto de la cantidad
+      await addCarritoItem({ idCarrito: carrito.idCarrito, idProducto: producto.idProducto, cantidad });
       await MySwal.fire('Agregado', `"${producto.nombre}" añadido al carrito.`, 'success');
     } catch (error) {
       console.error('Error al añadir al carrito:', error);
@@ -77,6 +79,14 @@ export default function ProductDetail() {
     setForm({ ...form, rating: newRating });
   };
 
+  const handleIncrease = () => {
+    setCantidad((prevCantidad) => prevCantidad + 1); // Usar el valor anterior para asegurar la actualización correcta
+  };
+
+  const handleDecrease = () => {
+    setCantidad((prevCantidad) => (prevCantidad > 1 ? prevCantidad - 1 : 1)); // No permitir que la cantidad sea menor a 1
+  };
+
   if (!producto) {
     return <div>Cargando...</div>;
   }
@@ -92,6 +102,13 @@ export default function ProductDetail() {
           <h2>{producto.nombre}</h2>
           <p className="product-description">{producto.descripcion}</p>
           <p className="product-price">${producto.precio.toFixed(2)}</p>
+          
+          <div className="quantity-container">
+            <button onClick={handleDecrease} className="quantity-btn">-</button>
+            <span className="quantity-display">{cantidad}</span>
+            <button onClick={handleIncrease} className="quantity-btn">+</button>
+          </div>
+
           <button className="add-to-cart-btn" onClick={handleAddToCart}>
             Añadir al carrito
           </button>
@@ -136,3 +153,4 @@ export default function ProductDetail() {
     </div>
   );
 }
+

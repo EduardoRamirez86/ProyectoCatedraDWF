@@ -20,7 +20,7 @@ const handleResponse = async (resp) => {
 /**
  * Realiza el checkout del carrito
  */
-export const checkoutPedido = async ({ idCarrito, tipoPago }) => {
+export const checkoutPedido = async ({ idCarrito, tipoPago, cuponCodigo }) => {
   if (!idCarrito || !tipoPago) {
     throw new Error("idCarrito y tipoPago son obligatorios");
   }
@@ -31,7 +31,7 @@ export const checkoutPedido = async ({ idCarrito, tipoPago }) => {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${getToken()}`,
     },
-    body: JSON.stringify({ idCarrito, tipoPago }),
+    body: JSON.stringify({ idCarrito, tipoPago, cuponCodigo }),
   });
 
   return handleResponse(resp);
@@ -86,7 +86,6 @@ export const updatePedidoEstado = async (idPedido, newEstado) => {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${getToken()}`,
     },
-    // Se puede incluir body si el backend lo requiere
   });
 
   return handleResponse(resp);

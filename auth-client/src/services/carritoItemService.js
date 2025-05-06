@@ -34,3 +34,27 @@ export const removeCarritoItem = async (idCarritoItem) => {
   }
   return { success: true };
 };
+
+// Actualiza la cantidad de un ítem del carrito
+export const updateCarritoItem = async ({ idCarritoItem, idCarrito, idProducto, cantidad }) => {
+  if (!idCarritoItem || !idCarrito || !idProducto || cantidad == null) {
+    throw new Error('Faltan datos para actualizar el ítem');
+  }
+
+  const resp = await fetch(`${API_URL}/${idCarritoItem}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getToken()}`
+    },
+    body: JSON.stringify({
+      idCarrito,
+      idProducto,
+      cantidad
+    })
+  });
+
+  const text = await resp.text();
+  if (!resp.ok) throw new Error(`Error al actualizar ítem: ${text}`);
+  return JSON.parse(text);
+};
