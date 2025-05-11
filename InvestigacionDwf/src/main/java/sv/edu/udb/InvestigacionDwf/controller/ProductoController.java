@@ -11,7 +11,6 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-// src/main/java/sv/edu/udb/InvestigacionDwf/controller/ProductoController.java
 @RestController
 @RequestMapping(path = "auth/producto")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -46,7 +45,7 @@ public class ProductoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductoResponse> updateProducto(@PathVariable Long id,
-                                                   @RequestBody ProductoRequest req) {
+                                                           @RequestBody ProductoRequest req) {
         if (!service.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -61,6 +60,16 @@ public class ProductoController {
         }
         service.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    // NUEVO: endpoint para productos recomendados por usuario
+    @GetMapping("/recomendados/{idUser}")
+    public ResponseEntity<List<ProductoResponse>> getRecomendadosByUser(@PathVariable Long idUser) {
+        List<ProductoResponse> recomendaciones = service.findRecommendedByUser(idUser);
+        if (recomendaciones.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(recomendaciones);
     }
 }
 

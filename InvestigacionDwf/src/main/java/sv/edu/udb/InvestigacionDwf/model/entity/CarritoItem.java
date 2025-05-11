@@ -20,12 +20,8 @@ public class CarritoItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_producto")
-    private Producto producto;
+    private Producto producto;   // <— getProducto()
 
     private Integer cantidad;
-
-
-
-
 }
 

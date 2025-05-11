@@ -25,10 +25,11 @@ public class Carrito {
 
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<CarritoItem> items;
+    private List<CarritoItem> items;    // <— getItems()
 
     @OneToMany(mappedBy = "carrito", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Pedido> pedidos;
 }
+
 

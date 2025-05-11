@@ -1,6 +1,8 @@
+// src/services/productoService.js
 import { secureGetItem } from '../utils/secureStorage';
 
 const API_URL = "http://localhost:8080/auth/producto";
+const RECOMMENDED_URL = "http://localhost:8080/auth/producto/recomendados";
 const TIPO_URL = "http://localhost:8080/auth/tipoproducto";
 const getToken = () => secureGetItem('token');
 
@@ -8,6 +10,15 @@ const getToken = () => secureGetItem('token');
 export const getAllProductos = async () => {
   const resp = await fetch(API_URL);
   if (!resp.ok) throw new Error('No se pudo obtener la lista de productos');
+  return resp.json();
+};
+
+// GET recomendados por usuario
+export const getRecommendedProductos = async (idUser) => {
+  if (!idUser) return [];
+  const resp = await fetch(`${RECOMMENDED_URL}/${idUser}`);
+  if (resp.status === 204) return [];
+  if (!resp.ok) throw new Error('No se pudieron obtener recomendaciones');
   return resp.json();
 };
 
@@ -32,27 +43,20 @@ export const getAllTiposProductos = async () => {
 // POST (ADMIN)
 export const createProducto = async (producto) => {
   const token = getToken();
-  // El backend espera recibir { ..., tipoProducto: { id: X } }
   const payload = {
     ...producto,
     tipoProducto: { id: parseInt(producto.idTipoProducto, 10) }
   };
-
   if (!payload.tipoProducto.id) {
     throw new Error('El campo "ID Tipo Producto" es obligatorio y debe ser un número válido.');
   }
-
   const headers = new Headers({
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`,
   });
-
   const resp = await fetch(API_URL, {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify(payload),
+    method: 'POST', headers, body: JSON.stringify(payload)
   });
-
   const text = await resp.text();
   if (!resp.ok) {
     throw new Error(`Error al crear producto: ${text}`);
@@ -68,22 +72,16 @@ export const updateProducto = async (id, producto) => {
     ...producto,
     tipoProducto: { id: parseInt(producto.idTipoProducto, 10) }
   };
-
   if (!payload.tipoProducto.id) {
     throw new Error('El campo "ID Tipo Producto" es obligatorio y debe ser un número válido.');
   }
-
   const headers = new Headers({
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`,
   });
-
   const resp = await fetch(`${API_URL}/${id}`, {
-    method: 'PUT',
-    headers: headers,
-    body: JSON.stringify(payload),
+    method: 'PUT', headers, body: JSON.stringify(payload)
   });
-
   const text = await resp.text();
   if (!resp.ok) {
     throw new Error(`Error al actualizar producto: ${text}`);
@@ -95,15 +93,8 @@ export const updateProducto = async (id, producto) => {
 export const deleteProducto = async (id) => {
   if (!id) throw new Error('ID no proporcionado para delete');
   const token = getToken();
-  const headers = new Headers({
-    'Authorization': `Bearer ${token}`,
-  });
-
-  const resp = await fetch(`${API_URL}/${id}`, {
-    method: 'DELETE',
-    headers: headers,
-  });
-
+  const headers = new Headers({ 'Authorization': `Bearer ${token}` });
+  const resp = await fetch(`${API_URL}/${id}`, { method: 'DELETE', headers });
   if (!resp.ok) throw new Error(`Error al eliminar producto ${id}`);
   return { success: true };
 };
