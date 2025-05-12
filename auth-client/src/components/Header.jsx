@@ -67,6 +67,17 @@ export default function Header() {
   };
 
   const isUser = userData?.roles?.includes('ROLE_USER');
+  const isAdmin = userData?.roles?.includes('ROLE_ADMIN');
+
+  const handleLogoClick = () => {
+    if (isUser) {
+      navigate('/user');
+    } else if (isAdmin) {
+      navigate('/admin');
+    } else {
+      navigate('/');
+    }
+  };
 
   return (
     <motion.header
@@ -76,7 +87,9 @@ export default function Header() {
       transition={{ duration: 0.6 }}
     >
       <div className="header__brand">
-        <Link to="/">MiApp</Link>
+        <button onClick={handleLogoClick} className="logo-button">
+          Mi Tienda
+        </button>
       </div>
       <nav className="header__nav">
         {!token ? (
