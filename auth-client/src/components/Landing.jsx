@@ -1,8 +1,7 @@
-// src/components/Landing.jsx
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Header from './Header';
+import Header from './Header'; // Asume que tienes un componente Header
 import { getAllProductos, getRecommendedProductos } from '../services/productoService';
 import UserContext from '../context/UserContext';
 import '../style/Landing.css';
@@ -64,32 +63,56 @@ export default function Landing() {
         <div className="hero__overlay" />
         <motion.div
           className="hero__content"
-          initial={{ scale: 0.85, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.7 }}
+          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <h1 className="hero__title">Bienvenido a Fashion Store</h1>
-          <p className="hero__subtitle">Descubre tu estilo con nuestras últimas colecciones</p>
-          <Link to="/register" className="hero__cta">¡Comienza Ahora!</Link>
+          <h1 className="hero__title">
+            Encuentra tu Estilo Único
+          </h1>
+          <p className="hero__subtitle">
+            Descubre las últimas tendencias y eleva tu guardarropa con nuestra exclusiva colección.
+          </p>
+          <Link to="/register" className="hero__cta">
+            Únete Ahora
+          </Link>
         </motion.div>
-        {/* Imagen de fondo con transformación de desplazamiento */}
         <div
           className="hero__background"
           style={{
-            transform: `translateY(${scrollOffset * 0.2}px)`, // Ajusta el factor para la velocidad del paralaje
+            transform: `translateY(${scrollOffset * 0.2}px)`,
           }}
         />
       </section>
 
       <section className="products">
-        <h2 className="products__title">Productos Destacados</h2>
+        <h2 className="products__title">
+          Novedades de Temporada
+        </h2>
         <div className="products__grid">
-          {productosDestacados.map(p => (
-            <motion.div key={p.idProducto} className="product-card" whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
-              <img src={p.imagen || 'https://via.placeholder.com/300'} alt={p.nombre} className="product-card__img" />
+          {productosDestacados.map((p) => (
+            <motion.div
+              key={p.idProducto}
+              className="product-card"
+              whileHover={{ scale: 1.05, y: -8 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            >
+              <img
+                src={p.imagen || "https://via.placeholder.com/300"}
+                alt={p.nombre}
+                className="product-card__img"
+              />
               <div className="product-card__info">
                 <h3 className="product-card__name">{p.nombre}</h3>
-                <p className="product-card__price">{new Intl.NumberFormat('es-SV',{style:'currency',currency:'USD'}).format(p.precio)}</p>
+                <p className="product-card__price">
+                  {new Intl.NumberFormat("es-SV", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(p.precio)}
+                </p>
+                <button className="add-to-cart-button">
+                  Añadir al Carrito
+                </button>
               </div>
             </motion.div>
           ))}
@@ -98,14 +121,33 @@ export default function Landing() {
 
       {userId && recomendados.length > 0 && (
         <section className="products recomendados">
-          <h2 className="products__title">Recomendados para ti</h2>
+          <h2 className="products__title">
+            Recomendado para ti
+          </h2>
           <div className="products__grid">
-            {recomendados.map(p => (
-              <motion.div key={p.idProducto} className="product-card" whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
-                <img src={p.imagen || 'https://via.placeholder.com/300'} alt={p.nombre} className="product-card__img" />
+            {recomendados.map((p) => (
+              <motion.div
+                key={p.idProducto}
+                className="product-card"
+                whileHover={{ scale: 1.05, y: -8 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              >
+                <img
+                  src={p.imagen || "https://via.placeholder.com/300"}
+                  alt={p.nombre}
+                  className="product-card__img"
+                />
                 <div className="product-card__info">
                   <h3 className="product-card__name">{p.nombre}</h3>
-                  <p className="product-card__price">{new Intl.NumberFormat('es-SV',{style:'currency',currency:'USD'}).format(p.precio)}</p>
+                  <p className="product-card__price">
+                    {new Intl.NumberFormat("es-SV", {
+                      style: "currency",
+                      currency: "USD",
+                    }).format(p.precio)}
+                  </p>
+                  <button className="add-to-cart-button">
+                    Añadir al Carrito
+                  </button>
                 </div>
               </motion.div>
             ))}
