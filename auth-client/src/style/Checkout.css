@@ -99,7 +99,7 @@
 .submit-button {
   width: 100%;
   padding: 1rem;
-  background: #27ae60;
+  background: #7c20b9;
   color: white;
   border: none;
   border-radius: 6px;
@@ -111,7 +111,7 @@
 }
 
 .submit-button:hover {
-  background: #219a52;
+  background: #2c053b;
 }
 
 /* Checkbox de cupón */

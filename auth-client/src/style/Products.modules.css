@@ -88,40 +88,52 @@
 .add-to-cart-btn,
 .view-more-button {
   display: inline-block;
-  padding: 0.6rem 1.2rem;
-  background-color: #000000; /* Fondo negro para los botones */
-  color: #ffffff; /* Texto blanco para contraste */
+  padding: 0.8rem 1.5rem; /* Increase padding for better clickability */
+  background-color: #000000; /* Maintain black background */
+  color: #ffffff; /* White text for contrast */
   text-decoration: none;
   border: none;
   border-radius: 24px;
-  font-size: 0.9rem;
+  font-size: 1rem; /* Slightly larger font size */
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .add-to-cart-btn:hover,
 .view-more-button:hover {
-  background-color: #333333; /* Negro más claro al pasar el mouse */
+  background-color: #333333; /* Lighter black on hover */
   transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add subtle shadow on hover */
 }
 
+/* Adjust button focus for accessibility */
+.add-to-cart-btn:focus,
+.view-more-button:focus {
+  outline: 2px solid #ffffff; /* White outline for focus */
+  outline-offset: 2px;
+}
+
+/* Refine product details */
 .product-details {
-  padding: 1rem;
+  padding: 1.2rem; /* Slightly increase padding */
   text-align: center;
   border-top: 1px solid #eeeeee;
+  background-color: #f9f9f9; /* Subtle background for separation */
 }
 
+/* Refine product name */
 .product-name {
-  font-size: 1.3rem;
+  font-size: 1.4rem; /* Slightly larger font size */
   color: #222222;
   margin-bottom: 0.5rem;
   font-weight: 700;
 }
 
+/* Refine product price */
 .product-price {
-  font-size: 1.2rem;
-  color: #000000; /* Color negro para el precio */
+  font-size: 1.3rem; /* Slightly larger font size */
+  color: #000000; /* Maintain black color */
   font-weight: 600;
 }
 
