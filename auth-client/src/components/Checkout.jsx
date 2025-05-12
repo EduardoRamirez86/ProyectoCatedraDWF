@@ -33,11 +33,54 @@ export default function Checkout() {
   const { state } = useLocation();
   const navigate = useNavigate();
   const { envio } = useContext(CartContext);
-  const total = state?.total || 0;
+  const total = state?.total || 0; // Total already includes the shipping fee
 
-  const handlePayment = () => {
-    alert(`Pago realizado con éxito. Total pagado: $${(total + envio).toFixed(2)}`);
-    navigate('/confirmation'); // Navigate to a confirmation page after payment
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    setLoading(true);
+
+    try {
+      const idCarrito = parseInt(secureGetItem('carritoId'), 10);
+      if (!idCarrito) throw new Error('Carrito no disponible');
+
+      let dirId = form.direccionId;
+      if (addingNew) {
+        const uid = parseInt(secureGetItem('userId'), 10);
+        const nueva = {
+          alias: form.alias,
+          calle: form.calle,
+          ciudad: form.ciudad,
+          departamento: form.departamento,
+          latitud: form.latitud,
+          longitud: form.longitud,
+        };
+        const respDir = await saveDireccion(nueva, uid);
+        dirId = respDir.idDireccion;
+      }
+
+      if (!dirId || dirId === 'nueva') {
+        throw new Error('Debe seleccionar o crear una dirección válida');
+      }
+
+      const payload = {
+        idCarrito,
+        tipoPago: form.tipoPago,
+        cuponCodigo: hasCupon ? form.cuponCodigo.trim() : null,
+        idDireccion: dirId,
+      };
+
+      const resp = await checkoutPedido(payload);
+      sessionStorage.setItem('orderNumber', resp.idPedido);
+      sessionStorage.setItem('orderTotal', resp.total);
+      await MySwal.fire('¡Compra Exitosa!', `Pedido #${resp.idPedido}`, 'success');
+      navigate('/confirmation');
+    } catch (err) {
+      console.error(err);
+      await MySwal.fire('Error en la compra', err.message || 'Fallo al procesar', 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const [form, setForm] = useState({
@@ -110,54 +153,6 @@ export default function Checkout() {
 
     setErrors(err);
     return ok;
-  };
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-    if (!validateForm()) return;
-    setLoading(true);
-
-    try {
-      const idCarrito = parseInt(secureGetItem('carritoId'), 10);
-      if (!idCarrito) throw new Error('Carrito no disponible');
-
-      let dirId = form.direccionId;
-      if (addingNew) {
-        const uid = parseInt(secureGetItem('userId'), 10);
-        const nueva = {
-          alias: form.alias,
-          calle: form.calle,
-          ciudad: form.ciudad,
-          departamento: form.departamento,
-          latitud: form.latitud,
-          longitud: form.longitud
-        };
-        const respDir = await saveDireccion(nueva, uid);
-        dirId = respDir.idDireccion;
-      }
-
-      if (!dirId || dirId === 'nueva') {
-        throw new Error('Debe seleccionar o crear una dirección válida');
-      }
-
-      const payload = {
-        idCarrito,
-        tipoPago: form.tipoPago,
-        cuponCodigo: hasCupon ? form.cuponCodigo.trim() : null,
-        idDireccion: dirId
-      };
-
-      const resp = await checkoutPedido(payload);
-      sessionStorage.setItem('orderNumber', resp.idPedido);
-      sessionStorage.setItem('orderTotal', resp.total);
-      await MySwal.fire('¡Compra Exitosa!', `Pedido #${resp.idPedido}`, 'success');
-      navigate('/confirmation');
-    } catch (err) {
-      console.error(err);
-      await MySwal.fire('Error en la compra', err.message || 'Fallo al procesar', 'error');
-    } finally {
-      setLoading(false);
-    }
   };
 
   const renderPaymentFields = () =>
@@ -321,12 +316,9 @@ export default function Checkout() {
         </div>
         <div className="summary-row total">
           <span>Total:</span>
-          <span>${(total + envio).toFixed(2)}</span>
+          <span>${total.toFixed(2)}</span>
         </div>
       </div>
-      <button className="submit-button" onClick={handlePayment}>
-        Confirmar Pago
-      </button>
     </div>
   );
 }

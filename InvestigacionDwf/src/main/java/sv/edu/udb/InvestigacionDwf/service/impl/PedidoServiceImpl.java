@@ -53,6 +53,11 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
                 .map(i -> i.getProducto().getPrecio().multiply(BigDecimal.valueOf(i.getCantidad())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        // Agregar $5 por envío
+        BigDecimal costoEnvio = BigDecimal.valueOf(5);
+        total = total.add(costoEnvio);
+
+
         // Obtener el usuario
         User user = carrito.getUser();
 
