@@ -1,0 +1,137 @@
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 3rem;
+  justify-items: center;
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  border-radius: 12px;
+  animation: fadeInGrid 0.8s ease-in-out;
+}
+
+.product-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 320px;
+  cursor: pointer;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+}
+
+.product-image-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.1);
+}
+
+.product-image-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-image-container::after {
+  opacity: 1;
+}
+
+.product-hover-info {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.9);
+  color: #1a1a1a;
+  opacity: 0;
+  visibility: hidden;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  border-radius: 12px;
+}
+
+.product-card:hover .product-hover-info {
+  opacity: 1;
+  visibility: visible;
+}
+
+.product-description {
+  font-size: 1rem;
+  color: #333333;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.add-to-cart-btn,
+.view-more-button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #000000; /* Fondo negro para los botones */
+  color: #ffffff; /* Texto blanco para contraste */
+  text-decoration: none;
+  border: none;
+  border-radius: 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-to-cart-btn:hover,
+.view-more-button:hover {
+  background-color: #333333; /* Negro más claro al pasar el mouse */
+  transform: translateY(-2px);
+}
+
+.product-details {
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid #eeeeee;
+}
+
+.product-name {
+  font-size: 1.3rem;
+  color: #222222;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.product-price {
+  font-size: 1.2rem;
+  color: #000000; /* Color negro para el precio */
+  font-weight: 600;
+}
+
+@keyframes fadeInGrid {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

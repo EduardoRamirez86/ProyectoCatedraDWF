@@ -5,7 +5,7 @@ import { addCarritoItem } from '../services/carritoItemService';
 import MySwal from '../utils/swal';
 import { CartContext } from '../context/CartContext';
 import UserContext from '../context/UserContext';
-import '../style/Products.css';
+import '../style/Products.modules.css';
 
 export default function Products({ searchQuery }) {
   const [allProductos, setAllProductos] = useState([]);
