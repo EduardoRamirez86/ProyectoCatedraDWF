@@ -3,7 +3,7 @@ package sv.edu.udb.InvestigacionDwf.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sv.edu.udb.InvestigacionDwf.model.Ropa;
+import sv.edu.udb.InvestigacionDwf.model.entity.Ropa;
 import sv.edu.udb.InvestigacionDwf.repository.RopaRespository;
 import sv.edu.udb.InvestigacionDwf.service.RopaService;
 

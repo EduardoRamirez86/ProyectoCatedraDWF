@@ -4,7 +4,7 @@ package sv.edu.udb.InvestigacionDwf.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sv.edu.udb.InvestigacionDwf.model.Ropa;
+import sv.edu.udb.InvestigacionDwf.model.entity.Ropa;
 import sv.edu.udb.InvestigacionDwf.service.RopaService;
 
 import java.util.List;

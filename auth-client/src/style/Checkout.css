@@ -1,0 +1,188 @@
+.checkout-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.checkout-container h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.form-section h2 {
+  color: #34495e;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding-top: 1.2rem;
+}
+
+.floating-input {
+  width: 100%;
+  padding: 1rem 0.8rem 0.5rem;
+  border: 2px solid #bdc3c7;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: transparent;
+  z-index: 1;
+}
+
+.floating-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.floating-label {
+  position: absolute;
+  top: 1.8rem;
+  left: 0.8rem;
+  color: #7f8c8d;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+  padding: 0 0.2rem;
+  z-index: 2;
+}
+
+.floating-input:focus ~ .floating-label,
+.floating-input:not(:placeholder-shown) ~ .floating-label {
+  top: 0.4rem;
+  left: 0.6rem;
+  font-size: 0.8rem;
+  color: #3498db;
+  background: #fff;
+}
+
+/* Estilos para select */
+.floating-input[type="select"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Errores */
+.error-message {
+  display: block;
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.floating-input.error {
+  border-color: #e74c3c;
+}
+
+.floating-input.error ~ .floating-label {
+  color: #e74c3c;
+}
+
+/* Botón de enviar */
+.submit-button {
+  width: 100%;
+  padding: 1rem;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1.5rem;
+}
+
+.submit-button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* Checkbox de cupón */
+.coupon-section {
+  margin: 1rem 0;
+}
+
+.coupon-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+.coupon-toggle input {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+/* Checkout summary */
+.checkout-summary .summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.checkout-summary .summary-row span {
+  color: #333;
+}
+
+.checkout-summary .summary-row span:nth-child(2) {
+  font-weight: bold;
+}
+
+.checkout-summary .summary-row.total {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+  margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .checkout-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .checkout-container h1 {
+    font-size: 1.5rem;
+  }
+}
+
+.back-button {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}

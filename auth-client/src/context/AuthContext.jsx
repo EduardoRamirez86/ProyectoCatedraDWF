@@ -1,36 +1,70 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import {jwtDecode} from 'jwt-decode';
+import { secureGetItem, secureSetItem, secureRemoveItem } from '../utils/secureStorage';
+import UserContext from '../context/UserContext';
+import secureLs from '../utils/secureStorage';
 
-export const AuthContext = createContext();
+
+export const AuthContext = createContext({
+  token: null,
+  userData: null,
+  login: () => {},
+  logout: () => {},
+});
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(() => secureGetItem('token') || null);
+  const [userData, setUserData] = useState(() => {
+    const storedToken = secureGetItem('token');
+    return storedToken ? jwtDecode(storedToken) : null;
+  });
 
-// Cuando cambie `token`, lo guardamos/eliminamos de localStorage
+  // Solo extraemos la función que necesitamos y que es referencialmente estable
+  const { setUserId } = useContext(UserContext) || {};
+
   useEffect(() => {
-    if (token) {
-      localStorage.setItem('token', token);
-    } else {
-      localStorage.removeItem('token');
-    }
-  }, [token]);
+    const handleStorageUpdate = () => {
+      const newToken = secureGetItem('token');
+      if (newToken !== token) {
+        setToken(newToken);
+        const decoded = newToken ? jwtDecode(newToken) : null;
+        setUserData(decoded);
 
-  // Derivamos el rol del token
-  const [role, setRole] = useState(null);
-  useEffect(() => {
-    if (token) {
-      try { setRole(jwtDecode(token).roles); }
-      catch { setRole(null); }
-    } else {
-      setRole(null);
-    }
-  }, [token]);
+        if (decoded?.userId) {
+          setUserId(decoded.userId);
+          secureSetItem('userId', decoded.userId.toString());
+        }
+      }
+    };
 
-  const login = newToken => setToken(newToken);
-  const logout = () => setToken(null);
+    window.addEventListener('storage', handleStorageUpdate);
+    return () => window.removeEventListener('storage', handleStorageUpdate);
+  }, [token, setUserId]); // <-- aquí termina el hook sin nada más debajo
+
+  const login = (newToken) => {
+    secureSetItem('token', newToken);
+    const decoded = jwtDecode(newToken);
+    setToken(newToken);
+    setUserData(decoded);
+    if (decoded.userId) {
+      setUserId(decoded.userId);
+      secureSetItem('userId', decoded.userId.toString());
+    }
+  };
+
+  const logout = () => {
+    secureLs.removeAll();
+    secureRemoveItem('token');
+    setToken(null);
+    setUserData(null);
+    setUserId(null);
+    secureRemoveItem('userId');
+    secureRemoveItem('carritoId');
+    secureRemoveItem('cartItems');
+  };
 
   return (
-    <AuthContext.Provider value={{ token, role, login, logout }}>
+    <AuthContext.Provider value={{ token, userData, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

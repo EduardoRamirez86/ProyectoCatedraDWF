@@ -1,7 +1,7 @@
 // RopaService.java
 package sv.edu.udb.InvestigacionDwf.service;
 
-import sv.edu.udb.InvestigacionDwf.model.Ropa;
+import sv.edu.udb.InvestigacionDwf.model.entity.Ropa;
 
 import java.util.List;
 import java.util.Optional;

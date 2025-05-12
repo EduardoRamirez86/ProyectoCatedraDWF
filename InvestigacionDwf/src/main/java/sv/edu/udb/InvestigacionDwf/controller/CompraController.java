@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import sv.edu.udb.InvestigacionDwf.model.Compra;
+import sv.edu.udb.InvestigacionDwf.model.entity.Compra;
 import sv.edu.udb.InvestigacionDwf.repository.CompraRepository;
 
 @RestController
