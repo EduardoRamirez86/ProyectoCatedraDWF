@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/DataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/DataLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/TipoProductoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/TipoProductoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/DataLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/DataLoader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/TipoProductoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/TipoProductoRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/WebConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +124,7 @@
       <workItem from="1747017969415" duration="389000" />
       <workItem from="1747026814573" duration="791000" />
       <workItem from="1747029025833" duration="1318000" />
-      <workItem from="1747030570819" duration="3028000" />
+      <workItem from="1747030570819" duration="4125000" />
     </task>
     <servers />
   </component>
