@@ -17,3 +17,5 @@ export const secureGetItem = (key) => {
 export const secureRemoveItem = (key) => {
   secureLs.remove(key);
 };
+
+export default secureLs;

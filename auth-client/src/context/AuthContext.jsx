@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import {jwtDecode} from 'jwt-decode';
 import { secureGetItem, secureSetItem, secureRemoveItem } from '../utils/secureStorage';
 import UserContext from '../context/UserContext';
+import secureLs from '../utils/secureStorage';
+
 
 export const AuthContext = createContext({
   token: null,
@@ -51,11 +53,14 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
+    secureLs.removeAll();
     secureRemoveItem('token');
     setToken(null);
     setUserData(null);
     setUserId(null);
     secureRemoveItem('userId');
+    secureRemoveItem('carritoId');
+    secureRemoveItem('cartItems');
   };
 
   return (
