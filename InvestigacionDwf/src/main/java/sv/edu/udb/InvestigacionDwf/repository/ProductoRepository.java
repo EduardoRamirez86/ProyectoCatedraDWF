@@ -1,3 +1,4 @@
+// src/main/java/sv/edu/udb/InvestigacionDwf/repository/ProductoRepository.java
 package sv.edu.udb.InvestigacionDwf.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +19,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     List<Producto> findByTipoProducto_IdTipoProductoIn(List<Long> tipoIds);
 
     boolean existsById(Long id);
+
+    // ← metodo para ingresar producto
+    Optional<Producto> findByNombre(String nombre);
 }
+
 
 

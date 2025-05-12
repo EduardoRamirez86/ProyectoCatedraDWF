@@ -9,7 +9,7 @@ import '../style/Landing.css';
 
 export default function Landing() {
   const { userId } = useContext(UserContext);
-  const [productos, setProductos] = useState([]);
+  const [productosDestacados, setProductosDestacados] = useState([]);
   const [recomendados, setRecomendados] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +17,9 @@ export default function Landing() {
     const fetchProductos = async () => {
       try {
         const all = await getAllProductos();
-        setProductos(all);
+        // Ordenar por precio descendente y tomar los 5 más caros
+        const destacados = all.sort((a, b) => b.precio - a.precio).slice(0, 5);
+        setProductosDestacados(destacados);
         // Solo intentar recomendaciones si hay usuario logueado
         if (userId) {
           const rec = await getRecommendedProductos(userId);
@@ -62,7 +64,7 @@ export default function Landing() {
       <section className="products">
         <h2 className="products__title">Productos Destacados</h2>
         <div className="products__grid">
-          {productos.map(p => (
+          {productosDestacados.map(p => (
             <motion.div key={p.idProducto} className="product-card" whileHover={{ scale: 1.05 }} transition={{ type: 'spring', stiffness: 300 }}>
               <img src={p.imagen || 'https://via.placeholder.com/300'} alt={p.nombre} className="product-card__img" />
               <div className="product-card__info">
@@ -93,4 +95,3 @@ export default function Landing() {
     </div>
   );
 }
-
