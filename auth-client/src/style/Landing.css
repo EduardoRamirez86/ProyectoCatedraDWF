@@ -6,10 +6,9 @@
 
 .hero {
   position: relative;
-  background-image: url('https://images.unsplash.com/photo-1553095066-5014bc7b7f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d2Vic2l0ZSUyMGJhbm5lcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=1500&q=60'); /* Reemplazado con Unsplash */
-  background-size: cover;
-  background-position: center;
-  height: 60vh;
+  background-color: #f8f9fa; /* Añade un color de fondo de respaldo */
+  height: 60vh; /* Puedes ajustar esto */
+  overflow: hidden; /* Importante para que el fondo no se desborde */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,41 +22,54 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4); /* Ajustado el overlay */
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1; /* Asegura que el overlay esté sobre el fondo */
 }
 
 .hero__content {
   position: relative;
-  z-index: 1;
-  padding: 20px; /* Añadido padding */
+  z-index: 2; /* Asegura que el contenido esté sobre el overlay y el fondo */
+  padding: 20px;
 }
 
 .hero__title {
-  font-size: 3.5rem; /* Aumentado el tamaño */
+  font-size: 3.5rem;
   margin-bottom: 1rem;
-  font-weight: bold; /* Añadido negrita */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Añadida sombra */
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .hero__subtitle {
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Añadida sombra */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .hero__cta {
-  background-color: #007bff; /* Cambiado el color */
+  background-color: #007bff;
   color: white;
   padding: 0.75rem 1.5rem;
   text-decoration: none;
   border-radius: 4px;
   font-size: 1.25rem;
-  font-weight: bold; /* Añadido negrita */
-  transition: background-color 0.3s ease; /* Añadida transición */
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .hero__cta:hover {
-  background-color: #0056b3; /* Cambiado el color al pasar el ratón */
+  background-color: #0056b3;
+}
+
+.hero__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://images.unsplash.com/photo-1553095066-5014bc7b7f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d2Vic2l0ZSUyMGJhbm5lcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=1500&q=60');
+  background-size: cover;
+  background-position: center;
+  z-index: 0; /* Coloca el fondo detrás del overlay y el contenido */
 }
 
 .products {
@@ -74,14 +86,14 @@
 .products__grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 0; /* sin espacios entre tarjetas */
+  gap: 0;
   width: 100%;
-  margin: 0; /* elimina márgenes extra */
+  margin: 0;
 }
 
 .product-card {
   box-sizing: border-box;
-  padding: 10px; /* espacio interno dentro de cada tarjeta */
+  padding: 10px;
 }
 
 .product-card__img {

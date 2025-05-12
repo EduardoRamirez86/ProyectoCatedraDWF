@@ -12,6 +12,19 @@ export default function Landing() {
   const [productosDestacados, setProductosDestacados] = useState([]);
   const [recomendados, setRecomendados] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [scrollOffset, setScrollOffset] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollOffset(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -59,6 +72,13 @@ export default function Landing() {
           <p className="hero__subtitle">Descubre tu estilo con nuestras últimas colecciones</p>
           <Link to="/register" className="hero__cta">¡Comienza Ahora!</Link>
         </motion.div>
+        {/* Imagen de fondo con transformación de desplazamiento */}
+        <div
+          className="hero__background"
+          style={{
+            transform: `translateY(${scrollOffset * 0.2}px)`, // Ajusta el factor para la velocidad del paralaje
+          }}
+        />
       </section>
 
       <section className="products">
