@@ -1,8 +1,7 @@
 import { secureGetItem } from '../utils/secureStorage';
 
-/**
- * Función auxiliar para manejar respuestas
- */
+const API_URL = "http://localhost:8080/auth/pedido";
+
 const handleResponse = async (resp) => {
   const contentType = resp.headers.get("content-type");
   const isJson = contentType && contentType.includes("application/json");
@@ -16,17 +15,9 @@ const handleResponse = async (resp) => {
   return data;
 };
 
-const API_URL = "http://localhost:8080/auth/pedido";
 const getToken = () => secureGetItem("token");
 
-/**
- * Realiza el checkout del carrito
- */
-export const checkoutPedido = async ({ idCarrito, tipoPago, cuponCodigo }) => {
-  if (!idCarrito || !tipoPago) {
-    throw new Error("idCarrito y tipoPago son obligatorios");
-  }
-
+export const checkoutPedido = async (payload) => {
   const token = getToken();
   if (!token) throw new Error('No se encontró el token de autenticación');
 
@@ -38,7 +29,7 @@ export const checkoutPedido = async ({ idCarrito, tipoPago, cuponCodigo }) => {
   const resp = await fetch(`${API_URL}/checkout`, {
     method: "POST",
     headers: headers,
-    body: JSON.stringify({ idCarrito, tipoPago, cuponCodigo }),
+    body: JSON.stringify(payload),
   });
 
   return handleResponse(resp);

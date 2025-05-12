@@ -1,16 +1,24 @@
-// src/components/Confirmation.jsx
-import React from 'react';
-import '../style/userPage.css';
+// Confirmation.jsx
+import React, { useEffect, useState } from 'react';
+import { getPedidoById } from '../services/pedidoService';
 
 export default function Confirmation() {
-  const orderNumber = sessionStorage.getItem('orderNumber');
-  const orderTotal = sessionStorage.getItem('orderTotal');
+  const [pedido, setPedido] = useState(null);
+  useEffect(() => {
+    const id = sessionStorage.getItem('orderNumber');
+    getPedidoById(id).then(setPedido);
+  }, []);
 
+  if (!pedido) return <p>Cargando...</p>;
   return (
-    <div className="confirmation">
-      <h2>¡Compra Exitosa!</h2>
-      <p>Número de Pedido: {orderNumber}</p>
-      <p>Total: ${orderTotal}</p>
+    <div>
+      <h1>¡Gracias por tu compra! Pedido #{pedido.idPedido}</h1>
+      <h2>Se enviará a:</h2>
+      <p><strong>{pedido.direccion.alias}</strong></p>
+      <p>{pedido.direccion.calle}, {pedido.direccion.ciudad}</p>
+      <p>{pedido.direccion.departamento}</p>
+      {/* Si quieres, puedes mostrar un mapita con lat/lng */}
     </div>
   );
 }
+

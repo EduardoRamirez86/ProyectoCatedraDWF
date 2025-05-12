@@ -24,4 +24,12 @@ public class PedidoResponse {
     private Long idCarrito;
     private TipoPago tipoPago;
     private EstadoPedido estado;
+
+    // Campos de dirección (opcionales)
+    private Long idDireccion;
+    private String aliasDireccion;
+    private String calleDireccion;
+    private String ciudadDireccion;
+    private String departamentoDireccion;
 }
+

@@ -5,11 +5,12 @@ import org.springframework.stereotype.Component;
 import sv.edu.udb.InvestigacionDwf.dto.request.PedidoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.PedidoResponse;
 import sv.edu.udb.InvestigacionDwf.model.entity.Carrito;
+import sv.edu.udb.InvestigacionDwf.model.entity.Direccion;
 import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-04T01:15:08-0600",
+    date = "2025-05-11T19:28:14-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -24,6 +25,7 @@ public class PedidoMapperImpl implements PedidoMapper {
         Pedido pedido = new Pedido();
 
         pedido.setCarrito( pedidoRequestToCarrito( request ) );
+        pedido.setDireccion( pedidoRequestToDireccion( request ) );
         pedido.setTipoPago( request.getTipoPago() );
 
         return pedido;
@@ -46,6 +48,8 @@ public class PedidoMapperImpl implements PedidoMapper {
         pedidoResponse.total( pedido.getTotal() );
         pedidoResponse.puntosTotales( pedido.getPuntosTotales() );
 
+        pedidoResponse.idDireccion( pedido.getDireccion() != null ? pedido.getDireccion().getIdDireccion() : null );
+
         return pedidoResponse.build();
     }
 
@@ -59,6 +63,18 @@ public class PedidoMapperImpl implements PedidoMapper {
         carrito.setIdCarrito( pedidoRequest.getIdCarrito() );
 
         return carrito;
+    }
+
+    protected Direccion pedidoRequestToDireccion(PedidoRequest pedidoRequest) {
+        if ( pedidoRequest == null ) {
+            return null;
+        }
+
+        Direccion direccion = new Direccion();
+
+        direccion.setIdDireccion( pedidoRequest.getIdDireccion() );
+
+        return direccion;
     }
 
     private Long pedidoCarritoIdCarrito(Pedido pedido) {

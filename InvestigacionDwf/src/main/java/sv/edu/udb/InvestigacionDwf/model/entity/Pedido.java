@@ -1,9 +1,3 @@
-/*
- Complete implementation of Pedido lifecycle management
- Includes initialization of collections to avoid NPE
-*/
-
-// src/main/java/sv/edu/udb/InvestigacionDwf/model/entity/Pedido.java
 package sv.edu.udb.InvestigacionDwf.model.entity;
 
 import java.math.BigDecimal;
@@ -53,6 +47,10 @@ public class Pedido {
     @JoinColumn(name = "carrito_id")
     private Carrito carrito;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_direccion")
+    private Direccion direccion;
+
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<HistorialPedido> historialPedidos = new ArrayList<>();
@@ -84,7 +82,4 @@ public class Pedido {
 
         // Aquí guardarías la notificación con NotificacionRepository (inyéctalo desde fuera)
     }
-
 }
-
-// (Other files remain unchanged)
