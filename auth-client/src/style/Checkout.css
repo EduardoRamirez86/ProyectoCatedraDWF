@@ -141,7 +141,15 @@
   font-size: 1.1rem;
 }
 
-.checkout-summary .total {
+.checkout-summary .summary-row span {
+  color: #333;
+}
+
+.checkout-summary .summary-row span:nth-child(2) {
+  font-weight: bold;
+}
+
+.checkout-summary .summary-row.total {
   font-size: 1.5rem;
   font-weight: bold;
   color: #000;

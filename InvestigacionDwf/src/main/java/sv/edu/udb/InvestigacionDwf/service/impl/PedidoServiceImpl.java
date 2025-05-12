@@ -48,15 +48,13 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
             throw new IllegalStateException("No se puede realizar la compra con el carrito vacío.");
         }
 
-        // Calcular el total
-        BigDecimal total = items.stream()
+        // Calcular el subtotal de productos (sin envío)
+        BigDecimal subtotalProductos = items.stream()
                 .map(i -> i.getProducto().getPrecio().multiply(BigDecimal.valueOf(i.getCantidad())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // Agregar $5 por envío
-        BigDecimal costoEnvio = BigDecimal.valueOf(5);
-        total = total.add(costoEnvio);
-
+        // Inicializar descuento
+        BigDecimal descuento = BigDecimal.ZERO;
 
         // Obtener el usuario
         User user = carrito.getUser();
@@ -66,13 +64,18 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
             if (cuponService.validateCoupon(req.getCuponCodigo(), user)) {
                 Cupon cupon = cuponRepository.findByCodigo(req.getCuponCodigo())
                         .orElseThrow(() -> new ResourceNotFoundException("Cupón no encontrado: " + req.getCuponCodigo()));
-                BigDecimal descuento = total.multiply(BigDecimal.valueOf(cupon.getPorcentajeDescuento()).divide(BigDecimal.valueOf(100)));
-                total = total.subtract(descuento);
+                descuento = subtotalProductos.multiply(BigDecimal.valueOf(cupon.getPorcentajeDescuento()).divide(BigDecimal.valueOf(100)));
+                subtotalProductos = subtotalProductos.subtract(descuento);
                 cuponService.redeemCoupon(req.getCuponCodigo(), user);
             } else {
                 throw new IllegalStateException("Cupón inválido o no aplicable");
             }
         }
+
+        // Agregar $5 de envío después del descuento
+        BigDecimal costoEnvio = BigDecimal.valueOf(5);
+        BigDecimal total = subtotalProductos.add(costoEnvio);
+
 
         // Crear el pedido
         Pedido pedido = new Pedido();

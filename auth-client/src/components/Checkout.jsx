@@ -34,6 +34,14 @@ export default function Checkout() {
   const navigate = useNavigate();
   const { envio } = useContext(CartContext);
   const total = state?.total || 0; // Total already includes the shipping fee
+  const [hasCupon, setHasCupon] = useState(false);
+
+  // Helper function to round to two decimal places
+  const roundToTwo = (num) => Math.round(num * 100) / 100;
+
+  const subtotal = roundToTwo(total - envio); // Ensure consistent rounding for subtotal
+  const discount = hasCupon ? roundToTwo(subtotal * 0.15) : 0; // 15% discount
+  const totalWithDiscount = roundToTwo(subtotal - discount + envio); // Final total
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,7 +98,6 @@ export default function Checkout() {
     card: '', expiry: '', paypalAccount: '', transferencia: ''
   });
   const [errors, setErrors] = useState({});
-  const [hasCupon, setHasCupon] = useState(false);
   const [loading, setLoading] = useState(false);
   const [direcciones, setDirecciones] = useState([]);
   const [addingNew, setAddingNew] = useState(false);
@@ -308,15 +315,21 @@ export default function Checkout() {
       <div className="checkout-summary">
         <div className="summary-row">
           <span>Subtotal:</span>
-          <span>${(total - envio).toFixed(2)}</span>
+          <span>${subtotal.toFixed(2)}</span>
         </div>
         <div className="summary-row">
           <span>Envío:</span>
           <span>${envio.toFixed(2)}</span>
         </div>
+        {hasCupon && (
+          <div className="summary-row">
+            <span>Descuento (15%):</span>
+            <span>-${discount.toFixed(2)}</span>
+          </div>
+        )}
         <div className="summary-row total">
           <span>Total:</span>
-          <span>${total.toFixed(2)}</span>
+          <span>${totalWithDiscount.toFixed(2)}</span>
         </div>
       </div>
     </div>
