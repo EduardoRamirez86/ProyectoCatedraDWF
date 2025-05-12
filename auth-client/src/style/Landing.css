@@ -219,23 +219,23 @@
   opacity: 0.8;
 }
 
-/* Estilos para las reseñas (si se implementan) */
-.product-reviews {
-  /* ... */
+/* Botón “Ver más” */
+.view-more-button {
+  display: inline-block;
+  background-color: #e60023;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.product-review {
-  /* ... */
-}
-
-/* Estilos para la lista de deseos (si se implementa) */
-.wishlist-button {
-  /* ... */
-}
-
-/* Estilos para la sección de recomendados (si es diferente) */
-.recomendados {
-  /* ... */
+.view-more-button:hover {
+  background-color: #c5001f;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 /* Media queries para la responsividad */
