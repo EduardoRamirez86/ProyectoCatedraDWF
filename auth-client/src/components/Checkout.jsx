@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { checkoutPedido } from '../services/pedidoService';
 import { getByUserDirecciones, saveDireccion } from '../services/direccionService';
 import MySwal from '../utils/swal';
 import { secureGetItem } from '../utils/secureStorage';
 import AddressPicker from './AddressPicker';
+import { CartContext } from '../context/CartContext';
 import '../style/Checkout.css';
 
 const paymentOptions = [
@@ -29,7 +30,16 @@ const fieldConfigs = {
 };
 
 export default function Checkout() {
+  const { state } = useLocation();
   const navigate = useNavigate();
+  const { envio } = useContext(CartContext);
+  const total = state?.total || 0;
+
+  const handlePayment = () => {
+    alert(`Pago realizado con éxito. Total pagado: $${(total + envio).toFixed(2)}`);
+    navigate('/confirmation'); // Navigate to a confirmation page after payment
+  };
+
   const [form, setForm] = useState({
     nombre: '', tipoPago: '', cuponCodigo: '',
     direccionId: '', alias: '', calle: '', ciudad: '', departamento: '',
@@ -168,6 +178,9 @@ export default function Checkout() {
 
   return (
     <div className="checkout-container">
+      <button className="back-button" onClick={() => navigate(-1)}>
+        ← Volver
+      </button>
       <h1>Finalizar Compra</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-section">
@@ -296,6 +309,24 @@ export default function Checkout() {
           </button>
         </div>
       </form>
+
+      <div className="checkout-summary">
+        <div className="summary-row">
+          <span>Subtotal:</span>
+          <span>${(total - envio).toFixed(2)}</span>
+        </div>
+        <div className="summary-row">
+          <span>Envío:</span>
+          <span>${envio.toFixed(2)}</span>
+        </div>
+        <div className="summary-row total">
+          <span>Total:</span>
+          <span>${(total + envio).toFixed(2)}</span>
+        </div>
+      </div>
+      <button className="submit-button" onClick={handlePayment}>
+        Confirmar Pago
+      </button>
     </div>
   );
 }

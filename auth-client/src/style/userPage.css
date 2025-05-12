@@ -178,3 +178,22 @@
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
   transition: box-shadow 0.3s ease;
 }
+
+.checkout-button {
+  width: 100%;
+  padding: 1rem;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1.5rem;
+}
+
+.checkout-button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { getCarritoItems } from '../services/carritoService';
 import { removeCarritoItem, updateCarritoItem } from '../services/carritoItemService';
 import { CartContext } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 import '../style/userPage.css';
 
 export default function Cart() {
@@ -10,6 +11,7 @@ export default function Cart() {
   const [total, setTotal] = useState(0);
   const envio = 5;
   const { carrito, loading } = useContext(CartContext);
+  const navigate = useNavigate();
 
   // Función para agrupar items optimizada con useCallback
 const agruparItems = useCallback((itemsOriginales) => {
@@ -178,16 +180,22 @@ const agruparItems = useCallback((itemsOriginales) => {
           <div className="cart-summary">
             <div className="summary-row">
               <span>Subtotal:</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>${subtotal ? subtotal.toFixed(2) : '0.00'}</span>
             </div>
             <div className="summary-row">
               <span>Envío:</span>
-              <span>${envio.toFixed(2)}</span>
+              <span>${envio ? envio.toFixed(2) : '0.00'}</span>
             </div>
             <div className="summary-row total">
               <span>Total:</span>
-              <span>${total.toFixed(2)}</span>
+              <span>${total ? total.toFixed(2) : '0.00'}</span>
             </div>
+            <button
+              className="checkout-button"
+              onClick={() => navigate('/user/checkout', { state: { total } })}
+            >
+              Proceder al Pago
+            </button>
           </div>
         </>
       )}

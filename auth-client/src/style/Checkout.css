@@ -99,19 +99,20 @@
 .submit-button {
   width: 100%;
   padding: 1rem;
-  background: #7c20b9;
+  background: #28a745;
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.2rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease;
-  margin-top: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1.5rem;
 }
 
 .submit-button:hover {
-  background: #2c053b;
+  background-color: #218838;
+  transform: scale(1.05);
 }
 
 /* Checkbox de cupón */
@@ -132,6 +133,21 @@
   height: 1.2rem;
 }
 
+/* Checkout summary */
+.checkout-summary .summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.checkout-summary .total {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000;
+  margin-top: 1rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .checkout-container {
@@ -142,4 +158,23 @@
   .checkout-container h1 {
     font-size: 1.5rem;
   }
+}
+
+.back-button {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
 }

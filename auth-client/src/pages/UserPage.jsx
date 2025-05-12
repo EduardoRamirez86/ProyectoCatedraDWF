@@ -1,9 +1,7 @@
 // src/pages/UserPage.jsx
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import Cart from '../components/Cart';
 import Products from '../components/Products';
-import Checkout from '../components/Checkout';
 import '../style/userPage.css';
 
 export default function UserPage() {
@@ -31,18 +29,6 @@ export default function UserPage() {
             >
               Productos
             </button>
-            <button
-              className={activeComponent === 'cart' ? 'active' : ''}
-              onClick={() => setActiveComponent('cart')}
-            >
-              Carrito
-            </button>
-            <button
-              className={activeComponent === 'checkout' ? 'active' : ''}
-              onClick={() => setActiveComponent('checkout')}
-            >
-              Checkout
-            </button>
           </div>
           <input
             type="text"
@@ -56,8 +42,6 @@ export default function UserPage() {
 
       <main className="user-page-content">
         {activeComponent === 'products' && <Products searchQuery={searchQuery} />}
-        {activeComponent === 'cart' && <Cart />}
-        {activeComponent === 'checkout' && <Checkout />}
       </main>
     </div>
   );

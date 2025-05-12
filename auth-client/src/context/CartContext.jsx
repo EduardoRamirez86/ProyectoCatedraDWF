@@ -9,6 +9,7 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [carrito, setCarrito] = useState(null);
   const [loading, setLoading] = useState(true);
+  const envio = 5; // Shipping fee
   const { userId } = useContext(UserContext);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export const CartProvider = ({ children }) => {
   }, [userId]);
 
   return (
-    <CartContext.Provider value={{ carrito, setCarrito, loading }}>
+    <CartContext.Provider value={{ carrito, setCarrito, loading, envio }}>
       {children}
     </CartContext.Provider>
   );

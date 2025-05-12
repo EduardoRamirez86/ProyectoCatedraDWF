@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
+import { CartContext } from "../context/CartContext";
 import { getUserNotifications, markNotificationRead } from "../services/notificationService";
 import { Bell, User } from "react-feather";
 import '../style/Header.css';
 
 export default function Header() {
   const { token, userData, logout } = useContext(AuthContext);
+  const { carrito } = useContext(CartContext);
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -63,6 +65,8 @@ export default function Header() {
       navigate("/admin");
     }
   };
+
+  const isUser = userData?.roles?.includes('ROLE_USER');
 
   return (
     <motion.header
@@ -129,6 +133,19 @@ export default function Header() {
                 </div>
               )}
             </div>
+
+            {isUser && (
+              <button
+                className="cart-icon"
+                onClick={() => navigate('/user/cart')}
+                title="Ver Carrito"
+              >
+                🛒
+                {carrito?.items?.length > 0 && (
+                  <span className="cart-count">{carrito.items.length}</span>
+                )}
+              </button>
+            )}
 
             <div className="user-menu-wrapper" ref={menuRef}>
               <button

@@ -10,6 +10,8 @@ import Register from './pages/Register';
 import UserPage from './pages/UserPage';
 import AdminPage from './pages/AdminPage';
 import ProductDetail from './components/ProductDetail';
+import Checkout from './components/Checkout';
+import Cart from './components/Cart'; // Add this import
 
 function PrivateRoute({ requiredRole, children }) {
   const { token, userData } = useContext(AuthContext);
@@ -50,6 +52,22 @@ export default function App() {
                 element={
                   <PrivateRoute requiredRole="ROLE_USER">
                     <UserPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/user/cart"
+                element={
+                  <PrivateRoute requiredRole="ROLE_USER">
+                    <Cart />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/user/checkout"
+                element={
+                  <PrivateRoute requiredRole="ROLE_USER">
+                    <Checkout />
                   </PrivateRoute>
                 }
               />
