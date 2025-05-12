@@ -228,7 +228,7 @@ public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.Pe
     private void crearNotificacionCupon(User user, Pedido pedido, String codigoCupon) {
         Notificacion n = new Notificacion();
         n.setUser(user);
-        n.setMensaje("¡Felicidades! Has alcanzado 30 puntos. Usa el cupón " + codigoCupon + " para un descuento.");
+        n.setMensaje("¡Felicidades! Has alcanzado 30 puntos. Usa el cupón " + codigoCupon + " para un descuento de 15% en tu siguiente compra.");
         n.setFechaEnvio(LocalDateTime.now());
         n.setEstado(EstadoNotificacion.ENVIADA);
         n.setPedido(pedido);

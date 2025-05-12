@@ -5,20 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/request/PedidoRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/request/PedidoRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/entity/Pedido.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/entity/Pedido.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/PedidoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/PedidoServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse$PedidoResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse$PedidoResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Pedido.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Pedido.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/PedidoServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/PedidoServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapperImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapperImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../auth-client/src/components/Checkout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../auth-client/src/components/Checkout.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +118,7 @@
       <workItem from="1746556720903" duration="2459000" />
       <workItem from="1746675698382" duration="577000" />
       <workItem from="1746927125514" duration="5977000" />
-      <workItem from="1747005656714" duration="7614000" />
+      <workItem from="1747005656714" duration="8058000" />
     </task>
     <servers />
   </component>
