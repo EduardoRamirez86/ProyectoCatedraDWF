@@ -30,7 +30,7 @@ public class JwtUtils {
     public String generateToken(String username, Long userId, String roles) {
         return Jwts.builder()
                 .setSubject(username)
-                .claim("userId", userId)  // Agrega el userId como un claim
+                .claim("userId", userId)
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))

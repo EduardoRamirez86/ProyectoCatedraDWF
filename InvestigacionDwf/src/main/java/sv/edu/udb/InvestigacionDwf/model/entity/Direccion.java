@@ -15,14 +15,15 @@ public class Direccion {
     private Long idDireccion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", nullable = false)
     private User user;
 
-    private String pais;
-    private String departamento;
+    private String alias;           // “Casa”, “Trabajo”, etc.
+    private String calle;           // Calle / dirección textual
     private String ciudad;
-    private String calle;
-    private String codigoPostal;
-    private String numeroDomicilio;
+    private String departamento;
+    private Double latitud;         // Coordenadas
+    private Double longitud;
 }
+
 

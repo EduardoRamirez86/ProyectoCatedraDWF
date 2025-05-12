@@ -3,7 +3,7 @@ import SecureLS from 'secure-ls';
 const secureLs = new SecureLS({
   encodingType: 'aes',
   isCompression: true,
-  encryptionSecret: 'miClaveSecreta123' // Cambia esta clave en producción
+  encryptionSecret: 'miClaveSecreta123'
 });
 
 export const secureSetItem = (key, value) => {

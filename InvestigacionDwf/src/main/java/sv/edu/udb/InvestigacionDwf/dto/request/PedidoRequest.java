@@ -17,5 +17,7 @@ public class PedidoRequest {
     @NotNull(message = "La forma de pago es obligatoria")
     private TipoPago tipoPago;
 
-    private String cuponCodigo; //campo para el cupón
+    private String cuponCodigo;//campo para el cupón
+
+    private Long idDireccion;
 }
