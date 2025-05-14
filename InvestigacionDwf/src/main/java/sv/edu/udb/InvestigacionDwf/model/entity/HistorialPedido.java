@@ -2,12 +2,16 @@ package sv.edu.udb.InvestigacionDwf.model.entity;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "HistorialPedido")
 public class HistorialPedido {

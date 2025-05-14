@@ -1,3 +1,4 @@
+// src/main/java/sv/edu/udb/InvestigacionDwf/model/entity/Pedido.java
 package sv.edu.udb.InvestigacionDwf.model.entity;
 
 import java.math.BigDecimal;
@@ -7,14 +8,14 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import sv.edu.udb.InvestigacionDwf.model.enums.EstadoNotificacion;
+import lombok.*;
 import sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido;
 import sv.edu.udb.InvestigacionDwf.model.enums.TipoPago;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "pedidos")
 public class Pedido {
@@ -51,35 +52,28 @@ public class Pedido {
     @JoinColumn(name = "id_direccion")
     private Direccion direccion;
 
+    /** Garantiza que el builder inicialice la lista */
+    @Builder.Default
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<HistorialPedido> historialPedidos = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<HistorialPuntos> historialPuntos = new ArrayList<>();
 
+    /**
+     * Añade un nuevo paso al historial de estados
+     */
     public void actualizarEstado(EstadoPedido nuevoEstado, User usuario) {
-        if (this.historialPedidos == null) {
-            this.historialPedidos = new ArrayList<>();
-        }
-
-        HistorialPedido historial = new HistorialPedido();
-        historial.setFecha(LocalDateTime.now());
-        historial.setEstado(nuevoEstado);
-        historial.setUser(usuario);
-        historial.setPedido(this);
+        var historial = HistorialPedido.builder()
+                .pedido(this)
+                .user(usuario)
+                .estado(nuevoEstado)
+                .fecha(LocalDateTime.now())
+                .build();
         this.historialPedidos.add(historial);
         this.estado = nuevoEstado;
-
-        // Crear notificación automática
-        Notificacion notificacion = new Notificacion();
-        notificacion.setUser(usuario);
-        notificacion.setMensaje("Estado del pedido #" + this.idPedido + " actualizado a: " + nuevoEstado);
-        notificacion.setFechaEnvio(LocalDateTime.now());
-        notificacion.setEstado(EstadoNotificacion.ENVIADA);
-        notificacion.setPedido(this);
-
-        // Aquí guardarías la notificación con NotificacionRepository (inyéctalo desde fuera)
     }
 }
