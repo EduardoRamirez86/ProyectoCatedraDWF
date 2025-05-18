@@ -14,6 +14,7 @@ import sv.edu.udb.InvestigacionDwf.model.enums.EstadoNotificacion;
 import sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido;
 import sv.edu.udb.InvestigacionDwf.repository.*;
 import sv.edu.udb.InvestigacionDwf.service.CuponService;
+import sv.edu.udb.InvestigacionDwf.service.PedidoService;
 import sv.edu.udb.InvestigacionDwf.service.mapper.PedidoMapper;
 
 import java.math.BigDecimal;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class PedidoServiceImpl implements sv.edu.udb.InvestigacionDwf.service.PedidoService {
+public class PedidoServiceImpl implements PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final CarritoRepository carritoRepository;

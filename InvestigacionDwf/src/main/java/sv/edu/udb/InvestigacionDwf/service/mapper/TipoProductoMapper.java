@@ -9,18 +9,18 @@ import sv.edu.udb.InvestigacionDwf.model.entity.TipoProducto;
 public class TipoProductoMapper {
 
     public TipoProducto toEntity(TipoProductoRequest request) {
-        TipoProducto tipoProducto = new TipoProducto();
-        tipoProducto.setTipo(request.getTipo());
-        tipoProducto.setDescripcion(request.getDescripcion());
-        return tipoProducto;
+        return TipoProducto.builder()
+                .tipo(request.getTipo())
+                .descripcion(request.getDescripcion())
+                .build();
     }
 
     public TipoProductoResponse toResponse(TipoProducto entity) {
-        TipoProductoResponse response = new TipoProductoResponse();
-        response.setIdTipoProducto(entity.getIdTipoProducto());
-        response.setTipo(entity.getTipo());
-        response.setDescripcion(entity.getDescripcion());
-        return response;
+        return TipoProductoResponse.builder()
+                .idTipoProducto(entity.getIdTipoProducto())
+                .tipo(entity.getTipo())
+                .descripcion(entity.getDescripcion())
+                .build();
     }
 }
 

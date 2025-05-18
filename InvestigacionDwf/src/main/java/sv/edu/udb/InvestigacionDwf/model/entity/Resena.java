@@ -1,6 +1,8 @@
 package sv.edu.udb.InvestigacionDwf.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import sv.edu.udb.InvestigacionDwf.model.enums.RatingEnum;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Resena")
+@AllArgsConstructor
+@Builder
 @Data
 @NoArgsConstructor
 public class Resena {

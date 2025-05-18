@@ -37,11 +37,12 @@ public class ResenaServiceImpl implements ResenaService {
         Producto producto = productoRepository.findById(request.getIdProducto())
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        Resena resena = new Resena();
-        resena.setUser(user);
-        resena.setProducto(producto);
-        resena.setComentario(request.getComentario());
-        resena.setRating(request.getRating());
+        Resena resena = Resena.builder()
+                .user(user)
+                .producto(producto)
+                .comentario(request.getComentario())
+                .rating(request.getRating())
+                .build();
 
         resenaRepository.save(resena);
 
