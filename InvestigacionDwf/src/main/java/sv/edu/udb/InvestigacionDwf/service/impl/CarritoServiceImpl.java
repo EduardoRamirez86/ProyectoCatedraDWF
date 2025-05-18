@@ -11,13 +11,14 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Carrito;
 import sv.edu.udb.InvestigacionDwf.repository.CarritoItemRepository;
 import sv.edu.udb.InvestigacionDwf.repository.CarritoRepository;
 import sv.edu.udb.InvestigacionDwf.repository.UserRepository;
-import sv.edu.udb.InvestigacionDwf.security.jwt.CustomUserDetails; // Importación corregida
+import sv.edu.udb.InvestigacionDwf.security.jwt.CustomUserDetails;
 import sv.edu.udb.InvestigacionDwf.service.CarritoService;
 import sv.edu.udb.InvestigacionDwf.service.mapper.CarritoItemMapper;
 import sv.edu.udb.InvestigacionDwf.service.mapper.CarritoMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,7 @@ public class CarritoServiceImpl implements CarritoService {
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public CarritoResponse getOrCreateByUser(Long idUser) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
+        if (Objects.isNull(authentication) || !authentication.isAuthenticated()) {
             throw new SecurityException("Acceso denegado: Se requiere autenticación");
         }
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -44,9 +45,10 @@ public class CarritoServiceImpl implements CarritoService {
 
         Carrito carrito = carritoRepository.findByUserIdUser(idUser)
                 .orElseGet(() -> {
-                    Carrito nuevo = new Carrito();
-                    nuevo.setUser(userRepository.getReferenceById(idUser));
-                    nuevo.setFechaCreacion(LocalDateTime.now());
+                    Carrito nuevo = Carrito.builder()
+                            .user(userRepository.getReferenceById(idUser))
+                            .fechaCreacion(LocalDateTime.now())
+                            .build();
                     return carritoRepository.save(nuevo);
                 });
         return carritoMapper.toResponse(carrito);
@@ -56,7 +58,7 @@ public class CarritoServiceImpl implements CarritoService {
     @Transactional(readOnly = true)
     public List<CarritoItemResponse> getItems(Long idCarrito) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
+        if (Objects.isNull(authentication) || !authentication.isAuthenticated()) {
             throw new SecurityException("Acceso denegado: Se requiere autenticación");
         }
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -76,7 +78,7 @@ public class CarritoServiceImpl implements CarritoService {
     @Transactional(readOnly = false, rollbackFor = Exception.class)
     public void clearCarritoAfterPedido(Long idUser) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
+        if (Objects.isNull(authentication) || !authentication.isAuthenticated()) {
             throw new SecurityException("Acceso denegado: Se requiere autenticación");
         }
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

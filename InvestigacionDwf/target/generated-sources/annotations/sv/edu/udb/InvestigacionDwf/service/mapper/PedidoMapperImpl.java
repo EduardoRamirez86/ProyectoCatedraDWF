@@ -10,7 +10,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-13T22:26:44-0600",
+    date = "2025-05-18T05:50:45-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -58,11 +58,11 @@ public class PedidoMapperImpl implements PedidoMapper {
             return null;
         }
 
-        Carrito carrito = new Carrito();
+        Carrito.CarritoBuilder carrito = Carrito.builder();
 
-        carrito.setIdCarrito( pedidoRequest.getIdCarrito() );
+        carrito.idCarrito( pedidoRequest.getIdCarrito() );
 
-        return carrito;
+        return carrito.build();
     }
 
     protected Direccion pedidoRequestToDireccion(PedidoRequest pedidoRequest) {
@@ -70,11 +70,11 @@ public class PedidoMapperImpl implements PedidoMapper {
             return null;
         }
 
-        Direccion direccion = new Direccion();
+        Direccion.DireccionBuilder direccion = Direccion.builder();
 
-        direccion.setIdDireccion( pedidoRequest.getIdDireccion() );
+        direccion.idDireccion( pedidoRequest.getIdDireccion() );
 
-        return direccion;
+        return direccion.build();
     }
 
     private Long pedidoCarritoIdCarrito(Pedido pedido) {

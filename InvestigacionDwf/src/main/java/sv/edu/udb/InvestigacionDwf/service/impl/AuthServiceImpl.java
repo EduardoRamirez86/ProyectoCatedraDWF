@@ -45,19 +45,20 @@ public class AuthServiceImpl implements AuthService {
         Role userRole = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Rol ROLE_USER no encontrado"));
 
-        User user = new User();
-        user.setUsername(registerRequest.getUsername());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setEmail(registerRequest.getEmail());
-        user.setRole(userRole);
-        user.setPrimerNombre(registerRequest.getPrimerNombre());
-        user.setSegundoNombre(registerRequest.getSegundoNombre());
-        user.setPrimerApellido(registerRequest.getPrimerApellido());
-        user.setSegundoApellido(registerRequest.getSegundoApellido());
-        user.setFechaNacimiento(registerRequest.getFechaNacimiento());
-        user.setTelefono(registerRequest.getTelefono());
-        user.setDUI(registerRequest.getDUI());
-        user.setDireccion(registerRequest.getDireccion());
+        User user = User.builder()
+                .username(registerRequest.getUsername())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .email(registerRequest.getEmail())
+                .role(userRole)
+                .primerNombre(registerRequest.getPrimerNombre())
+                .segundoNombre(registerRequest.getSegundoNombre())
+                .primerApellido(registerRequest.getPrimerApellido())
+                .segundoApellido(registerRequest.getSegundoApellido())
+                .fechaNacimiento(registerRequest.getFechaNacimiento())
+                .telefono(registerRequest.getTelefono())
+                .DUI(registerRequest.getDUI())
+                .direccion(registerRequest.getDireccion())
+                .build();
 
         userRepository.save(user);
 

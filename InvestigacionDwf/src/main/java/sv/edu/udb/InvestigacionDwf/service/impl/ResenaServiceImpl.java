@@ -14,6 +14,7 @@ import sv.edu.udb.InvestigacionDwf.repository.UserRepository;
 import sv.edu.udb.InvestigacionDwf.service.ResenaService;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +27,10 @@ public class ResenaServiceImpl implements ResenaService {
 
     @Override
     public ResenaResponse crearResena(ResenaRequest request) {
+        if (Objects.isNull(request) || Objects.isNull(request.getIdUser()) || Objects.isNull(request.getIdProducto())) {
+            throw new IllegalArgumentException("Datos de reseña inválidos");
+        }
+
         User user = userRepository.findById(request.getIdUser())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -45,9 +50,14 @@ public class ResenaServiceImpl implements ResenaService {
 
     @Override
     public List<ResenaResponse> obtenerResenasPorProducto(Long idProducto) {
+        if (Objects.isNull(idProducto)) {
+            throw new IllegalArgumentException("El ID del producto no puede ser nulo");
+        }
+
         return resenaRepository.findByProducto_IdProducto(idProducto)
                 .stream()
                 .map(ResenaMapper::toDto)
                 .collect(Collectors.toList());
     }
 }
+

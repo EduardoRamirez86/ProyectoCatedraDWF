@@ -10,26 +10,27 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Direccion;
 public class DireccionMapper {
 
     public Direccion toEntity(DireccionRequest req) {
-        Direccion d = new Direccion();
-        d.setAlias(req.getAlias());
-        d.setCalle(req.getCalle());
-        d.setCiudad(req.getCiudad());
-        d.setDepartamento(req.getDepartamento());
-        d.setLatitud(req.getLatitud());
-        d.setLongitud(req.getLongitud());
-        return d;
+        return Direccion.builder()
+                .alias(req.getAlias())
+                .calle(req.getCalle())
+                .ciudad(req.getCiudad())
+                .departamento(req.getDepartamento())
+                .latitud(req.getLatitud())
+                .longitud(req.getLongitud())
+                .build();
     }
 
     public DireccionResponse toResponse(Direccion entity) {
-        DireccionResponse r = new DireccionResponse();
-        r.setIdDireccion(entity.getIdDireccion());
-        r.setAlias(entity.getAlias());
-        r.setCalle(entity.getCalle());
-        r.setCiudad(entity.getCiudad());
-        r.setDepartamento(entity.getDepartamento());
-        r.setLatitud(entity.getLatitud());
-        r.setLongitud(entity.getLongitud());
-        return r;
+        return DireccionResponse.builder()
+                .idDireccion(entity.getIdDireccion())
+                .alias(entity.getAlias())
+                .calle(entity.getCalle())
+                .ciudad(entity.getCiudad())
+                .departamento(entity.getDepartamento())
+                .latitud(entity.getLatitud())
+                .longitud(entity.getLongitud())
+                .build();
     }
 }
+
 

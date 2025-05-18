@@ -9,7 +9,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.User;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-13T22:26:44-0600",
+    date = "2025-05-18T05:50:45-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -21,12 +21,12 @@ public class CarritoMapperImpl extends CarritoMapper {
             return null;
         }
 
-        Carrito carrito = new Carrito();
+        Carrito.CarritoBuilder carrito = Carrito.builder();
 
-        carrito.setUser( userRepository.getReferenceById(request.getIdUser()) );
-        carrito.setFechaCreacion( java.time.LocalDateTime.now() );
+        carrito.user( userRepository.getReferenceById(request.getIdUser()) );
+        carrito.fechaCreacion( java.time.LocalDateTime.now() );
 
-        return carrito;
+        return carrito.build();
     }
 
     @Override
