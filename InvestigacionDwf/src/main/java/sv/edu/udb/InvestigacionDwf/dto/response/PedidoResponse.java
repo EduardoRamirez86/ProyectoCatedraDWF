@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido;
 import sv.edu.udb.InvestigacionDwf.model.enums.TipoPago;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PedidoResponse {
+public class PedidoResponse extends RepresentationModel<PedidoResponse> {
     private Long idPedido;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFinal;
@@ -24,8 +25,6 @@ public class PedidoResponse {
     private Long idCarrito;
     private TipoPago tipoPago;
     private EstadoPedido estado;
-
-    // Campos de dirección (opcionales)
     private Long idDireccion;
     private String aliasDireccion;
     private String calleDireccion;

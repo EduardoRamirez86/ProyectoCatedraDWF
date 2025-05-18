@@ -3,6 +3,10 @@ package sv.edu.udb.InvestigacionDwf.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sv.edu.udb.InvestigacionDwf.dto.request.PagoRequest;
@@ -15,13 +19,11 @@ import sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido;
 import sv.edu.udb.InvestigacionDwf.repository.*;
 import sv.edu.udb.InvestigacionDwf.service.CuponService;
 import sv.edu.udb.InvestigacionDwf.service.PedidoService;
-import sv.edu.udb.InvestigacionDwf.service.mapper.PedidoMapper;
+import sv.edu.udb.InvestigacionDwf.service.assembler.PedidoAssembler;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,15 +33,13 @@ public class PedidoServiceImpl implements PedidoService {
     private final CarritoRepository carritoRepository;
     private final CarritoItemRepository carritoItemRepository;
     private final DireccionRepository direccionRepository;
-    private final PedidoMapper pedidoMapper;
     private final UserRepository userRepository;
     private final NotificacionRepository notificacionRepository;
     private final CuponService cuponService;
     private final CuponRepository cuponRepository;
+    private final PedidoAssembler pedidoAssembler;
+    private final PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
-    /**
-     * Inyecta desde application.properties el costo de envío
-     */
     @Value("${app.shipping.cost}")
     private BigDecimal shippingCost;
 
@@ -48,19 +48,15 @@ public class PedidoServiceImpl implements PedidoService {
     public PedidoResponse checkout(PedidoRequest req) {
         var carrito = carritoRepository.findById(req.getIdCarrito())
                 .orElseThrow(() -> new ResourceNotFoundException("Carrito no encontrado ID: " + req.getIdCarrito()));
-
         var items = carritoItemRepository.findByCarrito_IdCarrito(carrito.getIdCarrito());
         if (items.isEmpty()) {
             throw new IllegalStateException("No se puede realizar la compra con el carrito vacío.");
         }
 
-        // 1) Subtotal productos
         BigDecimal subtotal = items.stream()
-                .map(i -> i.getProducto().getPrecio()
-                        .multiply(BigDecimal.valueOf(i.getCantidad())))
+                .map(i -> i.getProducto().getPrecio().multiply(BigDecimal.valueOf(i.getCantidad())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // 2) Aplicar cupón si hay
         User user = carrito.getUser();
         if (Objects.nonNull(req.getCuponCodigo()) && !req.getCuponCodigo().isBlank()) {
             if (cuponService.validateCoupon(req.getCuponCodigo(), user)) {
@@ -76,20 +72,15 @@ public class PedidoServiceImpl implements PedidoService {
             }
         }
 
-        // 3) Sumar envío (ahora configurable)
         BigDecimal total = subtotal.add(shippingCost);
-
-        // 4) Construir pedido con builder
         var pedido = Pedido.builder()
                 .carrito(carrito)
                 .fechaInicio(LocalDateTime.now())
                 .total(total)
                 .tipoPago(req.getTipoPago())
                 .build();
-
         pedido.actualizarEstado(EstadoPedido.PENDIENTE, user);
 
-        // 5) Dirección
         if (Objects.isNull(req.getIdDireccion())) {
             throw new IllegalArgumentException("Debe especificar una dirección de entrega.");
         }
@@ -97,7 +88,6 @@ public class PedidoServiceImpl implements PedidoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Dirección no encontrada ID: " + req.getIdDireccion()));
         pedido.setDireccion(dir);
 
-        // 6) Puntos
         int puntosGanados = items.stream()
                 .mapToInt(i -> i.getProducto().getCantidadPuntos() * i.getCantidad())
                 .sum();
@@ -116,11 +106,9 @@ public class PedidoServiceImpl implements PedidoService {
                 .build();
         pedido.getHistorialPuntos().add(hp);
 
-        // 7) Guardar
         var saved = pedidoRepository.save(pedido);
         userRepository.save(user);
 
-        // 8) Cupón por puntos si aplica
         if (puntosNuevos >= 30) {
             var nuevoCupon = cuponService.generateCouponForUser(user);
             user.setPuntos(puntosNuevos - 30);
@@ -137,7 +125,7 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         crearNotificacion(user, saved, "PAGADO");
-        return pedidoMapper.toResponse(saved);
+        return pedidoAssembler.toModel(saved);
     }
 
     @Override
@@ -185,26 +173,30 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PedidoResponse> findAllByUser(Long idUser) {
-        return pedidoRepository.findByCarrito_User_IdUser(idUser).stream()
-                .map(pedidoMapper::toResponse)
-                .collect(Collectors.toList());
+    public PagedModel<PedidoResponse> findAllByUser(Long idUser, Pageable pageable) {
+        Page<Pedido> page = pedidoRepository.findByCarrito_User_IdUser(idUser, pageable);
+        return pagedResourcesAssembler.toModel(page, pedidoAssembler);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<PedidoResponse> findAll() {
-        return pedidoRepository.findAll().stream()
-                .map(pedidoMapper::toResponse)
-                .collect(Collectors.toList());
+    public PagedModel<PedidoResponse> findAll(Pageable pageable) {
+        Page<Pedido> page = pedidoRepository.findAll(pageable);
+        return pagedResourcesAssembler.toModel(page, pedidoAssembler);
     }
 
-    // Helpers
+    @Override
+    @Transactional(readOnly = true)
+    public PedidoResponse getById(Long id) {
+        return pedidoAssembler.toModel(getPedidoOrThrow(id));
+    }
+
+    // Métodos auxiliares
 
     private PedidoResponse saveAndNotify(Pedido p, String estado) {
         var saved = pedidoRepository.save(p);
         crearNotificacion(p.getCarrito().getUser(), saved, estado);
-        return pedidoMapper.toResponse(saved);
+        return pedidoAssembler.toModel(saved);
     }
 
     private Pedido getPedidoOrThrow(Long id) {
@@ -234,5 +226,3 @@ public class PedidoServiceImpl implements PedidoService {
         notificacionRepository.save(n);
     }
 }
-
-

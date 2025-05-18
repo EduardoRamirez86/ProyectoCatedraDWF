@@ -2,6 +2,8 @@
 package sv.edu.udb.InvestigacionDwf.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
@@ -74,15 +76,16 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional(readOnly = true)
     public List<ProductoResponse> findRecommendedByUser(Long idUser) {
-        // 1) Obtener todos los pedidos del usuario
-        List<Pedido> pedidos = pedidoRepository.findByCarrito_User_IdUser(idUser);
+        // 1) Obtener todos los pedidos del usuario sin paginación
+        Page<Pedido> pedidosPage = pedidoRepository.findByCarrito_User_IdUser(idUser, Pageable.unpaged());
+        List<Pedido> pedidos = pedidosPage.getContent();
 
         // 2) Extraer IDs de tipoProducto con referencia de método
         Set<Long> tipoIds = pedidos.stream()
                 .flatMap(p -> p.getCarrito().getItems().stream())
                 .map(CarritoItem::getProducto)
                 .map(Producto::getTipoProducto)
-                .map(TipoProducto::getIdTipoProducto)   // <-- aquí usamos method reference
+                .map(TipoProducto::getIdTipoProducto)
                 .collect(Collectors.toSet());
 
         if (tipoIds.isEmpty()) {

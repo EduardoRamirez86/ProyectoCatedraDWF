@@ -1,10 +1,10 @@
 package sv.edu.udb.InvestigacionDwf.service;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
 import sv.edu.udb.InvestigacionDwf.dto.request.PagoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.request.PedidoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.PedidoResponse;
-
-import java.util.List;
 
 public interface PedidoService {
     PedidoResponse checkout(PedidoRequest req);
@@ -13,7 +13,8 @@ public interface PedidoService {
     PedidoResponse iniciarEnvio(Long idPedido);
     PedidoResponse marcarEntregado(Long idPedido);
     PedidoResponse cancelar(Long idPedido, String motivo);
-    List<PedidoResponse> findAllByUser(Long idUser);
-    List<PedidoResponse> findAll();
+    PagedModel<PedidoResponse> findAllByUser(Long idUser, Pageable pageable);
+    PagedModel<PedidoResponse> findAll(Pageable pageable);
+    PedidoResponse getById(Long id);
 }
 
