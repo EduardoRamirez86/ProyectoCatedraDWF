@@ -9,7 +9,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
 public class HateoasConfig {
 
     @Bean
-    public PagedResourcesAssembler<Pedido> pagedResourcesAssembler() {
+    public PagedResourcesAssembler<Pedido> pedidoPagedResourcesAssembler() {
         return new PagedResourcesAssembler<>(null, null);
     }
 }

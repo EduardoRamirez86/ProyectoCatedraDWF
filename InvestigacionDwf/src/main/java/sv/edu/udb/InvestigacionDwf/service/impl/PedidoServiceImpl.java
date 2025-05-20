@@ -46,57 +46,71 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     @Transactional
     public PedidoResponse checkout(PedidoRequest req) {
+        // Obtiene el carrito por ID o lanza una excepción si no existe
         var carrito = carritoRepository.findById(req.getIdCarrito())
                 .orElseThrow(() -> new ResourceNotFoundException("Carrito no encontrado ID: " + req.getIdCarrito()));
+        // Obtiene los items del carrito
         var items = carritoItemRepository.findByCarrito_IdCarrito(carrito.getIdCarrito());
         if (items.isEmpty()) {
             throw new IllegalStateException("No se puede realizar la compra con el carrito vacío.");
         }
 
+        // Calcula el subtotal sumando el precio de cada item multiplicado por su cantidad
         BigDecimal subtotal = items.stream()
                 .map(i -> i.getProducto().getPrecio().multiply(BigDecimal.valueOf(i.getCantidad())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         User user = carrito.getUser();
+        // Verifica si se proporcionó un código de cupón y si es válido
         if (Objects.nonNull(req.getCuponCodigo()) && !req.getCuponCodigo().isBlank()) {
             if (cuponService.validateCoupon(req.getCuponCodigo(), user)) {
                 var cupon = cuponRepository.findByCodigo(req.getCuponCodigo())
                         .orElseThrow(() -> new ResourceNotFoundException("Cupón no encontrado: " + req.getCuponCodigo()));
+                // Calcula el descuento basado en el porcentaje del cupón
                 BigDecimal descuento = subtotal.multiply(
                         BigDecimal.valueOf(cupon.getPorcentajeDescuento()).divide(BigDecimal.valueOf(100))
                 );
                 subtotal = subtotal.subtract(descuento);
+                // Redime el cupón para que no se use nuevamente
                 cuponService.redeemCoupon(req.getCuponCodigo(), user);
             } else {
                 throw new IllegalStateException("Cupón inválido o no aplicable");
             }
         }
 
+        // Agrega el costo de envío al subtotal para obtener el total
         BigDecimal total = subtotal.add(shippingCost);
+        // Construye el objeto Pedido con los datos calculados
         var pedido = Pedido.builder()
                 .carrito(carrito)
                 .fechaInicio(LocalDateTime.now())
                 .total(total)
                 .tipoPago(req.getTipoPago())
                 .build();
+        // Actualiza el estado del pedido a PENDIENTE
         pedido.actualizarEstado(EstadoPedido.PENDIENTE, user);
 
+        // Verifica que se haya proporcionado una dirección de entrega
         if (Objects.isNull(req.getIdDireccion())) {
             throw new IllegalArgumentException("Debe especificar una dirección de entrega.");
         }
+        // Obtiene la dirección por ID o lanza una excepción si no existe
         var dir = direccionRepository.findById(req.getIdDireccion())
                 .orElseThrow(() -> new ResourceNotFoundException("Dirección no encontrada ID: " + req.getIdDireccion()));
         pedido.setDireccion(dir);
 
+        // Calcula los puntos ganados por los items del pedido
         int puntosGanados = items.stream()
                 .mapToInt(i -> i.getProducto().getCantidadPuntos() * i.getCantidad())
                 .sum();
         pedido.setPuntosTotales(puntosGanados);
 
+        // Actualiza los puntos del usuario
         int puntosAntes = user.getPuntos();
         int puntosNuevos = puntosAntes + puntosGanados;
         user.setPuntos(puntosNuevos);
 
+        // Registra el historial de puntos
         var hp = HistorialPuntos.builder()
                 .pedido(pedido)
                 .user(user)
@@ -106,9 +120,11 @@ public class PedidoServiceImpl implements PedidoService {
                 .build();
         pedido.getHistorialPuntos().add(hp);
 
+        // Guarda el pedido y actualiza el usuario
         var saved = pedidoRepository.save(pedido);
         userRepository.save(user);
 
+        // Si el usuario alcanza 30 puntos, genera un cupón y deduce los puntos
         if (puntosNuevos >= 30) {
             var nuevoCupon = cuponService.generateCouponForUser(user);
             user.setPuntos(puntosNuevos - 30);
@@ -124,7 +140,9 @@ public class PedidoServiceImpl implements PedidoService {
             crearNotificacionCupon(user, saved, nuevoCupon.getCodigo());
         }
 
+        // Crea una notificación para el usuario sobre el estado del pedido
         crearNotificacion(user, saved, "PAGADO");
+        // Convierte el pedido guardado a un modelo HAL
         return pedidoAssembler.toModel(saved);
     }
 
