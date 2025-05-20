@@ -20,36 +20,41 @@ const getToken = () => secureGetItem("token");
  * Admin: todos los pedidos, paginados
  */
 export const getAllPedidos = async (page = 0, size = 10) => {
-  const token = getToken();
+  const token = getToken(); // Suponiendo que tienes una función para obtener el token
   if (!token) throw new Error('No se encontró el token de autenticación');
 
   const params = new URLSearchParams({ page, size });
-  const resp = await fetch(`${API_URL}/all?${params}`, {
-    headers: { "Authorization": `Bearer ${token}` },
-  });
-  const data = await handleResponse(resp);
-  console.log("RAW PAGE MODEL (all):", data);
+  try {
+    const resp = await fetch(`${API_URL}/all?${params}`, {
+      headers: { "Authorization": `Bearer ${token}` },
+    });
 
-  // Corrige: si hay pedidos en _embedded.pedidoResponseList, úsalos SIEMPRE
-  let items = [];
-  if (data._embedded && Array.isArray(data._embedded.pedidoResponseList)) {
-    items = data._embedded.pedidoResponseList;
-  } else if (Array.isArray(data.pedidoResponseList)) {
-    // fallback por si el backend cambia la estructura
-    items = data.pedidoResponseList;
+    if (!resp.ok) {
+      const message = await resp.text();
+      throw new Error(`Error en la solicitud: ${message}`);
+    }
+
+    const data = await resp.json();
+    console.log("Respuesta cruda del backend:", data);
+
+    // Extraer la lista de pedidos de _embedded.pedidoResponseList
+    const items = data._embedded?.pedidoResponseList || [];
+    console.log("Pedidos extraídos:", items);
+
+    // Extraer información de paginación
+    const pageInfo = data.page || {};
+
+    return {
+      items, // Lista de pedidos
+      page: pageInfo.number || 0, // Número de página actual
+      size: pageInfo.size || size, // Tamaño de la página
+      totalPages: pageInfo.totalPages || 1, // Total de páginas
+      totalElements: pageInfo.totalElements || items.length, // Total de elementos
+    };
+  } catch (error) {
+    console.error("Error al obtener los pedidos:", error);
+    throw error;
   }
-
-  // Corrige la paginación: usa SIEMPRE la info real del backend
-  const pageInfo = data.page || {};
-
-  // Si no hay info de paginación pero hay items, calcula totalElements
-  return {
-    items,
-    page: pageInfo.number ?? 0,
-    size: pageInfo.size ?? items.length,
-    totalPages: pageInfo.totalPages ?? 1,
-    totalElements: pageInfo.totalElements ?? items.length,
-  };
 };
 
 /**
