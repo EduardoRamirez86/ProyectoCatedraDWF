@@ -6,7 +6,6 @@ sv\edu\udb\InvestigacionDwf\service\impl\CuponServiceImpl.class
 sv\edu\udb\InvestigacionDwf\model\enums\TipoPago.class
 sv\edu\udb\InvestigacionDwf\service\CarritoService.class
 sv\edu\udb\InvestigacionDwf\repository\CarritoRepository.class
-sv\edu\udb\InvestigacionDwf\model\entity\Compra.class
 sv\edu\udb\InvestigacionDwf\model\entity\Direccion.class
 sv\edu\udb\InvestigacionDwf\exception\UserAlreadyExistException.class
 sv\edu\udb\InvestigacionDwf\dto\request\NotificacionRequest.class
@@ -21,7 +20,6 @@ sv\edu\udb\InvestigacionDwf\repository\RopaRespository.class
 sv\edu\udb\InvestigacionDwf\repository\CarritoItemRepository.class
 sv\edu\udb\InvestigacionDwf\dto\response\TipoProductoResponse.class
 sv\edu\udb\InvestigacionDwf\service\UserService.class
-sv\edu\udb\InvestigacionDwf\repository\EstadoMensajeRepository.class
 sv\edu\udb\InvestigacionDwf\controller\PedidoController.class
 sv\edu\udb\InvestigacionDwf\dto\request\UserRequest.class
 sv\edu\udb\InvestigacionDwf\repository\CuponRepository.class
@@ -55,7 +53,6 @@ sv\edu\udb\InvestigacionDwf\model\enums\EstadoNotificacion.class
 sv\edu\udb\InvestigacionDwf\dto\response\UserResponse.class
 sv\edu\udb\InvestigacionDwf\repository\NotificacionRepository.class
 sv\edu\udb\InvestigacionDwf\dto\response\DireccionResponse$DireccionResponseBuilder.class
-sv\edu\udb\InvestigacionDwf\repository\EstadoRepository.class
 sv\edu\udb\InvestigacionDwf\model\entity\Cupon$CuponBuilder.class
 sv\edu\udb\InvestigacionDwf\security\jwt\JwtUtils.class
 sv\edu\udb\InvestigacionDwf\service\TipoProductoService.class
@@ -65,13 +62,10 @@ sv\edu\udb\InvestigacionDwf\dto\request\ProductoRequest$ProductoRequestBuilder.c
 sv\edu\udb\InvestigacionDwf\service\impl\ResenaServiceImpl.class
 sv\edu\udb\InvestigacionDwf\dto\response\PedidoResponse.class
 sv\edu\udb\InvestigacionDwf\dto\response\CarritoResponse$CarritoResponseBuilder.class
-sv\edu\udb\InvestigacionDwf\repository\CompraRepository.class
-sv\edu\udb\InvestigacionDwf\repository\FormaPagoRepository.class
 sv\edu\udb\InvestigacionDwf\security\jwt\CustomUserDetails.class
 sv\edu\udb\InvestigacionDwf\controller\CarritoController.class
 sv\edu\udb\InvestigacionDwf\dto\request\PedidoRequest.class
 sv\edu\udb\InvestigacionDwf\dto\response\TipoProductoResponse$TipoProductoResponseBuilder.class
-sv\edu\udb\InvestigacionDwf\model\entity\EstadoMensaje.class
 sv\edu\udb\InvestigacionDwf\model\entity\HistorialPedido$HistorialPedidoBuilder.class
 sv\edu\udb\InvestigacionDwf\service\CarritoItemService.class
 sv\edu\udb\InvestigacionDwf\service\impl\PedidoServiceImpl.class
@@ -97,6 +91,7 @@ sv\edu\udb\InvestigacionDwf\service\impl\CarritoItemServiceImpl.class
 sv\edu\udb\InvestigacionDwf\service\mapper\CarritoMapper.class
 sv\edu\udb\InvestigacionDwf\dto\response\NotificacionResponse$NotificacionResponseBuilder.class
 sv\edu\udb\InvestigacionDwf\dto\response\ProductoResponse$Fields.class
+sv\edu\udb\InvestigacionDwf\config\HateoasConfig.class
 sv\edu\udb\InvestigacionDwf\dto\response\CarritoResponse.class
 sv\edu\udb\InvestigacionDwf\service\ProductoService.class
 sv\edu\udb\InvestigacionDwf\model\entity\Ropa.class
@@ -111,11 +106,11 @@ sv\edu\udb\InvestigacionDwf\service\impl\ProductoServiceImpl.class
 sv\edu\udb\InvestigacionDwf\model\entity\Estado.class
 sv\edu\udb\InvestigacionDwf\exception\ResourceNotFoundException.class
 sv\edu\udb\InvestigacionDwf\repository\RoleRepository.class
-sv\edu\udb\InvestigacionDwf\controller\CompraController.class
 sv\edu\udb\InvestigacionDwf\service\mapper\ProductoMapperImpl.class
 sv\edu\udb\InvestigacionDwf\model\entity\Pedido$PedidoBuilder.class
 sv\edu\udb\InvestigacionDwf\dto\response\CuponResponse.class
 sv\edu\udb\InvestigacionDwf\model\enums\EstadoPedido.class
+sv\edu\udb\InvestigacionDwf\service\assembler\PedidoAssembler.class
 sv\edu\udb\InvestigacionDwf\service\impl\CarritoServiceImpl.class
 sv\edu\udb\InvestigacionDwf\model\entity\Pedido.class
 sv\edu\udb\InvestigacionDwf\service\impl\RopaServiceImpl.class
@@ -143,4 +138,3 @@ sv\edu\udb\InvestigacionDwf\service\RopaService.class
 sv\edu\udb\InvestigacionDwf\dto\request\CarritoItemRequest.class
 sv\edu\udb\InvestigacionDwf\repository\ProductoRepository.class
 sv\edu\udb\InvestigacionDwf\dto\response\ProductoResponse$ProductoResponseBuilder.class
-sv\edu\udb\InvestigacionDwf\model\entity\FormaPago.class

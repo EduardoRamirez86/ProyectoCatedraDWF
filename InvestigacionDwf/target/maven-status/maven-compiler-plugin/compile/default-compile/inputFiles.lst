@@ -8,7 +8,6 @@ C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\DireccionRepository.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\controller\NotificacionController.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\ResenaRepository.java
-C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\FormaPagoRepository.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\HistorialPedidoRepository.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\dto\request\ResenaRequest.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\mapper\ResenaMapper.java
@@ -45,8 +44,6 @@ C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\model\entity\Role.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\dto\request\NotificacionRequest.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\model\enums\TipoPago.java
-C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\EstadoMensajeRepository.java
-C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\controller\CompraController.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\mapper\TipoProductoMapper.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\mapper\CarritoMapper.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\ResenaService.java
@@ -69,11 +66,10 @@ C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\ProductoService.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\model\enums\RatingEnum.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\impl\CarritoServiceImpl.java
-C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\CompraRepository.java
+C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\config\HateoasConfig.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\mapper\CarritoItemMapper.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\dto\response\CarritoResponse.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\dto\response\UserResponse.java
-C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\model\entity\Compra.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\dto\request\UserRequest.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\dto\request\PagoRequest.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\model\entity\HistorialPuntos.java
@@ -83,14 +79,12 @@ C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\config\web\WebConfig.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\dto\response\ResenaResponse.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\controller\CarritoController.java
-C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\model\entity\FormaPago.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\HistorialPuntosRepository.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\impl\DireccionServiceImpl.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\DataLoader.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\RopaRespository.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\NotificacionRepository.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\exception\ResourceNotFoundException.java
-C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\model\entity\EstadoMensaje.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\PedidoRepository.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\NotificacionService.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\dto\request\TipoProductoRequest.java
@@ -107,6 +101,7 @@ C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\CarritoService.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\impl\ResenaServiceImpl.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\model\entity\Pedido.java
+C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\assembler\PedidoAssembler.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\config\SecurityConfig.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\controller\PedidoController.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\model\entity\Ropa.java
@@ -114,7 +109,6 @@ C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\mapper\DireccionMapper.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\CarritoItemRepository.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\service\DireccionService.java
-C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\EstadoRepository.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\dto\response\TipoProductoResponse.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\repository\TipoProductoRepository.java
 C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\dto\request\DireccionRequest.java
