@@ -10,8 +10,6 @@ import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
 import sv.edu.udb.InvestigacionDwf.service.ProductoService;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-
 @RestController
 @RequestMapping("/auth/producto")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -36,9 +34,10 @@ public class ProductoController {
         service.delete(id);
     }
 
+    // ✅ Solo dejamos esta ruta para obtener productos paginados
     @GetMapping("/all")
     public PagedModel<ProductoResponse> getAll(Pageable pageable) {
-        return service.findAll(pageable);
+        return service.findAll(pageable); // ✅ Lógica de paginación y detalles en el servicio
     }
 
     @GetMapping("/{id}")
@@ -46,23 +45,13 @@ public class ProductoController {
         return service.getById(id);
     }
 
-    /**
-     * NUEVO: productos recomendados para un usuario (sin paginar)
-     */
     @GetMapping("/recomendados/{idUser}")
     public CollectionModel<ProductoResponse> getRecommendedByUser(@PathVariable Long idUser) {
         var recomendaciones = service.findRecommendedByUser(idUser);
-
-        return CollectionModel.of(recomendaciones,
-                linkTo(methodOn(ProductoController.class)
-                        .getRecommendedByUser(idUser))
-                        .withSelfRel(),
-                linkTo(methodOn(ProductoController.class)
-                        .getAll(null))
-                        .withRel("productos")
-        );
+        return CollectionModel.of(recomendaciones);
     }
 
 }
+
 
 

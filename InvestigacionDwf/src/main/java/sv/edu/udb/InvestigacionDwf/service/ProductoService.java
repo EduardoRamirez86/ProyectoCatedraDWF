@@ -15,6 +15,7 @@ public interface ProductoService {
     PagedModel<ProductoResponse> findAll(Pageable pageable);
     ProductoResponse getById(Long id);
 
+
     List<ProductoResponse> findRecommendedByUser(Long idUser);
 }
 

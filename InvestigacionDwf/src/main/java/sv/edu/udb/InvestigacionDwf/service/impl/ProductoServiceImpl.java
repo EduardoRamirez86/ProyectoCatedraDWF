@@ -1,4 +1,3 @@
-// src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/ProductoServiceImpl.java
 package sv.edu.udb.InvestigacionDwf.service.impl;
 
 import lombok.RequiredArgsConstructor;
@@ -13,10 +12,11 @@ import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
 import sv.edu.udb.InvestigacionDwf.exception.ResourceNotFoundException;
 import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 import sv.edu.udb.InvestigacionDwf.repository.ProductoRepository;
+import sv.edu.udb.InvestigacionDwf.service.ProductoService;
 import sv.edu.udb.InvestigacionDwf.service.assembler.ProductoAssembler;
 import sv.edu.udb.InvestigacionDwf.service.mapper.ProductoMapper;
-import sv.edu.udb.InvestigacionDwf.service.ProductoService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,7 +32,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional
     public ProductoResponse create(ProductoRequest req) {
         Producto prod = mapper.toEntity(req);
-        prod.setFechaCreacion(java.time.LocalDateTime.now());
+        prod.setFechaCreacion(LocalDateTime.now());
         Producto saved = repo.save(prod);
         return assembler.toModel(saved);
     }
@@ -43,7 +43,7 @@ public class ProductoServiceImpl implements ProductoService {
         Producto prod = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado ID: " + id));
         mapper.updateEntityFromRequest(req, prod);
-        prod.setFechaActualizacion(java.time.LocalDateTime.now());
+        prod.setFechaActualizacion(LocalDateTime.now());
         Producto updated = repo.save(prod);
         return assembler.toModel(updated);
     }
@@ -61,7 +61,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional(readOnly = true)
     public PagedModel<ProductoResponse> findAll(Pageable pageable) {
         Page<Producto> page = repo.findAll(pageable);
-        return pagedAssembler.toModel(page, assembler);
+        return pagedAssembler.toModel(page, assembler); // ← usa HATEOAS con ProductoAssembler
     }
 
     @Override
@@ -71,18 +71,14 @@ public class ProductoServiceImpl implements ProductoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado ID: " + id));
         return assembler.toModel(prod);
     }
+
     @Override
     @Transactional(readOnly = true)
     public List<ProductoResponse> findRecommendedByUser(Long idUser) {
-        // Esta es una lógica de ejemplo. Puedes personalizarla según tu necesidad real.
-        // Por ejemplo, podrías filtrar por tipo de producto más comprado por el usuario, etc.
-
-        // Aquí simplemente devolvemos los últimos 5 productos creados como "recomendados"
         return repo.findTop5ByOrderByFechaCreacionDesc()
                 .stream()
                 .map(assembler::toModel)
                 .toList();
     }
-
 }
 

@@ -18,4 +18,5 @@ public class HateoasConfig {
     public PagedResourcesAssembler<Producto> productoPagedResourcesAssembler() {
         return new PagedResourcesAssembler<>(null, null);
     }
+
 }

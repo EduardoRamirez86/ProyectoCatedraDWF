@@ -36,12 +36,27 @@ export const getAllProductosPaged = async (page = 0, size = 10) => {
   };
 };
 
-/** GET todos los productos (sin paginar) */
+/** GET todos los productos (sin paginar) *//** GET todos los productos (sin paginar) */
 export const getAllProductos = async () => {
-  const resp = await fetch(API_URL);
-  if (!resp.ok) throw new Error('No se pudo obtener la lista de productos');
-  return resp.json();
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+
+  const resp = await fetch(`${API_URL}/all`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`No se pudo obtener la lista de productos: ${text}`);
+  }
+
+  const data = await resp.json();
+  const items = data._embedded?.productoResponseList || [];
+
+  return items; // <- devuelve el array de productos
 };
+
+
 
 /** GET recomendados por usuario */
 export const getRecommendedProductos = async (idUser) => {
