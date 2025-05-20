@@ -4,101 +4,85 @@ package sv.edu.udb.InvestigacionDwf.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
 import sv.edu.udb.InvestigacionDwf.exception.ResourceNotFoundException;
-import sv.edu.udb.InvestigacionDwf.model.entity.CarritoItem;
-import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
 import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
-import sv.edu.udb.InvestigacionDwf.model.entity.TipoProducto;
-import sv.edu.udb.InvestigacionDwf.repository.PedidoRepository;
 import sv.edu.udb.InvestigacionDwf.repository.ProductoRepository;
-import sv.edu.udb.InvestigacionDwf.service.ProductoService;
+import sv.edu.udb.InvestigacionDwf.service.assembler.ProductoAssembler;
 import sv.edu.udb.InvestigacionDwf.service.mapper.ProductoMapper;
+import sv.edu.udb.InvestigacionDwf.service.ProductoService;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ProductoServiceImpl implements ProductoService {
 
-    private final ProductoRepository productoRepository;
-    private final ProductoMapper productoMapper;
-    private final PedidoRepository pedidoRepository;
+    private final ProductoRepository repo;
+    private final ProductoAssembler assembler;
+    private final ProductoMapper mapper;
+    private final PagedResourcesAssembler<Producto> pagedAssembler;
 
     @Override
-    @Transactional(readOnly = true)
-    public List<ProductoResponse> findAll() {
-        return productoMapper.toResponseList(productoRepository.findAll());
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public ProductoResponse findById(Long id) {
-        Producto producto = productoRepository.findByIdWithTipoProducto(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado ID: " + id));
-        return productoMapper.toResponse(producto);
+    @Transactional
+    public ProductoResponse create(ProductoRequest req) {
+        Producto prod = mapper.toEntity(req);
+        prod.setFechaCreacion(java.time.LocalDateTime.now());
+        Producto saved = repo.save(prod);
+        return assembler.toModel(saved);
     }
 
     @Override
     @Transactional
-    public ProductoResponse save(ProductoRequest request) {
-        Producto entity = productoMapper.toEntity(request);
-        return productoMapper.toResponse(productoRepository.save(entity));
-    }
-
-    @Override
-    @Transactional
-    public ProductoResponse update(Long id, ProductoRequest request) {
-        Producto entity = productoRepository.findById(id)
+    public ProductoResponse update(Long id, ProductoRequest req) {
+        Producto prod = repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado ID: " + id));
-        productoMapper.updateEntityFromRequest(request, entity);
-        return productoMapper.toResponse(productoRepository.save(entity));
+        mapper.updateEntityFromRequest(req, prod);
+        prod.setFechaActualizacion(java.time.LocalDateTime.now());
+        Producto updated = repo.save(prod);
+        return assembler.toModel(updated);
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-        if (!productoRepository.existsById(id)) {
+        if (!repo.existsById(id)) {
             throw new ResourceNotFoundException("Producto no encontrado ID: " + id);
         }
-        productoRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return productoRepository.existsById(id);
+        repo.deleteById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductoResponse> findRecommendedByUser(Long idUser) {
-        // 1) Obtener todos los pedidos del usuario sin paginación
-        Page<Pedido> pedidosPage = pedidoRepository.findByCarrito_User_IdUser(idUser, Pageable.unpaged());
-        List<Pedido> pedidos = pedidosPage.getContent();
-
-        // 2) Extraer IDs de tipoProducto con referencia de método
-        Set<Long> tipoIds = pedidos.stream()
-                .flatMap(p -> p.getCarrito().getItems().stream())
-                .map(CarritoItem::getProducto)
-                .map(Producto::getTipoProducto)
-                .map(TipoProducto::getIdTipoProducto)
-                .collect(Collectors.toSet());
-
-        if (tipoIds.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        // 3) Buscar productos de esas categorías
-        List<Producto> recomendados =
-                productoRepository.findByTipoProducto_IdTipoProductoIn(new ArrayList<>(tipoIds));
-
-        // 4) Mapear a DTO y devolver
-        return productoMapper.toResponseList(recomendados);
+    public PagedModel<ProductoResponse> findAll(Pageable pageable) {
+        Page<Producto> page = repo.findAll(pageable);
+        return pagedAssembler.toModel(page, assembler);
     }
-}
 
+    @Override
+    @Transactional(readOnly = true)
+    public ProductoResponse getById(Long id) {
+        Producto prod = repo.findByIdWithTipoProducto(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado ID: " + id));
+        return assembler.toModel(prod);
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductoResponse> findRecommendedByUser(Long idUser) {
+        // Esta es una lógica de ejemplo. Puedes personalizarla según tu necesidad real.
+        // Por ejemplo, podrías filtrar por tipo de producto más comprado por el usuario, etc.
+
+        // Aquí simplemente devolvemos los últimos 5 productos creados como "recomendados"
+        return repo.findTop5ByOrderByFechaCreacionDesc()
+                .stream()
+                .map(assembler::toModel)
+                .toList();
+    }
+
+}
 

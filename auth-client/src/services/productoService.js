@@ -1,28 +1,68 @@
-// src/services/productoService.js
 import { secureGetItem } from '../utils/secureStorage';
 
-const API_URL = "http://localhost:8080/auth/producto";
-const RECOMMENDED_URL = "http://localhost:8080/auth/producto/recomendados";
+const API_URL  = "http://localhost:8080/auth/producto";
 const TIPO_URL = "http://localhost:8080/auth/tipoproducto";
 const getToken = () => secureGetItem('token');
 
-// GET (público)
+/**
+ * Admin / público: obtiene productos paginados
+ * @param {number} page Índice de página (0-based)
+ * @param {number} size Tamaño de página
+ */
+export const getAllProductosPaged = async (page = 0, size = 10) => {
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+
+  const params = new URLSearchParams({ page, size });
+  const resp = await fetch(`${API_URL}/all?${params}`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+
+  if (!resp.ok) {
+    const msg = await resp.text();
+    throw new Error(`Error al cargar productos: ${msg}`);
+  }
+
+  const data = await resp.json();
+  const items    = data._embedded?.productoResponseList || [];
+  const pageInfo = data.page || {};
+
+  return {
+    items,
+    page:          pageInfo.number     ?? 0,
+    size:          pageInfo.size       ?? size,
+    totalPages:    pageInfo.totalPages ?? 1,
+    totalElements: pageInfo.totalElements ?? items.length,
+  };
+};
+
+/** GET todos los productos (sin paginar) */
 export const getAllProductos = async () => {
   const resp = await fetch(API_URL);
   if (!resp.ok) throw new Error('No se pudo obtener la lista de productos');
   return resp.json();
 };
 
-// GET recomendados por usuario
+/** GET recomendados por usuario */
 export const getRecommendedProductos = async (idUser) => {
   if (!idUser) return [];
-  const resp = await fetch(`${RECOMMENDED_URL}/${idUser}`);
-  if (resp.status === 204) return [];
-  if (!resp.ok) throw new Error('No se pudieron obtener recomendaciones');
-  return resp.json();
+
+  const resp = await fetch(`http://localhost:8080/auth/producto/recomendados/${idUser}`);
+  
+  if (resp.status === 204 || resp.status === 404) return [];
+
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`No se pudieron obtener recomendaciones: ${text}`);
+  }
+
+  const data = await resp.json();
+  const items = data._embedded?.productoResponseList || [];
+
+  return items;
 };
 
-// GET por ID (público)
+/** GET por ID */
 export const getProductoById = async (id) => {
   if (!id) throw new Error('ID no proporcionado');
   const resp = await fetch(`${API_URL}/${id}`);
@@ -30,7 +70,7 @@ export const getProductoById = async (id) => {
   return resp.json();
 };
 
-// GET todos los Tipos de Producto
+/** GET todos los Tipos de Producto */
 export const getAllTiposProductos = async () => {
   const resp = await fetch(TIPO_URL);
   if (!resp.ok) {
@@ -40,23 +80,27 @@ export const getAllTiposProductos = async () => {
   return resp.json();
 };
 
-// POST (ADMIN)
+/** POST (ADMIN): crea un producto */
 export const createProducto = async (producto) => {
   const token = getToken();
   const payload = {
     ...producto,
-    tipoProducto: { id: parseInt(producto.idTipoProducto, 10) }
+    idTipoProducto: parseInt(producto.idTipoProducto, 10)
   };
-  if (!payload.tipoProducto.id) {
+
+  if (!payload.idTipoProducto) {
     throw new Error('El campo "ID Tipo Producto" es obligatorio y debe ser un número válido.');
   }
-  const headers = new Headers({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-  });
+
   const resp = await fetch(API_URL, {
-    method: 'POST', headers, body: JSON.stringify(payload)
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(payload)
   });
+
   const text = await resp.text();
   if (!resp.ok) {
     throw new Error(`Error al crear producto: ${text}`);
@@ -64,24 +108,28 @@ export const createProducto = async (producto) => {
   return JSON.parse(text);
 };
 
-// PUT (ADMIN)
+/** PUT (ADMIN): actualiza un producto */
 export const updateProducto = async (id, producto) => {
   if (!id) throw new Error('ID no proporcionado para update');
   const token = getToken();
   const payload = {
     ...producto,
-    tipoProducto: { id: parseInt(producto.idTipoProducto, 10) }
+    idTipoProducto: parseInt(producto.idTipoProducto, 10)
   };
-  if (!payload.tipoProducto.id) {
+
+  if (!payload.idTipoProducto) {
     throw new Error('El campo "ID Tipo Producto" es obligatorio y debe ser un número válido.');
   }
-  const headers = new Headers({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
-  });
+
   const resp = await fetch(`${API_URL}/${id}`, {
-    method: 'PUT', headers, body: JSON.stringify(payload)
+    method: 'PUT',
+    headers: {
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(payload)
   });
+
   const text = await resp.text();
   if (!resp.ok) {
     throw new Error(`Error al actualizar producto: ${text}`);
@@ -89,12 +137,14 @@ export const updateProducto = async (id, producto) => {
   return JSON.parse(text);
 };
 
-// DELETE (ADMIN)
+/** DELETE (ADMIN): elimina un producto */
 export const deleteProducto = async (id) => {
   if (!id) throw new Error('ID no proporcionado para delete');
   const token = getToken();
-  const headers = new Headers({ 'Authorization': `Bearer ${token}` });
-  const resp = await fetch(`${API_URL}/${id}`, { method: 'DELETE', headers });
+  const resp = await fetch(`${API_URL}/${id}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
   if (!resp.ok) throw new Error(`Error al eliminar producto ${id}`);
   return { success: true };
 };

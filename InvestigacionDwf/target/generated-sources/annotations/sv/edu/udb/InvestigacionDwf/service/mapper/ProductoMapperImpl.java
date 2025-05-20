@@ -11,7 +11,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.TipoProducto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-20T13:53:26-0600",
+    date = "2025-05-20T14:25:43-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -23,19 +23,19 @@ public class ProductoMapperImpl extends ProductoMapper {
             return null;
         }
 
-        Producto producto = new Producto();
+        Producto.ProductoBuilder producto = Producto.builder();
 
-        producto.setNombre( request.getNombre() );
-        producto.setDescripcion( request.getDescripcion() );
-        producto.setPrecio( request.getPrecio() );
-        producto.setCosto( request.getCosto() );
-        producto.setCantidad( request.getCantidad() );
-        producto.setImagen( request.getImagen() );
-        producto.setCantidadPuntos( request.getCantidadPuntos() );
+        producto.nombre( request.getNombre() );
+        producto.descripcion( request.getDescripcion() );
+        producto.precio( request.getPrecio() );
+        producto.costo( request.getCosto() );
+        producto.cantidad( request.getCantidad() );
+        producto.imagen( request.getImagen() );
+        producto.cantidadPuntos( request.getCantidadPuntos() );
 
-        producto.setTipoProducto( request.getIdTipoProducto() != null ? tipoProductoRepository.getReferenceById(request.getIdTipoProducto()) : null );
+        producto.tipoProducto( tipoProductoRepository.getReferenceById(request.getIdTipoProducto()) );
 
-        return producto;
+        return producto.build();
     }
 
     @Override
@@ -56,6 +56,8 @@ public class ProductoMapperImpl extends ProductoMapper {
         productoResponse.cantidad( producto.getCantidad() );
         productoResponse.imagen( producto.getImagen() );
         productoResponse.cantidadPuntos( producto.getCantidadPuntos() );
+        productoResponse.fechaCreacion( producto.getFechaCreacion() );
+        productoResponse.fechaActualizacion( producto.getFechaActualizacion() );
 
         return productoResponse.build();
     }
@@ -102,7 +104,7 @@ public class ProductoMapperImpl extends ProductoMapper {
             producto.setCantidadPuntos( request.getCantidadPuntos() );
         }
 
-        producto.setTipoProducto( request.getIdTipoProducto() != null ? tipoProductoRepository.getReferenceById(request.getIdTipoProducto()) : null );
+        producto.setTipoProducto( request.getIdTipoProducto()!=null?tipoProductoRepository.getReferenceById(request.getIdTipoProducto()):null );
     }
 
     private Long productoTipoProductoIdTipoProducto(Producto producto) {

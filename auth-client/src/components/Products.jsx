@@ -1,6 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllProductos, getRecommendedProductos } from '../services/productoService';
+import {
+  getAllProductosPaged,
+  getRecommendedProductos
+} from '../services/productoService';
 import { addCarritoItem } from '../services/carritoItemService';
 import MySwal from '../utils/swal';
 import { CartContext } from '../context/CartContext';
@@ -8,64 +11,69 @@ import UserContext from '../context/UserContext';
 import '../style/Products.modules.css';
 
 export default function Products({ searchQuery }) {
-  const [allProductos, setAllProductos] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [allProductos, setAllProductos]   = useState([]);
+  const [loading, setLoading]             = useState(true);
+  const [page, setPage]                   = useState(0);
+  const [totalPages, setTotalPages]       = useState(1);
+  const size = 10;
+
   const { carrito } = useContext(CartContext);
-  const { userId } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { userId }  = useContext(UserContext);
+  const navigate    = useNavigate();
+
+  const loadPage = useCallback(async (pg = 0) => {
+    setLoading(true);
+    try {
+      // 1) Traer recomendaciones (sin paginar)
+      let recomendadosIds = [];
+      if (userId) {
+        const recs = await getRecommendedProductos(userId);
+        recomendadosIds = recs.map(r => r.idProducto);
+      }
+
+      // 2) Traer página de productos
+      const res = await getAllProductosPaged(pg, size);
+      const items = res.items.map(p => ({
+        ...p,
+        recomendado: recomendadosIds.includes(p.idProducto)
+      }));
+
+      setAllProductos(items);
+      setPage(res.page);
+      setTotalPages(res.totalPages);
+    } catch (err) {
+      console.error(err);
+      await MySwal.fire('Error', 'No se pudieron cargar los productos.', 'error');
+    } finally {
+      setLoading(false);
+    }
+  }, [userId, size]);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const prods = await getAllProductos();
-
-        // si hay userId, marca recomendados
-        let marcados = prods;
-        if (userId) {
-          const recs = await getRecommendedProductos(userId);
-          const recIds = new Set(recs.map(r => r.idProducto));
-          marcados = prods.map(p => ({
-            ...p,
-            recomendado: recIds.has(p.idProducto)
-          }));
-        }
-
-        setAllProductos(marcados);
-      } catch (err) {
-        console.error(err);
-        await MySwal.fire('Error', 'No se pudieron cargar los productos.', 'error');
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [userId]);
+    loadPage(0);
+  }, [loadPage]);
 
   if (loading) {
-    return <p className="loading">Cargando productos...</p>;
+    return <p className="loading">Cargando productos…</p>;
   }
 
-  // aplica búsqueda
+  // Filtrar por búsqueda
   const filtrados = allProductos.filter(p =>
     p.nombre.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // sección recomendados
-  const recomendados = userId
-    ? filtrados.filter(p => p.recomendado).slice(0, 5)
-    : [];
+  const recomendados     = filtrados.filter(p => p.recomendado);
+  const sinRecomendados  = filtrados.filter(p => !p.recomendado);
 
-  // quita recomendados del resto
-  const sinRecomendados = filtrados.filter(p => !p.recomendado);
-
-  // temporada: top 5 más caros entre los sinRecomendados
+  // Temporada: top 5 no recomendados por precio
   const temporada = [...sinRecomendados]
     .sort((a, b) => b.precio - a.precio)
     .slice(0, 5);
 
-  // el resto: quita los de temporada también
-  const restantes = sinRecomendados.filter(
-    p => !temporada.some(t => t.idProducto === p.idProducto)
-  ).slice(0, 5);
+  // Restantes: resto de la página menos temporada
+  const restantes = sinRecomendados
+    .filter(p => !temporada.some(t => t.idProducto === p.idProducto))
+    .slice(0, 5);
 
   const handleAdd = async p => {
     try {
@@ -133,6 +141,24 @@ export default function Products({ searchQuery }) {
         </div>
       </section>
 
+      {/* Paginación */}
+      <div className="pagination">
+        <button
+          onClick={() => loadPage(page - 1)}
+          disabled={page === 0 || loading}
+        >
+          « Anterior
+        </button>
+        <span>
+          Página {page + 1} de {totalPages}
+        </span>
+        <button
+          onClick={() => loadPage(page + 1)}
+          disabled={page + 1 >= totalPages || loading}
+        >
+          Siguiente »
+        </button>
+      </div>
     </div>
   );
 }

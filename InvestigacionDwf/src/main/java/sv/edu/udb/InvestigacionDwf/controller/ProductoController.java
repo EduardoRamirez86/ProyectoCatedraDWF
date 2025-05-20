@@ -1,75 +1,68 @@
 package sv.edu.udb.InvestigacionDwf.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
-import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
 import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
+import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
 import sv.edu.udb.InvestigacionDwf.service.ProductoService;
 
-import java.util.List;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
-@RequestMapping(path = "auth/producto")
+@RequestMapping("/auth/producto")
 @CrossOrigin(origins = "http://localhost:3000")
+@RequiredArgsConstructor
 public class ProductoController {
 
     private final ProductoService service;
-
-    @Autowired
-    public ProductoController(ProductoService service) {
-        this.service = service;
-    }
-
-    @GetMapping
-    public List<ProductoResponse> getAllProductos() {
-        return service.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductoResponse> getProductoById(@PathVariable Long id) {
-        if (!service.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(service.findById(id));
-    }
+    private final PagedResourcesAssembler<sv.edu.udb.InvestigacionDwf.model.entity.Producto> assembler;
 
     @PostMapping
-    @ResponseStatus(CREATED)
-    public ProductoResponse createProducto(@RequestBody ProductoRequest req) {
-        System.out.println("Datos recibidos: " + req);
-        return service.save(req);
+    public ProductoResponse create(@RequestBody ProductoRequest req) {
+        return service.create(req);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductoResponse> updateProducto(@PathVariable Long id,
-                                                           @RequestBody ProductoRequest req) {
-        if (!service.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(service.update(id, req));
+    public ProductoResponse update(@PathVariable Long id, @RequestBody ProductoRequest req) {
+        return service.update(id, req);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(NO_CONTENT)
-    public ResponseEntity<?> deleteProducto(@PathVariable Long id) {
-        if (!service.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
+    public void delete(@PathVariable Long id) {
         service.delete(id);
-        return ResponseEntity.ok().build();
     }
 
-    // NUEVO: endpoint para productos recomendados por usuario
-    @GetMapping("/recomendados/{idUser}")
-    public ResponseEntity<List<ProductoResponse>> getRecomendadosByUser(@PathVariable Long idUser) {
-        List<ProductoResponse> recomendaciones = service.findRecommendedByUser(idUser);
-        if (recomendaciones.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(recomendaciones);
+    @GetMapping("/all")
+    public PagedModel<ProductoResponse> getAll(Pageable pageable) {
+        return service.findAll(pageable);
     }
+
+    @GetMapping("/{id}")
+    public ProductoResponse getById(@PathVariable Long id) {
+        return service.getById(id);
+    }
+
+    /**
+     * NUEVO: productos recomendados para un usuario (sin paginar)
+     */
+    @GetMapping("/recomendados/{idUser}")
+    public CollectionModel<ProductoResponse> getRecommendedByUser(@PathVariable Long idUser) {
+        var recomendaciones = service.findRecommendedByUser(idUser);
+
+        return CollectionModel.of(recomendaciones,
+                linkTo(methodOn(ProductoController.class)
+                        .getRecommendedByUser(idUser))
+                        .withSelfRel(),
+                linkTo(methodOn(ProductoController.class)
+                        .getAll(null))
+                        .withRel("productos")
+        );
+    }
+
 }
+
 

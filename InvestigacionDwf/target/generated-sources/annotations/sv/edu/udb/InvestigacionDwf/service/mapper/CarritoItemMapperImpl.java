@@ -11,7 +11,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-20T13:53:26-0600",
+    date = "2025-05-20T14:25:43-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 @Component
@@ -81,6 +81,8 @@ public class CarritoItemMapperImpl extends CarritoItemMapper {
         productoResponse.cantidad( producto.getCantidad() );
         productoResponse.imagen( producto.getImagen() );
         productoResponse.cantidadPuntos( producto.getCantidadPuntos() );
+        productoResponse.fechaCreacion( producto.getFechaCreacion() );
+        productoResponse.fechaActualizacion( producto.getFechaActualizacion() );
 
         return productoResponse.build();
     }

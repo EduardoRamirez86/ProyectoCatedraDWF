@@ -1,18 +1,16 @@
 package sv.edu.udb.InvestigacionDwf.dto.response;
 
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 import java.math.BigDecimal;
-
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.FieldNameConstants;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder(toBuilder = true)
-@FieldNameConstants
-public class ProductoResponse {
-
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProductoResponse extends RepresentationModel<ProductoResponse> {
     private Long idProducto;
     private String nombre;
     private String descripcion;
@@ -21,25 +19,9 @@ public class ProductoResponse {
     private Integer cantidad;
     private String imagen;
     private Integer cantidadPuntos;
-
-    // Relaciones como IDs
     private Long idTipoProducto;
-
     private String nombreTipo;
-
-    @Override
-    public String toString() {
-        return "ProductoResponse{" +
-                "idProducto=" + idProducto +
-                ", nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", precio=" + precio +
-                ", costo=" + costo +
-                ", cantidad=" + cantidad +
-                ", imagen='" + imagen + '\'' +
-                ", cantidadPuntos=" + cantidadPuntos +
-                ", idTipoProducto=" + idTipoProducto +
-                '}';
-    }
+    private LocalDateTime fechaCreacion;
+    private LocalDateTime fechaActualizacion;
 }
 
