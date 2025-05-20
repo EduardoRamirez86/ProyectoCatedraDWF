@@ -13,6 +13,7 @@ import sv.edu.udb.InvestigacionDwf.repository.ResenaRepository;
 import sv.edu.udb.InvestigacionDwf.repository.UserRepository;
 import sv.edu.udb.InvestigacionDwf.service.ResenaService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -42,6 +43,7 @@ public class ResenaServiceImpl implements ResenaService {
                 .producto(producto)
                 .comentario(request.getComentario())
                 .rating(request.getRating())
+                .fecha(LocalDateTime.now())
                 .build();
 
         resenaRepository.save(resena);
