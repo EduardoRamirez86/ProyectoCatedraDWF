@@ -5,6 +5,7 @@ sv\edu\udb\InvestigacionDwf\model\entity\Carrito$CarritoBuilder.class
 sv\edu\udb\InvestigacionDwf\service\impl\CuponServiceImpl.class
 sv\edu\udb\InvestigacionDwf\model\enums\TipoPago.class
 sv\edu\udb\InvestigacionDwf\service\CarritoService.class
+sv\edu\udb\InvestigacionDwf\config\web\ApiError$ApiErrorBuilder.class
 sv\edu\udb\InvestigacionDwf\repository\CarritoRepository.class
 sv\edu\udb\InvestigacionDwf\model\entity\Direccion.class
 sv\edu\udb\InvestigacionDwf\exception\UserAlreadyExistException.class
@@ -16,6 +17,8 @@ sv\edu\udb\InvestigacionDwf\exception\GlobalExceptionHandler.class
 sv\edu\udb\InvestigacionDwf\model\entity\Resena$ResenaBuilder.class
 sv\edu\udb\InvestigacionDwf\controller\SecureController.class
 sv\edu\udb\InvestigacionDwf\repository\ResenaRepository.class
+sv\edu\udb\InvestigacionDwf\config\RestExceptionHandler.class
+sv\edu\udb\InvestigacionDwf\controller\validation\Dui.class
 sv\edu\udb\InvestigacionDwf\repository\RopaRespository.class
 sv\edu\udb\InvestigacionDwf\repository\CarritoItemRepository.class
 sv\edu\udb\InvestigacionDwf\dto\response\TipoProductoResponse.class
@@ -38,6 +41,7 @@ sv\edu\udb\InvestigacionDwf\controller\DireccionController.class
 sv\edu\udb\InvestigacionDwf\controller\ProductoController.class
 sv\edu\udb\InvestigacionDwf\dto\request\CuponRequest.class
 sv\edu\udb\InvestigacionDwf\controller\UserController.class
+sv\edu\udb\InvestigacionDwf\controller\validation\DuiValidator.class
 sv\edu\udb\InvestigacionDwf\model\entity\TipoProducto.class
 sv\edu\udb\InvestigacionDwf\service\impl\TipoProductoServiceImpl.class
 sv\edu\udb\InvestigacionDwf\security\jwt\JwtAuthFilter.class
@@ -56,6 +60,7 @@ sv\edu\udb\InvestigacionDwf\dto\response\DireccionResponse$DireccionResponseBuil
 sv\edu\udb\InvestigacionDwf\model\entity\Cupon$CuponBuilder.class
 sv\edu\udb\InvestigacionDwf\security\jwt\JwtUtils.class
 sv\edu\udb\InvestigacionDwf\service\TipoProductoService.class
+sv\edu\udb\InvestigacionDwf\model\entity\Producto$ProductoBuilder.class
 sv\edu\udb\InvestigacionDwf\model\entity\HistorialPuntos.class
 sv\edu\udb\InvestigacionDwf\service\impl\AuthServiceImpl.class
 sv\edu\udb\InvestigacionDwf\dto\request\ProductoRequest$ProductoRequestBuilder.class
@@ -70,6 +75,7 @@ sv\edu\udb\InvestigacionDwf\model\entity\HistorialPedido$HistorialPedidoBuilder.
 sv\edu\udb\InvestigacionDwf\service\CarritoItemService.class
 sv\edu\udb\InvestigacionDwf\service\impl\PedidoServiceImpl.class
 sv\edu\udb\InvestigacionDwf\dto\response\PedidoResponse$PedidoResponseBuilder.class
+sv\edu\udb\InvestigacionDwf\controller\validation\PhoneNumberValidator.class
 sv\edu\udb\InvestigacionDwf\repository\HistorialPedidoRepository.class
 sv\edu\udb\InvestigacionDwf\controller\NotificacionController.class
 sv\edu\udb\InvestigacionDwf\model\entity\Resena.class
@@ -88,9 +94,9 @@ sv\edu\udb\InvestigacionDwf\dto\request\RegisterRequest.class
 sv\edu\udb\InvestigacionDwf\dto\request\PagoRequest.class
 sv\edu\udb\InvestigacionDwf\model\entity\Producto.class
 sv\edu\udb\InvestigacionDwf\service\impl\CarritoItemServiceImpl.class
+sv\edu\udb\InvestigacionDwf\service\assembler\ProductoAssembler.class
 sv\edu\udb\InvestigacionDwf\service\mapper\CarritoMapper.class
 sv\edu\udb\InvestigacionDwf\dto\response\NotificacionResponse$NotificacionResponseBuilder.class
-sv\edu\udb\InvestigacionDwf\dto\response\ProductoResponse$Fields.class
 sv\edu\udb\InvestigacionDwf\config\HateoasConfig.class
 sv\edu\udb\InvestigacionDwf\dto\response\CarritoResponse.class
 sv\edu\udb\InvestigacionDwf\service\ProductoService.class
@@ -99,6 +105,7 @@ sv\edu\udb\InvestigacionDwf\controller\CarritoItemController.class
 sv\edu\udb\InvestigacionDwf\service\mapper\ProductoMapper.class
 sv\edu\udb\InvestigacionDwf\repository\DireccionRepository.class
 sv\edu\udb\InvestigacionDwf\service\impl\NotificacionServiceImpl.class
+sv\edu\udb\InvestigacionDwf\controller\validation\PhoneNumber.class
 sv\edu\udb\InvestigacionDwf\InvestigacionDwfApplication.class
 sv\edu\udb\InvestigacionDwf\repository\HistorialPuntosRepository.class
 sv\edu\udb\InvestigacionDwf\dto\request\DireccionRequest.class
@@ -128,7 +135,7 @@ sv\edu\udb\InvestigacionDwf\service\mapper\CarritoMapperImpl.class
 sv\edu\udb\InvestigacionDwf\model\entity\User.class
 sv\edu\udb\InvestigacionDwf\service\mapper\PedidoMapperImpl.class
 sv\edu\udb\InvestigacionDwf\repository\TipoProductoRepository.class
-sv\edu\udb\InvestigacionDwf\config\web\RestExceptionHandler.class
+sv\edu\udb\InvestigacionDwf\config\web\ApiErrorWrapper.class
 sv\edu\udb\InvestigacionDwf\service\mapper\CarritoItemMapperImpl.class
 sv\edu\udb\InvestigacionDwf\repository\PedidoRepository.class
 sv\edu\udb\InvestigacionDwf\DataLoaderRopa.class
@@ -138,3 +145,4 @@ sv\edu\udb\InvestigacionDwf\service\RopaService.class
 sv\edu\udb\InvestigacionDwf\dto\request\CarritoItemRequest.class
 sv\edu\udb\InvestigacionDwf\repository\ProductoRepository.class
 sv\edu\udb\InvestigacionDwf\dto\response\ProductoResponse$ProductoResponseBuilder.class
+sv\edu\udb\InvestigacionDwf\config\web\ApiError.class

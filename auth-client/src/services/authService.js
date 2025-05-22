@@ -12,7 +12,7 @@ export async function register({
   segundoApellido,
   fechaNacimiento,
   telefono,
-  DUI,
+  dui,
   direccion
 }) {
   try {
@@ -32,7 +32,7 @@ export async function register({
         segundoApellido,
         fechaNacimiento,
         telefono,
-        DUI,
+        dui,
         direccion
       })
     });

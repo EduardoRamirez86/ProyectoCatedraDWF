@@ -30,7 +30,14 @@ export default function Register() {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const token = await registerService(form);
+      // Convertir fechaNacimiento de yyyy-MM-dd a dd/MM/yyyy
+      const { fechaNacimiento, ...rest } = form;
+      let fechaFormateada = fechaNacimiento;
+      if (fechaNacimiento) {
+        const [yyyy, mm, dd] = fechaNacimiento.split('-');
+        fechaFormateada = `${dd}/${mm}/${yyyy}`;
+      }
+      const token = await registerService({ ...rest, fechaNacimiento: fechaFormateada });
       login(token);
       const decoded = jwtDecode(token);
       const roles = decoded.roles || [];
@@ -96,7 +103,7 @@ export default function Register() {
           <label>Teléfono</label>
         </div>
         <div className="form-group">
-          <input name="DUI" placeholder=" " value={form.DUI} onChange={handleChange}/>
+          <input name="dui" placeholder=" " value={form.dui} onChange={handleChange} required/>
           <label>DUI</label>
         </div>
         <div className="form-group">

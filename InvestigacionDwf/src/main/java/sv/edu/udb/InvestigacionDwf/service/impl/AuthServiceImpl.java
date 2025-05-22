@@ -56,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
                 .segundoApellido(registerRequest.getSegundoApellido())
                 .fechaNacimiento(registerRequest.getFechaNacimiento())
                 .telefono(registerRequest.getTelefono())
-                .DUI(registerRequest.getDUI())
+                .DUI(registerRequest.getDui())
                 .direccion(registerRequest.getDireccion())
                 .build();
 
