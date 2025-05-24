@@ -1,5 +1,6 @@
 package sv.edu.udb.InvestigacionDwf.service.mapper;
 
+import java.util.Objects;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import sv.edu.udb.InvestigacionDwf.dto.request.CarritoItemRequest;
@@ -11,8 +12,8 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-23T18:49:02-0600",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.13 (Amazon.com Inc.)"
+    date = "2025-05-24T02:44:20-0600",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
 public class CarritoItemMapperImpl extends CarritoItemMapper {
@@ -25,10 +26,10 @@ public class CarritoItemMapperImpl extends CarritoItemMapper {
 
         CarritoItem carritoItem = new CarritoItem();
 
-        carritoItem.setCantidad( request.getCantidad() );
+        carritoItem.setCantidad( Objects.requireNonNull( request.getCantidad() ) );
 
-        carritoItem.setCarrito( carritoRepository.getReferenceById(request.getIdCarrito()) );
-        carritoItem.setProducto( productoRepository.getReferenceById(request.getIdProducto()) );
+        carritoItem.setCarrito( Objects.nonNull(request.getIdCarrito()) ? carritoRepository.getReferenceById(request.getIdCarrito()) : null );
+        carritoItem.setProducto( Objects.nonNull(request.getIdProducto()) ? productoRepository.getReferenceById(request.getIdProducto()) : null );
 
         return carritoItem;
     }
@@ -41,13 +42,27 @@ public class CarritoItemMapperImpl extends CarritoItemMapper {
 
         CarritoItemResponse.CarritoItemResponseBuilder carritoItemResponse = CarritoItemResponse.builder();
 
-        carritoItemResponse.idCarrito( itemCarritoIdCarrito( item ) );
-        carritoItemResponse.idProducto( itemProductoIdProducto( item ) );
-        carritoItemResponse.idCarritoItem( item.getIdCarritoItem() );
-        carritoItemResponse.cantidad( item.getCantidad() );
+        carritoItemResponse.idCarrito( Objects.requireNonNull( itemCarritoIdCarrito( item ) ) );
+        carritoItemResponse.idProducto( Objects.requireNonNull( itemProductoIdProducto( item ) ) );
+        carritoItemResponse.idCarritoItem( Objects.requireNonNull( item.getIdCarritoItem() ) );
+        carritoItemResponse.cantidad( Objects.requireNonNull( item.getCantidad() ) );
         carritoItemResponse.producto( productoToProductoResponse( item.getProducto() ) );
 
         return carritoItemResponse.build();
+    }
+
+    @Override
+    public void updateEntityFromRequest(CarritoItemRequest request, CarritoItem targetItem) {
+        if ( request == null ) {
+            return;
+        }
+
+        if ( request.getCantidad() != null ) {
+            targetItem.setCantidad( Objects.requireNonNull( request.getCantidad() ) );
+        }
+
+        targetItem.setCarrito( Objects.nonNull(request.getIdCarrito()) ? carritoRepository.getReferenceById(request.getIdCarrito()) : targetItem.getCarrito() );
+        targetItem.setProducto( Objects.nonNull(request.getIdProducto()) ? productoRepository.getReferenceById(request.getIdProducto()) : targetItem.getProducto() );
     }
 
     private Long itemCarritoIdCarrito(CarritoItem carritoItem) {
@@ -73,16 +88,16 @@ public class CarritoItemMapperImpl extends CarritoItemMapper {
 
         ProductoResponse.ProductoResponseBuilder productoResponse = ProductoResponse.builder();
 
-        productoResponse.idProducto( producto.getIdProducto() );
-        productoResponse.nombre( producto.getNombre() );
-        productoResponse.descripcion( producto.getDescripcion() );
-        productoResponse.precio( producto.getPrecio() );
-        productoResponse.costo( producto.getCosto() );
-        productoResponse.cantidad( producto.getCantidad() );
-        productoResponse.imagen( producto.getImagen() );
-        productoResponse.cantidadPuntos( producto.getCantidadPuntos() );
-        productoResponse.fechaCreacion( producto.getFechaCreacion() );
-        productoResponse.fechaActualizacion( producto.getFechaActualizacion() );
+        productoResponse.idProducto( Objects.requireNonNull( producto.getIdProducto() ) );
+        productoResponse.nombre( Objects.requireNonNull( producto.getNombre() ) );
+        productoResponse.descripcion( Objects.requireNonNull( producto.getDescripcion() ) );
+        productoResponse.precio( Objects.requireNonNull( producto.getPrecio() ) );
+        productoResponse.costo( Objects.requireNonNull( producto.getCosto() ) );
+        productoResponse.cantidad( Objects.requireNonNull( producto.getCantidad() ) );
+        productoResponse.imagen( Objects.requireNonNull( producto.getImagen() ) );
+        productoResponse.cantidadPuntos( Objects.requireNonNull( producto.getCantidadPuntos() ) );
+        productoResponse.fechaCreacion( Objects.requireNonNull( producto.getFechaCreacion() ) );
+        productoResponse.fechaActualizacion( Objects.requireNonNull( producto.getFechaActualizacion() ) );
 
         return productoResponse.build();
     }

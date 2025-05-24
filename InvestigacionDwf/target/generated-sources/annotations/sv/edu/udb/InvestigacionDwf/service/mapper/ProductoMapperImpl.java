@@ -2,6 +2,7 @@ package sv.edu.udb.InvestigacionDwf.service.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
@@ -11,8 +12,8 @@ import sv.edu.udb.InvestigacionDwf.model.entity.TipoProducto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-23T18:49:02-0600",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.13 (Amazon.com Inc.)"
+    date = "2025-05-24T02:29:00-0600",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
 public class ProductoMapperImpl extends ProductoMapper {
@@ -25,15 +26,15 @@ public class ProductoMapperImpl extends ProductoMapper {
 
         Producto.ProductoBuilder producto = Producto.builder();
 
-        producto.nombre( request.getNombre() );
-        producto.descripcion( request.getDescripcion() );
-        producto.precio( request.getPrecio() );
-        producto.costo( request.getCosto() );
-        producto.cantidad( request.getCantidad() );
-        producto.imagen( request.getImagen() );
-        producto.cantidadPuntos( request.getCantidadPuntos() );
+        producto.nombre( Objects.requireNonNull( request.getNombre() ) );
+        producto.descripcion( Objects.requireNonNull( request.getDescripcion() ) );
+        producto.precio( Objects.requireNonNull( request.getPrecio() ) );
+        producto.costo( Objects.requireNonNull( request.getCosto() ) );
+        producto.cantidad( Objects.requireNonNull( request.getCantidad() ) );
+        producto.imagen( Objects.requireNonNull( request.getImagen() ) );
+        producto.cantidadPuntos( Objects.requireNonNull( request.getCantidadPuntos() ) );
 
-        producto.tipoProducto( tipoProductoRepository.getReferenceById(request.getIdTipoProducto()) );
+        producto.tipoProducto( Objects.nonNull(request.getIdTipoProducto()) ? tipoProductoRepository.getReferenceById(request.getIdTipoProducto()) : null );
 
         return producto.build();
     }
@@ -46,18 +47,18 @@ public class ProductoMapperImpl extends ProductoMapper {
 
         ProductoResponse.ProductoResponseBuilder productoResponse = ProductoResponse.builder();
 
-        productoResponse.idTipoProducto( productoTipoProductoIdTipoProducto( producto ) );
-        productoResponse.nombreTipo( productoTipoProductoTipo( producto ) );
-        productoResponse.idProducto( producto.getIdProducto() );
-        productoResponse.nombre( producto.getNombre() );
-        productoResponse.descripcion( producto.getDescripcion() );
-        productoResponse.precio( producto.getPrecio() );
-        productoResponse.costo( producto.getCosto() );
-        productoResponse.cantidad( producto.getCantidad() );
-        productoResponse.imagen( producto.getImagen() );
-        productoResponse.cantidadPuntos( producto.getCantidadPuntos() );
-        productoResponse.fechaCreacion( producto.getFechaCreacion() );
-        productoResponse.fechaActualizacion( producto.getFechaActualizacion() );
+        productoResponse.idTipoProducto( Objects.requireNonNull( productoTipoProductoIdTipoProducto( producto ) ) );
+        productoResponse.nombreTipo( Objects.requireNonNull( productoTipoProductoTipo( producto ) ) );
+        productoResponse.idProducto( Objects.requireNonNull( producto.getIdProducto() ) );
+        productoResponse.nombre( Objects.requireNonNull( producto.getNombre() ) );
+        productoResponse.descripcion( Objects.requireNonNull( producto.getDescripcion() ) );
+        productoResponse.precio( Objects.requireNonNull( producto.getPrecio() ) );
+        productoResponse.costo( Objects.requireNonNull( producto.getCosto() ) );
+        productoResponse.cantidad( Objects.requireNonNull( producto.getCantidad() ) );
+        productoResponse.imagen( Objects.requireNonNull( producto.getImagen() ) );
+        productoResponse.cantidadPuntos( Objects.requireNonNull( producto.getCantidadPuntos() ) );
+        productoResponse.fechaCreacion( Objects.requireNonNull( producto.getFechaCreacion() ) );
+        productoResponse.fechaActualizacion( Objects.requireNonNull( producto.getFechaActualizacion() ) );
 
         return productoResponse.build();
     }
@@ -83,28 +84,28 @@ public class ProductoMapperImpl extends ProductoMapper {
         }
 
         if ( request.getNombre() != null ) {
-            producto.setNombre( request.getNombre() );
+            producto.setNombre( Objects.requireNonNull( request.getNombre() ) );
         }
         if ( request.getDescripcion() != null ) {
-            producto.setDescripcion( request.getDescripcion() );
+            producto.setDescripcion( Objects.requireNonNull( request.getDescripcion() ) );
         }
         if ( request.getPrecio() != null ) {
-            producto.setPrecio( request.getPrecio() );
+            producto.setPrecio( Objects.requireNonNull( request.getPrecio() ) );
         }
         if ( request.getCosto() != null ) {
-            producto.setCosto( request.getCosto() );
+            producto.setCosto( Objects.requireNonNull( request.getCosto() ) );
         }
         if ( request.getCantidad() != null ) {
-            producto.setCantidad( request.getCantidad() );
+            producto.setCantidad( Objects.requireNonNull( request.getCantidad() ) );
         }
         if ( request.getImagen() != null ) {
-            producto.setImagen( request.getImagen() );
+            producto.setImagen( Objects.requireNonNull( request.getImagen() ) );
         }
         if ( request.getCantidadPuntos() != null ) {
-            producto.setCantidadPuntos( request.getCantidadPuntos() );
+            producto.setCantidadPuntos( Objects.requireNonNull( request.getCantidadPuntos() ) );
         }
 
-        producto.setTipoProducto( request.getIdTipoProducto()!=null?tipoProductoRepository.getReferenceById(request.getIdTipoProducto()):null );
+        producto.setTipoProducto( Objects.nonNull(request.getIdTipoProducto()) ? tipoProductoRepository.getReferenceById(request.getIdTipoProducto()) : null );
     }
 
     private Long productoTipoProductoIdTipoProducto(Producto producto) {

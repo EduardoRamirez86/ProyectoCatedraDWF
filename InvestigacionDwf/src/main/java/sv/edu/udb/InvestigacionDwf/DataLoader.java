@@ -12,6 +12,7 @@ import sv.edu.udb.InvestigacionDwf.repository.TipoProductoRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects; // ¡Importa Objects!
 import java.util.Optional;
 
 @Component
@@ -42,28 +43,28 @@ public class DataLoader implements CommandLineRunner {
 
         // Seed Tipos de Producto
         TipoProducto camisa = tipoProductoRepository.findByTipo("Camisa")
-                .orElseGet(() -> {
-                    TipoProducto t = new TipoProducto();
-                    t.setTipo("Camisa");
-                    t.setDescripcion("Prenda superior para torso");
-                    return tipoProductoRepository.save(t);
-                });
+                .orElseGet(() -> tipoProductoRepository.save(
+                        TipoProducto.builder()
+                                .tipo("Camisa")
+                                .descripcion("Prenda superior para torso")
+                                .build()
+                ));
 
         TipoProducto pantalon = tipoProductoRepository.findByTipo("Pantalón")
-                .orElseGet(() -> {
-                    TipoProducto t = new TipoProducto();
-                    t.setTipo("Pantalón");
-                    t.setDescripcion("Prenda inferior para piernas");
-                    return tipoProductoRepository.save(t);
-                });
+                .orElseGet(() -> tipoProductoRepository.save(
+                        TipoProducto.builder()
+                                .tipo("Pantalón")
+                                .descripcion("Prenda inferior para piernas")
+                                .build()
+                ));
 
         TipoProducto calzado = tipoProductoRepository.findByTipo("Calzado")
-                .orElseGet(() -> {
-                    TipoProducto t = new TipoProducto();
-                    t.setTipo("Calzado");
-                    t.setDescripcion("Zapatos y sandalias");
-                    return tipoProductoRepository.save(t);
-                });
+                .orElseGet(() -> tipoProductoRepository.save(
+                        TipoProducto.builder()
+                                .tipo("Calzado")
+                                .descripcion("Zapatos y sandalias")
+                                .build()
+                ));
 
         // Seed Productos
         createProductoIfNotExists("Camisa Blanca", "Camisa de algodón blanca, talla M.", "19.99", "10.00", 50, "https://images.pexels.com/photos/769733/pexels-photo-769733.jpeg", 5, camisa);
@@ -82,21 +83,22 @@ public class DataLoader implements CommandLineRunner {
 
     private void createProductoIfNotExists(String nombre, String descripcion, String precio, String costo,
                                            int cantidad, String imagen, int puntos, TipoProducto tipo) {
-        Optional<Producto> existing = productoRepository.findByNombre(nombre);
-        if (existing.isEmpty()) {
-            Producto p = new Producto();
-            p.setNombre(nombre);
-            p.setDescripcion(descripcion);
-            p.setPrecio(new BigDecimal(precio));
-            p.setCosto(new BigDecimal(costo));
-            p.setCantidad(cantidad);
-            p.setImagen(imagen);
-            p.setCantidadPuntos(puntos);
-            p.setTipoProducto(tipo);
-            p.setFechaCreacion(LocalDateTime.now());
-            p.setFechaActualizacion(LocalDateTime.now());
-            productoRepository.save(p);
+        // Mejoramos la legibilidad con Objects.isNull() para la comprobación de existencia
+        if (Objects.isNull(productoRepository.findByNombre(nombre).orElse(null))) {
+            productoRepository.save(
+                    Producto.builder()
+                            .nombre(nombre)
+                            .descripcion(descripcion)
+                            .precio(new BigDecimal(precio))
+                            .costo(new BigDecimal(costo))
+                            .cantidad(cantidad)
+                            .imagen(imagen)
+                            .cantidadPuntos(puntos)
+                            .tipoProducto(tipo)
+                            .fechaCreacion(LocalDateTime.now())
+                            .fechaActualizacion(LocalDateTime.now())
+                            .build()
+            );
         }
     }
-
 }

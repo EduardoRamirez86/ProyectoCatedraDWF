@@ -11,4 +11,5 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
     Optional<Carrito> findByUser_IdUserAndPedidosIsEmpty(Long idUser);
 
     Optional<Carrito> findByUserIdUser(Long idUser);
+
 }
