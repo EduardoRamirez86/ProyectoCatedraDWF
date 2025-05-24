@@ -40,6 +40,7 @@ public class PedidoServiceImpl implements PedidoService {
     private final PedidoAssembler pedidoAssembler;
     private final PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
+
     @Value("${app.shipping.cost}")
     private BigDecimal shippingCost;
 
@@ -137,7 +138,7 @@ public class PedidoServiceImpl implements PedidoService {
                     .build();
             saved.getHistorialPuntos().add(hp2);
             userRepository.save(user);
-            crearNotificacionCupon(user, saved, nuevoCupon.getCodigo());
+            crearNotificacionCupon(user, saved, nuevoCupon.getCodigo(), nuevoCupon.getPorcentajeDescuento());
         }
 
         // Crea una notificación para el usuario sobre el estado del pedido
@@ -233,10 +234,10 @@ public class PedidoServiceImpl implements PedidoService {
         notificacionRepository.save(n);
     }
 
-    private void crearNotificacionCupon(User user, Pedido pedido, String codigoCupon) {
+    private void crearNotificacionCupon(User user, Pedido pedido, String codigoCupon, double porcentajeDescuento) {
         var n = Notificacion.builder()
                 .user(user)
-                .mensaje("¡Felicidades! Has alcanzado 30 puntos. Usa el cupón " + codigoCupon + " para un 15% de descuento.")
+                .mensaje("¡Felicidades! Has alcanzado 30 puntos. Usa el cupón " + codigoCupon + " para un " + porcentajeDescuento + "% de descuento.")
                 .fechaEnvio(LocalDateTime.now())
                 .estado(EstadoNotificacion.ENVIADA)
                 .pedido(pedido)
