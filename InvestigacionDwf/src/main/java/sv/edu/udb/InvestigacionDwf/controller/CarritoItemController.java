@@ -2,7 +2,6 @@ package sv.edu.udb.InvestigacionDwf.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sv.edu.udb.InvestigacionDwf.dto.request.CarritoItemRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.CarritoItemResponse;
@@ -11,7 +10,7 @@ import sv.edu.udb.InvestigacionDwf.service.CarritoItemService;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "auth/carrito-item")
+@RequestMapping(path = "/auth/carrito-item")
 @CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class CarritoItemController {
@@ -19,43 +18,38 @@ public class CarritoItemController {
     private final CarritoItemService itemService;
 
     @PostMapping
-    public ResponseEntity<CarritoItemResponse> addItem(@RequestBody CarritoItemRequest req) {
-        CarritoItemResponse created = itemService.addItem(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    @ResponseStatus(HttpStatus.CREATED) // Indica que se devuelve un 201 Created
+    public CarritoItemResponse addItem(@RequestBody CarritoItemRequest req) {
+        return itemService.addItem(req);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeItem(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT) // Indica que no hay contenido para devolver (204 No Content)
+    public void removeItem(@PathVariable Long id) {
         itemService.removeItem(id);
-        return ResponseEntity.noContent().build();
     }
 
-    // Obtener todos los items del carrito
     @GetMapping("/carrito/{idCarrito}")
-    public ResponseEntity<List<CarritoItemResponse>> getItemsByCarrito(@PathVariable Long idCarrito) {
-        List<CarritoItemResponse> items = itemService.getItemsByCarritoId(idCarrito);
-        return ResponseEntity.ok(items);
+    @ResponseStatus(HttpStatus.OK) // Indica que se devuelve un 200 OK
+    public List<CarritoItemResponse> getItemsByCarrito(@PathVariable Long idCarrito) {
+        return itemService.getItemsByCarritoId(idCarrito);
     }
 
-    // Obtener todos los items
     @GetMapping
-    public ResponseEntity<List<CarritoItemResponse>> getAllItems() {
-        List<CarritoItemResponse> allItems = itemService.getAllItems();
-        return ResponseEntity.ok(allItems);
+    @ResponseStatus(HttpStatus.OK) // Indica que se devuelve un 200 OK
+    public List<CarritoItemResponse> getAllItems() {
+        return itemService.getAllItems();
     }
 
-    // Obtener un item por su ID
     @GetMapping("/{id}")
-    public ResponseEntity<CarritoItemResponse> getItemById(@PathVariable Long id) {
-        CarritoItemResponse item = itemService.getItemById(id);
-        return ResponseEntity.ok(item);
+    @ResponseStatus(HttpStatus.OK) // Indica que se devuelve un 200 OK
+    public CarritoItemResponse getItemById(@PathVariable Long id) {
+        return itemService.getItemById(id);
     }
 
-    // Actualizar un item
     @PutMapping("/{id}")
-    public ResponseEntity<CarritoItemResponse> updateItem(@PathVariable Long id, @RequestBody CarritoItemRequest request) {
-        CarritoItemResponse updated = itemService.updateItem(id, request);
-        return ResponseEntity.ok(updated);
+    @ResponseStatus(HttpStatus.OK) // Indica que se devuelve un 200 OK
+    public CarritoItemResponse updateItem(@PathVariable Long id, @RequestBody CarritoItemRequest request) {
+        return itemService.updateItem(id, request);
     }
 }
-

@@ -1,7 +1,7 @@
 package sv.edu.udb.InvestigacionDwf.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import sv.edu.udb.InvestigacionDwf.dto.request.ResenaRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.ResenaResponse;
@@ -18,12 +18,14 @@ public class ResenaController {
     private final ResenaService resenaService;
 
     @PostMapping
-    public ResponseEntity<ResenaResponse> crearResena(@RequestBody ResenaRequest request) {
-        return ResponseEntity.ok(resenaService.crearResena(request));
+    @ResponseStatus(HttpStatus.OK) // Aunque es un POST, el original devolvía 200 OK. Si la creación implica un nuevo recurso, HttpStatus.CREATED (201) sería más apropiado.
+    public ResenaResponse crearResena(@RequestBody ResenaRequest request) {
+        return resenaService.crearResena(request);
     }
 
     @GetMapping("/producto/{id}")
-    public ResponseEntity<List<ResenaResponse>> obtenerResenas(@PathVariable Long id) {
-        return ResponseEntity.ok(resenaService.obtenerResenasPorProducto(id));
+    @ResponseStatus(HttpStatus.OK)
+    public List<ResenaResponse> obtenerResenas(@PathVariable Long id) {
+        return resenaService.obtenerResenasPorProducto(id);
     }
 }

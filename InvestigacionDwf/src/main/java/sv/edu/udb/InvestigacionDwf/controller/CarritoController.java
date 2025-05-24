@@ -1,7 +1,8 @@
 package sv.edu.udb.InvestigacionDwf.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import sv.edu.udb.InvestigacionDwf.dto.response.CarritoItemResponse;
@@ -20,25 +21,26 @@ public class CarritoController {
     private final CarritoService carritoService;
 
     @GetMapping("/{idUser}")
-    public ResponseEntity<CarritoResponse> getOrCreate(@PathVariable Long idUser, Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).body(null); // Requiere autenticación
-        }
+    @ResponseStatus(HttpStatus.OK) // Establece el código de estado HTTP a 200 OK
+    public CarritoResponse getOrCreate(@PathVariable Long idUser, Authentication authentication) {
+        // Obtiene los detalles del usuario autenticado
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        // Verifica si el ID de usuario en la ruta coincide con el ID del usuario autenticado
         if (!userDetails.getUserId().equals(idUser)) {
-            return ResponseEntity.status(403).body(null); // Acceso denegado
+            // Lanza una excepción si el usuario no está autorizado para acceder a este carrito
+            throw new AccessDeniedException("No estás autorizado para acceder al carrito de este usuario.");
         }
-        CarritoResponse response = carritoService.getOrCreateByUser(idUser);
-        return ResponseEntity.ok(response);
+        // Llama al servicio para obtener o crear el carrito
+        return carritoService.getOrCreateByUser(idUser);
     }
 
     @GetMapping("/{idCarrito}/items")
-    public ResponseEntity<List<CarritoItemResponse>> getItems(@PathVariable Long idCarrito, Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(401).body(null); // Requiere autenticación
-        }
-        List<CarritoItemResponse> items = carritoService.getItems(idCarrito);
-        return ResponseEntity.ok(items);
+    @ResponseStatus(HttpStatus.OK) // Establece el código de estado HTTP a 200 OK
+    public List<CarritoItemResponse> getItems(@PathVariable Long idCarrito) {
+        // Llama al servicio para obtener los ítems del carrito
+        // (Considera agregar una verificación aquí para asegurar que el usuario autenticado es dueño de este carrito,
+        // o que el servicio ya lo maneja).
+        return carritoService.getItems(idCarrito);
     }
 }
-
