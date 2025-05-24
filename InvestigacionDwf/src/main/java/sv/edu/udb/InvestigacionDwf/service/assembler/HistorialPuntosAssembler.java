@@ -7,17 +7,17 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 import sv.edu.udb.InvestigacionDwf.controller.HistorialPuntosController;
 import sv.edu.udb.InvestigacionDwf.model.entity.HistorialPuntos;
-import sv.edu.udb.InvestigacionDwf.model.hal.HistorialPuntosModel;
+import sv.edu.udb.InvestigacionDwf.dto.response.HistorialPuntosResponse;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Component
 public class HistorialPuntosAssembler
-        implements RepresentationModelAssembler<HistorialPuntos, HistorialPuntosModel> {
+        implements RepresentationModelAssembler<HistorialPuntos, HistorialPuntosResponse> {
 
     @Override
-    public HistorialPuntosModel toModel(HistorialPuntos entidad) {
-        HistorialPuntosModel m = new HistorialPuntosModel();
+    public HistorialPuntosResponse toModel(HistorialPuntos entidad) {
+        HistorialPuntosResponse m = new HistorialPuntosResponse();
         m.setIdHistorialPuntos(entidad.getIdHistorialPuntos());
         m.setIdUser(entidad.getUser().getIdUser());
         m.setIdPedido(entidad.getPedido().getIdPedido());

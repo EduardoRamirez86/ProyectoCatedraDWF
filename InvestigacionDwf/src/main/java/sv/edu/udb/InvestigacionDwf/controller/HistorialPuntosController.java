@@ -7,7 +7,7 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
 import sv.edu.udb.InvestigacionDwf.model.entity.HistorialPuntos;
-import sv.edu.udb.InvestigacionDwf.model.hal.HistorialPuntosModel;
+import sv.edu.udb.InvestigacionDwf.dto.response.HistorialPuntosResponse;
 import sv.edu.udb.InvestigacionDwf.service.HistorialPuntosService;
 import sv.edu.udb.InvestigacionDwf.service.assembler.HistorialPuntosAssembler;
 
@@ -21,7 +21,7 @@ public class HistorialPuntosController {
     private final HistorialPuntosAssembler     assembler;
 
     @GetMapping
-    public PagedModel<HistorialPuntosModel> getAll(
+    public PagedModel<HistorialPuntosResponse> getAll(
             Pageable pageable,
             PagedResourcesAssembler<HistorialPuntos> pagedAssembler
     ) {
@@ -30,7 +30,7 @@ public class HistorialPuntosController {
     }
 
     @GetMapping("/{id}")
-    public HistorialPuntosModel getById(@PathVariable Long id) {
+    public HistorialPuntosResponse getById(@PathVariable Long id) {
         var entity = service.getByIdEntity(id);
         return assembler.toModel(entity);
     }
