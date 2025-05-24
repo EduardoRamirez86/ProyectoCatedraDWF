@@ -10,8 +10,8 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-22T14:11:47-0600",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
+    date = "2025-05-23T18:49:02-0600",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.13 (Amazon.com Inc.)"
 )
 @Component
 public class PedidoMapperImpl implements PedidoMapper {

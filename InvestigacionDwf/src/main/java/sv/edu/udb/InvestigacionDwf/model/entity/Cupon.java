@@ -27,7 +27,7 @@ public class Cupon {
     private String codigo;
 
     @Column(nullable = false)
-    private Double porcentajeDescuento = 15.0; // 15% por defecto
+    private Double porcentajeDescuento;
 
     @Column(nullable = false)
     private boolean usado = false;

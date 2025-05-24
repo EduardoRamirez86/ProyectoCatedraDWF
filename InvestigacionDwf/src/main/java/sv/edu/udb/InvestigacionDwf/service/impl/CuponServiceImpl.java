@@ -8,24 +8,31 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Cupon;
 import sv.edu.udb.InvestigacionDwf.model.entity.User;
 import sv.edu.udb.InvestigacionDwf.repository.CuponRepository;
 import sv.edu.udb.InvestigacionDwf.service.CuponService;
+import sv.edu.udb.InvestigacionDwf.service.ParametroService;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
 public class CuponServiceImpl implements CuponService {
 
     private final CuponRepository cuponRepository;
+    private final ParametroService parametroService;
 
     @Override
     @Transactional
     public Cupon generateCouponForUser(User user) {
-        String codigo = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        String codigo = java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+
+        // Obtener porcentaje de descuento desde parámetros (BigDecimal)
+        BigDecimal descuentoBD = parametroService.obtenerBigDecimal("descuento_cupon", new BigDecimal("15.0"));
+        double porcentaje = descuentoBD.doubleValue();
+
         Cupon cupon = Cupon.builder()
                 .user(user)
                 .codigo(codigo)
-                .porcentajeDescuento(15.0)
+                .porcentajeDescuento(porcentaje)
                 .usado(false)
                 .fechaCreacion(LocalDateTime.now())
                 .fechaExpiracion(LocalDateTime.now().plusDays(30))
@@ -37,9 +44,9 @@ public class CuponServiceImpl implements CuponService {
     @Transactional(readOnly = true)
     public boolean validateCoupon(String codigo, User user) {
         return cuponRepository.findByCodigo(codigo)
-                .map(cupon -> cupon.getUser().getIdUser().equals(user.getIdUser())
-                        && !cupon.isUsado()
-                        && cupon.getFechaExpiracion().isAfter(LocalDateTime.now()))
+                .map(c -> c.getUser().getIdUser().equals(user.getIdUser())
+                        && !c.isUsado()
+                        && c.getFechaExpiracion().isAfter(LocalDateTime.now()))
                 .orElse(false);
     }
 
@@ -48,6 +55,7 @@ public class CuponServiceImpl implements CuponService {
     public void redeemCoupon(String codigo, User user) {
         Cupon cupon = cuponRepository.findByCodigo(codigo)
                 .orElseThrow(() -> new ResourceNotFoundException("Cupón no encontrado: " + codigo));
+
         if (!cupon.getUser().getIdUser().equals(user.getIdUser())) {
             throw new IllegalStateException("El cupón no pertenece a este usuario");
         }
@@ -57,8 +65,10 @@ public class CuponServiceImpl implements CuponService {
         if (cupon.getFechaExpiracion().isBefore(LocalDateTime.now())) {
             throw new IllegalStateException("El cupón ha expirado");
         }
+
         cupon.setUsado(true);
         cuponRepository.save(cupon);
     }
 }
+
 
