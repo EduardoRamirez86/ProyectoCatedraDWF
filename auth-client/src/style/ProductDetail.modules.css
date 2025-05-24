@@ -364,3 +364,105 @@ body {
 .rating-container > div > span {
   font-size: 1.2rem;
 }
+
+.pagination {
+  display: flex;
+  justify-content: center; /* Centra los botones de paginación */
+  list-style: none; /* Remueve los puntos de lista */
+  padding: 0;
+  margin-top: 2rem; /* Espacio superior para separar de las reseñas */
+  gap: 0.5rem; /* Espacio entre los elementos de paginación */
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+}
+
+.pagination li {
+  margin: 0 0.25rem; /* Espacio más compacto entre los números */
+}
+
+.pagination li a {
+  display: block; /* Ocupa todo el espacio del li */
+  padding: 0.6rem 1rem; /* Relleno para que los botones sean más grandes */
+  border: 1px solid var(--surface-300); /* Borde suave */
+  border-radius: var(--border-radius-sm); /* Bordes ligeramente redondeados */
+  color: var(--text-color); /* Color de texto predeterminado */
+  text-decoration: none; /* Remueve el subrayado */
+  transition: all 0.2s ease-in-out; /* Transición suave para efectos hover/active */
+  font-weight: 500;
+  min-width: 40px; /* Ancho mínimo para los botones */
+  text-align: center; /* Centra el texto dentro del botón */
+  box-shadow: var(--shadow-sm); /* Sombra sutil */
+}
+
+.pagination li a:hover {
+  background-color: var(--primary-100); /* Fondo suave al pasar el mouse */
+  border-color: var(--primary-300); /* Borde más pronunciado al pasar el mouse */
+  color: var(--primary-700); /* Color de texto más oscuro */
+  transform: translateY(-2px); /* Pequeño efecto de elevación */
+  box-shadow: var(--shadow-md); /* Sombra más pronunciada */
+}
+
+/* Estilo para el botón de página activa */
+.pagination li.active a {
+  background-color: var(--primary-500); /* Color primario para la página activa */
+  border-color: var(--primary-500);
+  color: var(--text-color-light); /* Texto blanco para la página activa */
+  font-weight: bold;
+  box-shadow: var(--shadow-lg); /* Sombra más fuerte para la página activa */
+  pointer-events: none; /* No clickable when active */
+}
+
+/* Estilo para los botones "Previous" y "Next" */
+.pagination li.previous a,
+.pagination li.next a {
+  background-color: var(--surface-100);
+  color: var(--primary-600);
+  border-color: var(--primary-400);
+  padding: 0.6rem 1.2rem; /* Un poco más de padding para los botones de navegación */
+}
+
+.pagination li.previous a:hover,
+.pagination li.next a:hover {
+  background-color: var(--primary-200);
+  color: var(--primary-800);
+  border-color: var(--primary-600);
+}
+
+/* Estilo para los botones "Previous" y "Next" deshabilitados */
+.pagination li.disabled a {
+  opacity: 0.6; /* Menos opaco para indicar que está deshabilitado */
+  cursor: not-allowed; /* Cambia el cursor */
+  background-color: var(--surface-200);
+  border-color: var(--surface-300);
+  color: var(--text-color-disabled);
+  box-shadow: none;
+  transform: none; /* No hay efecto de elevación para botones deshabilitados */
+}
+
+/* Estilo para el "..." (break label) */
+.pagination li.break a {
+  border: none;
+  background-color: transparent;
+  color: var(--text-color-secondary);
+  cursor: default;
+  box-shadow: none;
+}
+
+.pagination li.break a:hover {
+  background-color: transparent;
+  color: var(--text-color-secondary);
+  border-color: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Media Queries para pantallas más pequeñas */
+@media (max-width: 768px) {
+  .pagination {
+    font-size: 0.9rem;
+    gap: 0.25rem;
+  }
+  .pagination li a {
+    padding: 0.5rem 0.8rem;
+    min-width: 35px;
+  }
+}

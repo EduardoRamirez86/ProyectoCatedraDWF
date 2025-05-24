@@ -5,11 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/assembler/ResenaAssembler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/HistorialPuntosController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/HistorialPuntosController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/HistorialPuntosResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/HistorialPuntosResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/hal/HistorialPuntosModel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/assembler/HistorialPuntosAssembler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/assembler/HistorialPuntosAssembler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/InvestigacionDwfApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/InvestigacionDwfApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/HateoasConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/HateoasConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/ResenaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/ResenaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ResenaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ResenaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/ResenaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/ResenaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/ResenaServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/ResenaServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/InvestigacionDwfApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/InvestigacionDwfApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/config/HateoasConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/config/HateoasConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/ResenaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/ResenaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse$ResenaResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse$ResenaResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/ResenaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/ResenaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/ResenaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/ResenaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/ResenaServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/ResenaServiceImpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +167,7 @@
       <workItem from="1747949269706" duration="277000" />
       <workItem from="1748047692967" duration="8348000" />
       <workItem from="1748058724549" duration="4606000" />
-      <workItem from="1748073175481" duration="8458000" />
+      <workItem from="1748073175481" duration="11444000" />
     </task>
     <servers />
   </component>
