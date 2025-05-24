@@ -2,7 +2,6 @@
 package sv.edu.udb.InvestigacionDwf.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -18,6 +17,7 @@ import sv.edu.udb.InvestigacionDwf.model.enums.EstadoNotificacion;
 import sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido;
 import sv.edu.udb.InvestigacionDwf.repository.*;
 import sv.edu.udb.InvestigacionDwf.service.CuponService;
+import sv.edu.udb.InvestigacionDwf.service.ParametroService;
 import sv.edu.udb.InvestigacionDwf.service.PedidoService;
 import sv.edu.udb.InvestigacionDwf.service.assembler.PedidoAssembler;
 
@@ -36,13 +36,11 @@ public class PedidoServiceImpl implements PedidoService {
     private final UserRepository userRepository;
     private final NotificacionRepository notificacionRepository;
     private final CuponService cuponService;
+    private final ParametroService parametroService;
     private final CuponRepository cuponRepository;
     private final PedidoAssembler pedidoAssembler;
     private final PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
-
-    @Value("${app.shipping.cost}")
-    private BigDecimal shippingCost;
 
     @Override
     @Transactional
@@ -80,7 +78,11 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         // Agrega el costo de envío al subtotal para obtener el total
+        // Ahora se obtiene dinámicamente desde la tabla de parámetros en BD
+        BigDecimal shippingCost = parametroService
+                .obtenerBigDecimal("costo_envio", new BigDecimal("5.00"));
         BigDecimal total = subtotal.add(shippingCost);
+
         // Construye el objeto Pedido con los datos calculados
         var pedido = Pedido.builder()
                 .carrito(carrito)
