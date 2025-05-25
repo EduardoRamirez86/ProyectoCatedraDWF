@@ -320,6 +320,7 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoAssembler.toModel(savedPedido);
     }
 
+    // Clase auxiliar para almacenar datos temporalmente
     private static class PedidoItemData {
         private final Producto producto;
         private final int cantidad;

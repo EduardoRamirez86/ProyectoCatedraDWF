@@ -14,6 +14,9 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Para mostrar feedback de consulta de periodo
+  const [periodoMsg, setPeriodoMsg] = useState(null);
+
   useEffect(() => {
     const fetchDashboard = async () => {
       setLoading(true);
@@ -39,12 +42,22 @@ export default function AdminDashboard() {
   const handlePeriodo = async (e) => {
     e.preventDefault();
     setGananciasPeriodo(null);
+    setPeriodoMsg(null);
     setError(null);
-    if (!fechaInicio || !fechaFin) return;
+    if (!fechaInicio || !fechaFin) {
+      setPeriodoMsg("Selecciona ambas fechas.");
+      return;
+    }
+    if (fechaFin < fechaInicio) {
+      setPeriodoMsg("La fecha final debe ser igual o posterior a la inicial.");
+      return;
+    }
     try {
       const res = await getGananciasPorPeriodo(fechaInicio, fechaFin);
       setGananciasPeriodo(res);
+      setPeriodoMsg(null);
     } catch (err) {
+      setPeriodoMsg("No se pudo consultar el periodo.");
       setError(err.message);
     }
   };
@@ -56,36 +69,44 @@ export default function AdminDashboard() {
         Dashboard de Ventas
       </h2>
       {loading ? (
-        <p className="text-center">Cargando estadísticas...</p>
+        <div className="flex justify-center items-center h-32">
+          <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mr-3"></span>
+          <span className="text-gray-500">Cargando estadísticas...</span>
+        </div>
       ) : error ? (
-        <p className="text-red-500 text-center">{error}</p>
+        <div className="text-center text-red-500">{error}</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Ganancias Totales */}
           <div className="bg-white rounded-xl shadow p-6 border border-indigo-100 flex flex-col items-center">
             <span className="text-gray-500 mb-2">Ganancias Totales</span>
             <span className="text-3xl font-bold text-indigo-700">
-              ${gananciasTotales ?? 0}
+              ${Number(gananciasTotales ?? 0).toLocaleString("es-SV", { minimumFractionDigits: 2 })}
             </span>
+            <span className="mt-2 text-xs text-gray-400">Acumulado histórico</span>
           </div>
           {/* Ganancias por periodo */}
           <div className="bg-white rounded-xl shadow p-6 border border-indigo-100 flex flex-col items-center">
             <form onSubmit={handlePeriodo} className="flex flex-col items-center gap-2 w-full">
               <span className="text-gray-500 mb-2">Ganancias por periodo</span>
-              <div className="flex gap-2 w-full">
+              <div className="flex flex-col sm:flex-row gap-2 w-full">
                 <input
                   type="date"
                   value={fechaInicio}
                   onChange={e => setFechaInicio(e.target.value)}
-                  className="border rounded px-2 py-1 w-full"
+                  className="border rounded px-2 py-1 w-full min-w-[140px] max-w-[180px] text-center"
                   required
+                  placeholder="Fecha inicio"
+                  style={{ minWidth: 0 }}
                 />
                 <input
                   type="date"
                   value={fechaFin}
                   onChange={e => setFechaFin(e.target.value)}
-                  className="border rounded px-2 py-1 w-full"
+                  className="border rounded px-2 py-1 w-full min-w-[140px] max-w-[180px] text-center"
                   required
+                  placeholder="Fecha fin"
+                  style={{ minWidth: 0 }}
                 />
               </div>
               <button
@@ -95,9 +116,12 @@ export default function AdminDashboard() {
                 Consultar
               </button>
             </form>
-            {gananciasPeriodo !== null && (
+            {periodoMsg && (
+              <span className="mt-2 text-sm text-red-500">{periodoMsg}</span>
+            )}
+            {gananciasPeriodo !== null && !periodoMsg && (
               <span className="mt-3 text-xl font-bold text-indigo-700">
-                ${gananciasPeriodo}
+                ${Number(gananciasPeriodo).toLocaleString("es-SV", { minimumFractionDigits: 2 })}
               </span>
             )}
           </div>
@@ -109,13 +133,17 @@ export default function AdminDashboard() {
                 <li className="text-gray-400">Sin datos</li>
               ) : (
                 productosMasVendidos.map((p, i) => (
-                  <li key={i} className="flex justify-between">
-                    <span className="font-medium text-indigo-800">{p.nombre}</span>
-                    <span className="text-gray-700">{p.cantidad} vendidos</span>
+                  <li key={i} className="flex justify-between items-center">
+                    <span className="font-medium text-indigo-800 truncate max-w-[120px]">{p.nombre}</span>
+                    <span className="text-gray-700 font-semibold">{p.cantidad} vendidos</span>
                   </li>
                 ))
               )}
             </ul>
+            <div className="mt-4">
+              <i className="fas fa-trophy text-yellow-400 mr-2"></i>
+              <span className="text-xs text-gray-500">Basado en ventas históricas</span>
+            </div>
           </div>
         </div>
       )}

@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { getAllProductos, createProducto, updateProducto, deleteProducto } from "../services/productoService";
 
+// Simulación de tipos de producto (deberías traerlos de la API real)
+const fetchTiposProducto = async () => [
+  { idTipoProducto: 1, nombre: "Camisa" },
+  { idTipoProducto: 2, nombre: "Pantalón" },
+  { idTipoProducto: 3, nombre: "Calzado" }
+];
+
 export default function ProductoCrud() {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -9,9 +16,16 @@ export default function ProductoCrud() {
   const [editProducto, setEditProducto] = useState(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [size] = useState(10); // Fijo en 10 para evitar cambios inesperados
+  const [size] = useState(10);
 
-  // Lógica de paginación: asume que getAllProductos devuelve el objeto paginado como PedidoCrud
+  const [tiposProducto, setTiposProducto] = useState([]);
+
+  useEffect(() => {
+    fetchProductos(page);
+    fetchTiposProducto().then(setTiposProducto);
+    // eslint-disable-next-line
+  }, [page]);
+
   const fetchProductos = async (pageNum = 0) => {
     setLoading(true);
     setError(null);
@@ -43,11 +57,6 @@ export default function ProductoCrud() {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchProductos(page);
-    // eslint-disable-next-line
-  }, [page]);
 
   const handleEdit = (producto) => {
     setEditProducto(producto);
@@ -118,9 +127,13 @@ export default function ProductoCrud() {
                 <tr className="bg-indigo-50">
                   <th className="py-2 px-3 font-semibold">ID</th>
                   <th className="py-2 px-3 font-semibold">Nombre</th>
+                  <th className="py-2 px-3 font-semibold">Descripción</th>
                   <th className="py-2 px-3 font-semibold">Precio</th>
+                  <th className="py-2 px-3 font-semibold">Costo</th>
                   <th className="py-2 px-3 font-semibold">Stock</th>
-                  <th className="py-2 px-3 font-semibold">Categoría</th>
+                  <th className="py-2 px-3 font-semibold">Imagen</th>
+                  <th className="py-2 px-3 font-semibold">Puntos</th>
+                  <th className="py-2 px-3 font-semibold">Tipo</th>
                   <th className="py-2 px-3 font-semibold">Acciones</th>
                 </tr>
               </thead>
@@ -129,9 +142,17 @@ export default function ProductoCrud() {
                   <tr key={producto.idProducto} className="border-b">
                     <td className="py-2 px-3">{producto.idProducto}</td>
                     <td className="py-2 px-3">{producto.nombre}</td>
+                    <td className="py-2 px-3">{producto.descripcion}</td>
                     <td className="py-2 px-3">${producto.precio}</td>
+                    <td className="py-2 px-3">${producto.costo}</td>
                     <td className="py-2 px-3">{producto.cantidad}</td>
-                    <td className="py-2 px-3">{producto.nombreTipo || '-'}</td>
+                    <td className="py-2 px-3">
+                      {producto.imagen && (
+                        <img src={producto.imagen} alt={producto.nombre} className="w-12 h-12 object-cover rounded" />
+                      )}
+                    </td>
+                    <td className="py-2 px-3">{producto.cantidadPuntos}</td>
+                    <td className="py-2 px-3">{producto.nombreTipo || producto.tipoProducto?.nombre || '-'}</td>
                     <td className="py-2 px-3 flex gap-2">
                       <button
                         className="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition"
@@ -178,30 +199,45 @@ export default function ProductoCrud() {
           producto={editProducto}
           onClose={handleModalClose}
           onSave={handleModalSave}
+          tiposProducto={tiposProducto}
         />
       )}
     </div>
   );
 }
 
-// Modal de producto (puedes mejorar este modal según tus necesidades)
-function ProductoModal({ producto, onClose, onSave }) {
+// Modal de producto mejorado con todos los campos
+function ProductoModal({ producto, onClose, onSave, tiposProducto }) {
   const [form, setForm] = useState(
-    producto || { nombre: "", precio: "", cantidad: "", nombreTipo: "" }
+    producto || {
+      nombre: "",
+      descripcion: "",
+      precio: "",
+      costo: "",
+      cantidad: "",
+      imagen: "",
+      cantidadPuntos: "",
+      idTipoProducto: "",
+    }
   );
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleTipoChange = (e) => {
+    setForm({ ...form, idTipoProducto: e.target.value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Si el tipoProducto es solo id, puedes mapearlo aquí si lo necesitas
     onSave(form);
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+      <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-lg">
         <h3 className="text-xl font-bold mb-4">{form.idProducto ? "Editar Producto" : "Nuevo Producto"}</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -215,35 +251,91 @@ function ProductoModal({ producto, onClose, onSave }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Precio</label>
-            <input
-              name="precio"
-              type="number"
-              value={form.precio}
+            <label className="block text-sm font-medium mb-1">Descripción</label>
+            <textarea
+              name="descripcion"
+              value={form.descripcion}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              required
+              rows={2}
+              maxLength={500}
+            />
+          </div>
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <label className="block text-sm font-medium mb-1">Precio</label>
+              <input
+                name="precio"
+                type="number"
+                step="0.01"
+                value={form.precio}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-sm font-medium mb-1">Costo</label>
+              <input
+                name="costo"
+                type="number"
+                step="0.01"
+                value={form.costo}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <label className="block text-sm font-medium mb-1">Stock</label>
+              <input
+                name="cantidad"
+                type="number"
+                value={form.cantidad}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-sm font-medium mb-1">Puntos</label>
+              <input
+                name="cantidadPuntos"
+                type="number"
+                value={form.cantidadPuntos}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Imagen (URL)</label>
+            <input
+              name="imagen"
+              value={form.imagen}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Stock</label>
-            <input
-              name="cantidad"
-              type="number"
-              value={form.cantidad}
-              onChange={handleChange}
+            <label className="block text-sm font-medium mb-1">Tipo de Producto</label>
+            <select
+              name="idTipoProducto"
+              value={form.idTipoProducto}
+              onChange={handleTipoChange}
               className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
               required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Categoría</label>
-            <input
-              name="nombreTipo"
-              value={form.nombreTipo}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
+            >
+              <option value="">Selecciona un tipo</option>
+              {tiposProducto.map(tp => (
+                <option key={tp.idTipoProducto} value={tp.idTipoProducto}>
+                  {tp.nombre}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex justify-end gap-2 mt-4">
             <button
