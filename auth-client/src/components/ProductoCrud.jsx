@@ -9,31 +9,34 @@ export default function ProductoCrud() {
   const [editProducto, setEditProducto] = useState(null);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [size, setSize] = useState(10);
+  const [size] = useState(10); // Fijo en 10 para evitar cambios inesperados
 
+  // Lógica de paginación: asume que getAllProductos devuelve el objeto paginado como PedidoCrud
   const fetchProductos = async (pageNum = 0) => {
     setLoading(true);
     setError(null);
     try {
       const result = await getAllProductos(pageNum, size);
-      // Soporta respuesta paginada HAL con page info
-      let list = [];
-      let total = 1;
-      let pageNumber = 0;
-      if (Array.isArray(result)) {
-        // Si el backend devuelve todos los productos como array, solo mostrar los de la página actual
-        list = result.slice(pageNum * size, pageNum * size + size);
-        total = Math.ceil(result.length / size);
-        pageNumber = pageNum;
-      } else if (result?._embedded?.productoResponseList) {
-        list = result._embedded.productoResponseList;
-        total = result.page?.totalPages || 1;
-        pageNumber = result.page?.number ?? pageNum;
-        setSize(result.page?.size || 10);
+      // Si el backend devuelve la estructura HAL con paginación
+      if (result && result.page && result._embedded?.productoResponseList) {
+        setProductos(result._embedded.productoResponseList);
+        setPage(result.page.number ?? 0);
+        setTotalPages(result.page.totalPages ?? 1);
+      } else if (result && Array.isArray(result.items)) {
+        // Si el servicio ya devuelve { items, page, totalPages, ... }
+        setProductos(result.items);
+        setPage(result.page ?? 0);
+        setTotalPages(result.totalPages ?? 1);
+      } else if (Array.isArray(result)) {
+        // fallback legacy
+        setProductos(result.slice(pageNum * size, pageNum * size + size));
+        setPage(pageNum);
+        setTotalPages(Math.ceil(result.length / size));
+      } else {
+        setProductos([]);
+        setPage(0);
+        setTotalPages(1);
       }
-      setProductos(list);
-      setPage(pageNumber);
-      setTotalPages(total);
     } catch (err) {
       setError(err.message);
     } finally {

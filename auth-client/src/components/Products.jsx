@@ -145,21 +145,23 @@ export default function Products({ searchQuery = "" }) {
       </section>
 
       {/* Paginación */}
-      <div className="pagination">
+      <div className="flex justify-center items-center gap-4 mt-8">
         <button
           onClick={() => loadPage(page - 1)}
           disabled={page === 0 || loading}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 transition"
         >
-          « Anterior
+          <i className="fas fa-chevron-left mr-1"></i> Anterior
         </button>
-        <span>
-          Página {page + 1} de {totalPages}
+        <span className="text-gray-700 font-medium">
+          Página <span className="font-bold">{page + 1}</span> de <span className="font-bold">{totalPages}</span>
         </span>
         <button
           onClick={() => loadPage(page + 1)}
           disabled={page + 1 >= totalPages || loading}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 transition"
         >
-          Siguiente »
+          Siguiente <i className="fas fa-chevron-right ml-1"></i>
         </button>
       </div>
     </div>

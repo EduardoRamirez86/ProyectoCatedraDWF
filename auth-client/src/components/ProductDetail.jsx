@@ -1,16 +1,38 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Rating } from 'react-simple-star-rating';
 import ReactPaginate from 'react-paginate';
+
+// Importaciones de Material-UI
+import Rating from '@mui/material/Rating';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography'; // Ahora lo usaremos
+import StarIcon from '@mui/icons-material/Star';
 
 import { getAllProductos } from '../services/productoService';
 import { addCarritoItem } from '../services/carritoItemService';
-// Importa la nueva función para obtener reseñas paginadas por producto
 import { crearResena, obtenerResenasPorProductoPaginadas } from '../services/resenaService';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import MySwal from '../utils/swal';
-import '../style/ProductDetail.modules.css';
+
+// Labels para el rating con hover (Material-UI)
+const labels = {
+  0.5: 'Terrible',
+  1: 'Malo',
+  1.5: 'Regular',
+  2: 'Aceptable',
+  2.5: 'Bueno',
+  3: 'Muy Bueno',
+  3.5: 'Genial',
+  4: 'Excelente',
+  4.5: 'Impresionante',
+  5: 'Perfecto',
+};
+
+// Función helper para obtener el texto del label (Material-UI)
+function getLabelText(value) {
+  return `${value} Estrella${value !== 1 ? 's' : ''}, ${labels[value]}`;
+}
 
 export default function ProductDetail() {
   const { idProducto } = useParams();
@@ -19,26 +41,46 @@ export default function ProductDetail() {
   const [form, setForm] = useState({ comentario: '', rating: 0 });
   const [cantidad, setCantidad] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [reviewsLoading, setReviewsLoading] = useState(true); // Nuevo estado para la carga de reseñas
-  const [currentPage, setCurrentPage] = useState(0); // Página actual, inicia en 0
-  const [reviewsPerPage] = useState(5); // Reseñas a mostrar por página (tamaño de página del backend)
-  const [pageCount, setPageCount] = useState(0); // Total de páginas para las reseñas del producto, viene del backend
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [reviewsPerPage] = useState(5);
+  const [pageCount, setPageCount] = useState(0);
+  const [hoverRating, setHoverRating] = useState(-1);
+
   const { carrito } = useContext(CartContext);
   const { userData } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Esta función ahora solo llama al servicio de backend para obtener reseñas paginadas por producto
+  // Fetches product details
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const productos = await getAllProductos();
+        const prod = Array.isArray(productos)
+          ? productos.find((p) => p.idProducto === parseInt(idProducto, 10))
+          : productos._embedded?.productoResponseList?.find((p) => p.idProducto === parseInt(idProducto, 10));
+        if (!prod) throw new Error('Producto no encontrado');
+        setProducto(prod);
+      } catch (error) {
+        console.error('Error al cargar producto:', error);
+        MySwal.fire('Error', 'No se pudo cargar el producto.', 'error');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [idProducto]);
+
+  // Fetches product reviews
   const fetchProductResenas = useCallback(async () => {
     try {
-      setReviewsLoading(true); // Inicia la carga de reseñas
-
+      setReviewsLoading(true);
       const resenasData = await obtenerResenasPorProductoPaginadas(
         parseInt(idProducto, 10),
         currentPage,
         reviewsPerPage
       );
-
-      // Los datos vienen directamente del PagedModel de HATEOAS
       setDisplayedResenas(resenasData._embedded?.resenaResponseList || []);
       setPageCount(resenasData.page?.totalPages || 0);
     } catch (error) {
@@ -47,36 +89,15 @@ export default function ProductDetail() {
       setDisplayedResenas([]);
       setPageCount(0);
     } finally {
-      setReviewsLoading(false); // Finaliza la carga de reseñas
+      setReviewsLoading(false);
     }
-  }, [idProducto, currentPage, reviewsPerPage]); // Dependencias de useCallback
+  }, [idProducto, currentPage, reviewsPerPage]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true); // Inicia la carga general (producto y reseñas)
-        const productos = await getAllProductos();
-        const prod = productos.find((p) => p.idProducto === parseInt(idProducto, 10));
-        if (!prod) {
-          throw new Error('Producto no encontrado');
-        }
-        setProducto(prod);
-      } catch (error) {
-        console.error('Error al cargar producto:', error);
-        MySwal.fire('Error', 'No se pudo cargar el producto.', 'error');
-      } finally {
-        setLoading(false); // Finaliza la carga general del producto
-      }
-    };
-    fetchData();
-  }, [idProducto]);
-
-  // Nuevo useEffect para manejar la carga de reseñas, separado del producto para mayor claridad
-  useEffect(() => {
-    if (idProducto) { // Solo si tenemos un idProducto válido
+    if (idProducto) {
       fetchProductResenas();
     }
-  }, [idProducto, currentPage, fetchProductResenas]); // Recarga reseñas cuando cambian idProducto o currentPage
+  }, [idProducto, currentPage, fetchProductResenas]);
 
   const handleAddToCart = async () => {
     try {
@@ -101,6 +122,10 @@ export default function ProductDetail() {
     try {
       if (!userData) throw new Error('Usuario no autenticado');
       if (!producto?.idProducto) throw new Error('Producto no disponible para reseña');
+      if (form.rating === 0) {
+        MySwal.fire('Advertencia', 'Por favor, selecciona una calificación.', 'warning');
+        return;
+      }
 
       await crearResena({
         idProducto: producto.idProducto,
@@ -109,9 +134,9 @@ export default function ProductDetail() {
       });
       await MySwal.fire('Reseña enviada', 'Tu reseña ha sido publicada.', 'success');
       setForm({ comentario: '', rating: 0 });
-      // Después de crear una reseña, vuelve a cargar las reseñas desde la primera página
+      setHoverRating(-1);
       setCurrentPage(0);
-      await fetchProductResenas(); // Llama a la función para refrescar la lista de reseñas
+      await fetchProductResenas();
     } catch (error) {
       console.error('Error al enviar reseña:', error);
       await MySwal.fire('Error', 'No se pudo enviar la reseña.', 'error');
@@ -122,8 +147,8 @@ export default function ProductDetail() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleRatingChange = (newRating) => {
-    setForm({ ...form, rating: newRating });
+  const handleRatingChange = (event, newValue) => {
+    setForm({ ...form, rating: newValue });
   };
 
   const handleIncrease = () => {
@@ -135,212 +160,227 @@ export default function ProductDetail() {
   };
 
   const handlePageClick = (data) => {
-    // data.selected es el índice de la página (0-based)
     setCurrentPage(data.selected);
   };
 
+  // Helper para mapear el RatingEnum del backend a un número para Material-UI (0-5)
+  const getRatingNumber = useCallback((ratingEnum) => {
+    const ratingsMap = {
+      'ONE': 1,
+      'TWO': 2,
+      'THREE': 3,
+      'FOUR': 4,
+      'FIVE': 5,
+    };
+    return ratingsMap[ratingEnum] || parseFloat(ratingEnum) || 0;
+  }, []);
+
   if (loading && !producto) {
     return (
-      <div className="container">
-        <div className="loading-message">Cargando producto...</div>
-      </div>
+      <Box className="container mx-auto py-10">
+        <Typography variant="h6" component="p" className="text-center text-lg text-gray-500">
+          Cargando producto...
+        </Typography>
+      </Box>
     );
   }
 
   if (!producto) {
     return (
-      <div className="container">
-        <div className="error-message">Producto no encontrado</div>
-      </div>
+      <Box className="container mx-auto py-10">
+        <Typography variant="h6" component="p" className="text-center text-lg text-red-500">
+          Producto no encontrado
+        </Typography>
+      </Box>
     );
   }
 
   return (
-    <div className="product-detail-container surface">
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        ← Volver
+    <Box className="container mx-auto px-4 py-8">
+      <button
+        className="mb-6 text-indigo-600 hover:underline flex items-center gap-2"
+        onClick={() => navigate(-1)}
+      >
+        <i className="fas fa-arrow-left"></i> Volver
       </button>
 
-      <div className="product-detail">
-        <img
-          src={producto.imagen}
-          alt={producto.nombre}
-          className="product-detail-image"
-          loading="lazy"
-        />
-
-        <div className="product-info">
-          <h1
-            style={{
-              fontSize: "2.1rem",
-              fontWeight: 700,
-              marginBottom: "1.2rem",
-              color: "#222",
-              textAlign: "center"
-            }}
-          >
-            {producto.nombre}
-          </h1>
-          <p
-            className="product-description"
-            style={{
-              fontSize: "1.25rem",
-              color: "#444",
-              marginBottom: "1.5rem",
-              textAlign: "center"
-            }}
-          >
-            {producto.descripcion}
-          </p>
-          <p
-            className="product-price"
-            style={{
-              fontSize: "2rem",
-              fontWeight: 700,
-              color: "#2563eb",
-              marginBottom: "1.5rem",
-              textAlign: "center"
-            }}
-          >
-            ${producto.precio.toFixed(2)}
-          </p>
-
-          <div className="quantity-container">
+      <Box className="flex flex-col md:flex-row gap-8 bg-white shadow-lg rounded-xl p-8">
+        <Box className="flex-1 flex justify-center items-center">
+          <img
+            src={producto.imagen}
+            alt={producto.nombre}
+            className="rounded-lg object-cover max-h-96 w-full max-w-xs shadow"
+            loading="lazy"
+          />
+        </Box>
+        <Box className="flex-1 flex flex-col justify-between">
+          <Box>
+            <Typography variant="h4" component="h1" className="text-3xl font-bold text-indigo-800 mb-2">
+              {producto.nombre}
+            </Typography>
+            <Typography variant="body1" component="p" className="text-gray-600 mb-4">
+              {producto.descripcion}
+            </Typography>
+            <Typography variant="h5" component="p" className="text-2xl font-bold text-indigo-600 mb-4">
+              ${producto.precio.toFixed(2)}
+            </Typography>
+            <Box className="flex items-center gap-4 mb-4">
+              <Typography variant="subtitle1" component="span" className="text-gray-700 font-medium">
+                Stock:
+              </Typography>
+              <Typography variant="body1" component="span" className="text-gray-900">
+                {producto.cantidad}
+              </Typography>
+              <Typography variant="caption" component="span" className="ml-4 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-semibold">
+                {producto.nombreTipo}
+              </Typography>
+            </Box>
+            <Box className="flex items-center gap-4 mb-6">
+              <Typography variant="subtitle1" component="span" className="text-gray-700 font-medium">
+                Cantidad:
+              </Typography>
+              <button
+                type="button"
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                onClick={handleDecrease}
+                disabled={cantidad <= 1}
+              >
+                -
+              </button>
+              <Typography variant="body1" component="span" className="font-semibold">
+                {cantidad}
+              </Typography>
+              <button
+                type="button"
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                onClick={handleIncrease}
+                disabled={cantidad >= 99}
+              >
+                +
+              </button>
+            </Box>
             <button
-              type="button"
-              className="quantity-btn"
-              onClick={handleDecrease}
-              disabled={cantidad <= 1}
+              className="w-full py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition mb-4"
+              onClick={handleAddToCart}
+              disabled={!carrito}
             >
-              -
+              Añadir al carrito
             </button>
-            <span className="quantity-display">{cantidad}</span>
-            <button
-              type="button"
-              className="quantity-btn"
-              onClick={handleIncrease}
-              disabled={cantidad >= 99}
-            >
-              +
-            </button>
-          </div>
+          </Box>
+        </Box>
+      </Box>
 
-          <button
-            className="add-to-cart-btn"
-            onClick={handleAddToCart}
-            disabled={!carrito}
-          >
-            Añadir al carrito
-          </button>
-        </div>
-      </div>
-
-      <section className="reviews-section">
-        <h2>Reseñas</h2>
-
-        <form onSubmit={handleResenaSubmit} className="resena-form">
+      {/* Reseñas */}
+      <Box component="section" className="mt-12">
+        <Typography variant="h5" component="h2" className="text-2xl font-bold text-indigo-700 mb-4 flex items-center gap-2">
+          <StarIcon sx={{ color: 'text.yellow-400', mr: 1 }} /> {/* Usa StarIcon de MUI */}
+          Reseñas
+        </Typography>
+        <Box component="form" onSubmit={handleResenaSubmit} className="bg-indigo-50 rounded-lg p-6 mb-8 shadow flex flex-col gap-4">
           <textarea
             name="comentario"
             value={form.comentario}
             onChange={handleChange}
             placeholder="Escribe tu reseña..."
             required
-            rows="4"
+            rows="3"
+            className="w-full border border-indigo-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
-
-          <div
-            className="rating-container"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "1rem",
-              flexDirection: "row",
-              justifyContent: "center",
-              margin: "1rem 0"
-            }}
-          >
-            <Rating
-              onClick={handleRatingChange}
-              initialValue={form.rating}
-              size={28}
-              allowHalfIcon={false}
-              transition
-              fillColor={userData ? 'var(--primary-500)' : 'var(--surface-400)'}
-              emptyColor="var(--surface-200)"
-              readonly={!userData}
-              direction="horizontal"
-            />
+          <Box className="flex items-center gap-4">
+            <Typography variant="subtitle1" component="span" className="text-gray-700 font-medium">
+              Calificación:
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Rating
+                name="product-review-rating"
+                value={form.rating}
+                precision={0.5}
+                getLabelText={getLabelText}
+                onChange={handleRatingChange}
+                onChangeActive={(event, newHover) => {
+                  setHoverRating(newHover);
+                }}
+                emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+                readOnly={!userData}
+              />
+              {userData && form.rating !== null && (
+                <Box sx={{ ml: 2, color: 'text.secondary' }}>
+                  <Typography variant="body2" component="span">
+                    {labels[hoverRating !== -1 ? hoverRating : form.rating]}
+                  </Typography>
+                </Box>
+              )}
+            </Box>
             {!userData && (
-              <p className="auth-message-rating" style={{ margin: 0 }}>
+              <Typography variant="caption" component="span" className="text-sm text-gray-500 ml-2">
                 Inicia sesión para dejar una reseña.
-              </p>
+              </Typography>
             )}
-          </div>
-
+          </Box>
           <button
             type="submit"
-            className="add-to-cart-btn"
+            className="w-full py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
             disabled={!userData || form.rating === 0 || form.comentario.trim() === ''}
           >
             Publicar reseña
           </button>
-        </form>
-
-        <div className="reviews-list">
+        </Box>
+        <Box className="bg-white rounded-lg shadow p-6">
           {reviewsLoading ? (
-            <p className="loading-message">Cargando reseñas...</p>
+            <Typography variant="body1" component="p" className="text-center text-gray-500">
+              Cargando reseñas...
+            </Typography>
           ) : displayedResenas.length === 0 ? (
-            <p className="no-reviews">Sé el primero en dejar una reseña.</p>
+            <Typography variant="body1" component="p" className="text-center text-gray-500">
+              Sé el primero en dejar una reseña.
+            </Typography>
           ) : (
-            displayedResenas.map((resena, index) => {
-              const ratings = {
-                ONE: 1,
-                TWO: 2,
-                THREE: 3,
-                FOUR: 4,
-                FIVE: 5,
-              };
-              const ratingValue = ratings[resena.rating] || 0;
-
-              return (
-                <article key={index} className="review-item">
-                  <div className="review-header" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                    <span className="review-author">{resena.username || 'Anónimo'}</span>
-                    <div className="review-rating" style={{ display: "flex", flexDirection: "row" }}>
+            <Box component="ul" className="space-y-6">
+              {displayedResenas.map((resena, index) => (
+                <Box component="li" key={index} className="border-b pb-4 last:border-b-0 last:pb-0">
+                  <Box className="flex items-center gap-3 mb-1">
+                    <Typography variant="subtitle1" component="span" className="font-semibold text-indigo-700">
+                      {resena.username || 'Anónimo'}
+                    </Typography>
+                    <Box className="flex flex-row items-center">
                       <Rating
-                        readonly
-                        size={20}
-                        initialValue={ratingValue}
-                        allowHalfIcon={false}
-                        fillColor="var(--primary-500)"
-                        emptyColor="var(--surface-300)"
-                        direction="horizontal"
+                        name={`read-only-rating-${resena.idResena}`}
+                        value={getRatingNumber(resena.rating)}
+                        readOnly
+                        precision={0.5}
+                        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
                       />
-                    </div>
-                  </div>
-                  <p className="review-content">{resena.comentario}</p>
-                </article>
-              );
-            })
+                    </Box>
+                  </Box>
+                  <Typography variant="body2" component="p" className="text-gray-700">
+                    {resena.comentario}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
           )}
-        </div>
-
-        {/* Componente de paginación */}
-        {pageCount > 1 && (
-          <ReactPaginate
-            previousLabel={'Anterior'}
-            nextLabel={'Siguiente'}
-            breakLabel={'...'}
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={3}
-            onPageChange={handlePageClick}
-            containerClassName={'pagination'}
-            activeClassName={'active'}
-            forcePage={currentPage} // Fuerza a ReactPaginate a usar la página actual
-          />
-        )}
-      </section>
-    </div>
+          {pageCount > 1 && (
+            <Box className="mt-8 flex justify-center">
+              <ReactPaginate
+                previousLabel={'Anterior'}
+                nextLabel={'Siguiente'}
+                breakLabel={'...'}
+                pageCount={pageCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={3}
+                onPageChange={handlePageClick}
+                containerClassName={'flex gap-2'}
+                pageClassName={'px-3 py-1 rounded border border-gray-300'}
+                activeClassName={'bg-indigo-600 text-white'}
+                previousClassName={'px-3 py-1 rounded border border-gray-300'}
+                nextClassName={'px-3 py-1 rounded border border-gray-300'}
+                breakClassName={'px-3 py-1'}
+                forcePage={currentPage}
+              />
+            </Box>
+          )}
+        </Box>
+      </Box>
+    </Box>
   );
 }
