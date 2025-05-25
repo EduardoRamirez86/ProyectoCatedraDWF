@@ -30,6 +30,12 @@ export const CartProvider = ({ children }) => {
 
     const fetchEnvio = async () => {
       try {
+        // Solo intenta obtener el parámetro si hay token
+        const token = secureGetItem("token");
+        if (!token) {
+          setEnvio(5);
+          return;
+        }
         const param = await getParametroByClave('costo_envio');
         if (param && param.valor) {
           setEnvio(Number(param.valor));
@@ -37,7 +43,11 @@ export const CartProvider = ({ children }) => {
           setEnvio(5);
         }
       } catch (e) {
-        console.error('Error al obtener el costo de envío:', e);
+        // Solo loguea si hay token, si no, ignora el error
+        const token = secureGetItem("token");
+        if (token) {
+          console.error('Error al obtener el costo de envío:', e);
+        }
         setEnvio(5);
       }
     };
