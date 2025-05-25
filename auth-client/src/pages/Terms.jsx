@@ -5,7 +5,6 @@ import Footer from '../components/Footer';
 export default function Terms() {
   return (
     <>
-      <Header />
       <main className="container mx-auto px-4 py-6">
         <h1 className="text-2xl font-semibold mb-4">Términos y Condiciones</h1>
         <section className="mb-4">
@@ -48,7 +47,6 @@ export default function Terms() {
           </p>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

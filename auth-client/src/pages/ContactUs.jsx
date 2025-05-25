@@ -1,11 +1,9 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 export default function ContactUs() {
   return (
     <>
-      <Header />
+
       <main className="container mx-auto px-4 py-6">
         <h1 className="text-2xl font-semibold mb-4">Contáctanos</h1>
         <p className="mb-4">
@@ -52,7 +50,7 @@ export default function ContactUs() {
           También puedes encontrarnos en nuestras redes sociales para recibir atención personalizada y enterarte de nuestras novedades.
         </p>
       </main>
-      <Footer />
+
     </>
   );
 }

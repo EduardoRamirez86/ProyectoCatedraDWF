@@ -1,11 +1,8 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 export default function ShippingPolicy() {
   return (
     <>
-      <Header />
       <main className="container mx-auto px-4 py-6">
         <h1 className="text-2xl font-semibold mb-4">Política de Envíos</h1>
         <p className="mb-4">
@@ -35,7 +32,6 @@ export default function ShippingPolicy() {
           Nos esforzamos por cumplir los plazos de entrega, pero pueden presentarse demoras por causas ajenas a nuestra empresa (clima, tráfico, etc.).
         </p>
       </main>
-      <Footer />
     </>
   );
 }

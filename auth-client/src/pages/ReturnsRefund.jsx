@@ -1,11 +1,9 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 export default function ReturnsRefund() {
   return (
     <>
-      <Header />
+
       <main className="container mx-auto px-4 py-6">
         <h1 className="text-2xl font-semibold mb-4">Devoluciones y Reembolsos</h1>
         <p className="mb-4">
@@ -40,7 +38,6 @@ export default function ReturnsRefund() {
           Si tienes dudas sobre el proceso, contáctanos y con gusto te ayudaremos.
         </p>
       </main>
-      <Footer />
     </>
   );
 }

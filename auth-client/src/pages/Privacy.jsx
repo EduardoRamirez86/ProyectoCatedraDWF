@@ -1,11 +1,8 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 export default function Privacy() {
   return (
     <>
-      <Header />
       <main className="container mx-auto px-4 py-6">
         <h1 className="text-2xl font-semibold mb-4">Política de Privacidad</h1>
         <section className="mb-4">
@@ -47,7 +44,6 @@ export default function Privacy() {
           </p>
         </section>
       </main>
-      <Footer />
     </>
   );
 }
