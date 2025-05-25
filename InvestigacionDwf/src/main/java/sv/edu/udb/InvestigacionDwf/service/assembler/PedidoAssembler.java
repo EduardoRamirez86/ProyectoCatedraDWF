@@ -28,14 +28,10 @@ public class PedidoAssembler implements RepresentationModelAssembler<Pedido, Ped
                 .withSelfRel());
 
         // enlace a la lista de pedidos del usuario
-        // como el controlador define getByUser(idUser, Pageable, PagedResourcesAssembler)
-        // le pasamos tres args: id, null para pageable, null para assembler
-        response.add(linkTo(methodOn(PedidoController.class)
-                .getByUser(
-                        pedido.getCarrito().getUser().getIdUser(),
-                        /* pageable */ null,
-                        /* assembler */ null
-                ))
+        // Como Pageable y PagedResourcesAssembler no pueden ser null, usamos una URI manual o omitimos este link
+        response.add(linkTo(PedidoController.class)
+                .slash("user")
+                .slash(pedido.getCarrito().getUser().getIdUser())
                 .withRel("pedidos-usuario"));
 
         return response;

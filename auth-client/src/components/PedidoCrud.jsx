@@ -1,125 +1,173 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { getAllPedidos, updatePedidoEstado } from "../services/pedidoService";
-import MySwal from "../utils/swal";
-import "../style/Crud.css";
 
-const estadosDisponibles = [
-  "PENDIENTE",
-  "PAGADO",
-  "EN_PROCESO",
-  "ENTREGADO",
-  "CANCELADO",
-];
-
-export default function PedidoCrud({ admin = false }) {
+export default function PedidoCrud() {
   const [pedidos, setPedidos] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const size = 10;
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [estadoUpdate, setEstadoUpdate] = useState({});
+  const [size, setSize] = useState(10);
 
-  const loadPedidos = useCallback(
-  async (pg = 0) => {
+  const fetchPedidos = async (pageNum = 0) => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
-      const res = await getAllPedidos(pg, size);
-      console.log("Respuesta getAllPedidos:", res);
-
-      // Actualiza el estado con los valores devueltos
-      setPedidos(res.items || []);
-      setPage(res.page || 0);
-      setTotalPages(res.totalPages || 1);
-      console.log("Pedidos seteados:", res.items); // Para depurar
-    } catch (e) {
-      console.error(e);
-      MySwal.fire("Error", "No se pudieron cargar los pedidos", "error");
+      const result = await getAllPedidos(pageNum, size);
+      let list = [];
+      let total = 1;
+      let pageNumber = 0;
+      if (Array.isArray(result)) {
+        // Si el backend devuelve todos los pedidos como array, solo mostrar los de la página actual
+        list = result.slice(pageNum * size, pageNum * size + size);
+        total = Math.ceil(result.length / size);
+        pageNumber = pageNum;
+      } else if (result.items) {
+        list = result.items;
+        total = result.totalPages || 1;
+        pageNumber = result.page ?? pageNum;
+        setSize(result.size || 10);
+      }
+      setPedidos(list);
+      setPage(pageNumber);
+      setTotalPages(total);
+    } catch (err) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
-  },
-  [size]
-);
+  };
 
   useEffect(() => {
-    loadPedidos(0);
-  }, [loadPedidos]);
+    fetchPedidos(page);
+    // eslint-disable-next-line
+  }, [page]);
 
-  const handleEstadoChange = async (idPedido, nuevoEstado) => {
+  const handleEstadoChange = (idPedido, newEstado) => {
+    setEstadoUpdate((prev) => ({ ...prev, [idPedido]: newEstado }));
+  };
+
+  const handleUpdateEstado = async (idPedido) => {
+    const newEstado = estadoUpdate[idPedido];
+    if (!newEstado) return;
     try {
-      await updatePedidoEstado(idPedido, nuevoEstado);
-      await loadPedidos(page);
-      MySwal.fire(
-        "Estado actualizado",
-        `Pedido #${idPedido} actualizado a ${nuevoEstado}`,
-        "success"
-      );
-    } catch (e) {
-      console.error(e);
-      MySwal.fire("Error", "No se pudo actualizar el estado", "error");
+      await updatePedidoEstado(idPedido, newEstado);
+      fetchPedidos(page);
+    } catch (err) {
+      alert("Error al actualizar el estado: " + err.message);
     }
   };
 
-  if (loading) return <p>Cargando pedidos…</p>;
+  const handlePrev = () => {
+    if (page > 0) setPage(page - 1);
+  };
+
+  const handleNext = () => {
+    if (page < totalPages - 1) setPage(page + 1);
+  };
+
+  if (loading) return <p className="text-center">Cargando pedidos...</p>;
+  if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
-    <div className="admin-container">
-      <h1>Gestión de Pedidos</h1>
-      {pedidos.length === 0 ? (
-        <p>No hay pedidos</p>
-      ) : (
-        <>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Usuario</th>
-                <th>Total</th>
-                <th>Estado</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pedidos.map((p) => (
-                <tr key={p.idPedido}>
-                  <td>{p.idPedido}</td>
-                  <td>{p.idCarrito}</td>
-                  <td>${p.total.toFixed(2)}</td>
-                  <td>{p.estado}</td>
-                  <td>
-                    <select
-                      value={p.estado}
-                      onChange={(e) =>
-                        handleEstadoChange(p.idPedido, e.target.value)
-                      }
-                    >
-                      {estadosDisponibles.map((e) => (
-                        <option key={e} value={e}>
-                          {e}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
+    <div className="container mx-auto px-4 py-6">
+      <h2 className="text-2xl font-bold mb-6 text-indigo-700 flex items-center gap-2">
+        <i className="fas fa-clipboard-list text-indigo-400"></i>
+        Gestión de Pedidos
+      </h2>
+      <div className="bg-white shadow-md rounded-xl p-6">
+        {pedidos.length === 0 ? (
+          <p>No hay pedidos registrados.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm text-left">
+              <thead>
+                <tr className="bg-indigo-50">
+                  <th className="py-2 px-3 font-semibold">ID</th>
+                  <th className="py-2 px-3 font-semibold">Usuario</th>
+                  <th className="py-2 px-3 font-semibold">Fecha</th>
+                  <th className="py-2 px-3 font-semibold">Total</th>
+                  <th className="py-2 px-3 font-semibold">Estado</th>
+                  <th className="py-2 px-3 font-semibold">Tipo Pago</th>
+                  <th className="py-2 px-3 font-semibold">Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="pagination">
-            <button onClick={() => loadPedidos(page - 1)} disabled={page === 0}>
-              « Anterior
-            </button>
-            <span>
-              Página {page + 1} de {totalPages}
-            </span>
-            <button
-              onClick={() => loadPedidos(page + 1)}
-              disabled={page + 1 >= totalPages}
-            >
-              Siguiente »
-            </button>
+              </thead>
+              <tbody>
+                {pedidos.map((pedido) => (
+                  <tr key={pedido.idPedido} className="border-b">
+                    <td className="py-2 px-3">{pedido.idPedido}</td>
+                    <td className="py-2 px-3">{pedido.idUsuario || "-"}</td>
+                    <td className="py-2 px-3">
+                      {pedido.fechaInicio
+                        ? new Date(pedido.fechaInicio).toLocaleString()
+                        : "-"}
+                    </td>
+                    <td className="py-2 px-3">${pedido.total}</td>
+                    <td className="py-2 px-3">
+                      <span
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold
+                        ${
+                          pedido.estado === "ENTREGADO"
+                            ? "bg-green-100 text-green-800"
+                            : pedido.estado === "CANCELADO"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {pedido.estado}
+                      </span>
+                    </td>
+                    <td className="py-2 px-3">{pedido.tipoPago}</td>
+                    <td className="py-2 px-3">
+                      <select
+                        className="border rounded px-2 py-1 mr-2"
+                        value={estadoUpdate[pedido.idPedido] || ""}
+                        onChange={(e) =>
+                          handleEstadoChange(pedido.idPedido, e.target.value)
+                        }
+                      >
+                        <option value="">Cambiar estado</option>
+                        <option value="PENDIENTE">Pendiente</option>
+                        <option value="PAGADO">Pagado</option>
+                        <option value="EN_PROCESO">En Proceso</option>
+                        <option value="ENTREGADO">Entregado</option>
+                        <option value="CANCELADO">Cancelado</option>
+                      </select>
+                      <button
+                        className="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+                        onClick={() => handleUpdateEstado(pedido.idPedido)}
+                        disabled={!estadoUpdate[pedido.idPedido]}
+                      >
+                        Actualizar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </>
-      )}
+        )}
+        <div className="flex justify-between items-center mt-6">
+          <button
+            onClick={handlePrev}
+            disabled={page === 0}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Anterior
+          </button>
+          <span className="text-gray-700">
+            Página {page + 1} de {totalPages}
+          </span>
+          <button
+            onClick={handleNext}
+            disabled={page >= totalPages - 1}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

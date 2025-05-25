@@ -1,0 +1,153 @@
+import React, { useEffect, useState } from "react";
+import { getAllUsers, updateUserRole, deleteUser } from "../services/userService";
+
+export default function UserCrud() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [roleUpdate, setRoleUpdate] = useState({});
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const size = 10;
+
+  const fetchUsers = async (pageNum = 0) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await getAllUsers(pageNum, size);
+      setUsers(Array.isArray(result.items) ? result.items : []);
+      setPage(result.page ?? 0);
+      setTotalPages(result.totalPages ?? 1);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers(page);
+    // eslint-disable-next-line
+  }, [page]);
+
+  const handleRoleChange = (userId, newRole) => {
+    setRoleUpdate((prev) => ({ ...prev, [userId]: newRole }));
+  };
+
+  const handleUpdateRole = async (userId) => {
+    const newRole = roleUpdate[userId];
+    if (!newRole) return;
+    try {
+      await updateUserRole(userId, newRole);
+      fetchUsers(page);
+    } catch (err) {
+      alert("Error al actualizar el rol: " + err.message);
+    }
+  };
+
+  const handleDelete = async (userId) => {
+    if (!window.confirm("¿Seguro que deseas eliminar este usuario?")) return;
+    try {
+      await deleteUser(userId);
+      fetchUsers(page);
+    } catch (err) {
+      alert("Error al eliminar usuario: " + err.message);
+    }
+  };
+
+  const handlePrev = () => {
+    if (page > 0) setPage(page - 1);
+  };
+
+  const handleNext = () => {
+    if (page < totalPages - 1) setPage(page + 1);
+  };
+
+  if (loading) return <p className="text-center">Cargando usuarios...</p>;
+  if (error) return <p className="text-red-500 text-center">{error}</p>;
+
+  return (
+    <div className="container mx-auto px-4 py-6">
+      <h2 className="text-2xl font-bold mb-6 text-indigo-700 flex items-center gap-2">
+        <i className="fas fa-users-cog text-indigo-400"></i>
+        Gestión de Usuarios
+      </h2>
+      <div className="bg-white shadow-md rounded-xl p-6">
+        {users.length === 0 ? (
+          <p>No hay usuarios registrados.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm text-left">
+              <thead>
+                <tr className="bg-indigo-50">
+                  <th className="py-2 px-3 font-semibold">ID</th>
+                  <th className="py-2 px-3 font-semibold">Nombre</th>
+                  <th className="py-2 px-3 font-semibold">Email</th>
+                  <th className="py-2 px-3 font-semibold">Rol</th>
+                  <th className="py-2 px-3 font-semibold">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user.id} className="border-b">
+                    <td className="py-2 px-3">{user.id}</td>
+                    <td className="py-2 px-3">{user.username || user.nombre || '-'}</td>
+                    <td className="py-2 px-3">{user.email}</td>
+                    <td className="py-2 px-3">
+                      <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">
+                        {Array.isArray(user.roles) ? user.roles.join(", ") : user.roles}
+                      </span>
+                    </td>
+                    <td className="py-2 px-3 flex gap-2">
+                      <select
+                        className="border rounded px-2 py-1 mr-2"
+                        value={roleUpdate[user.id] || ""}
+                        onChange={e => handleRoleChange(user.id, e.target.value)}
+                      >
+                        <option value="">Cambiar rol</option>
+                        <option value="ROLE_USER">Usuario</option>
+                        <option value="ROLE_ADMIN">Administrador</option>
+                      </select>
+                      <button
+                        className="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+                        onClick={() => handleUpdateRole(user.id)}
+                        disabled={!roleUpdate[user.id]}
+                      >
+                        Actualizar
+                      </button>
+                      <button
+                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                        onClick={() => handleDelete(user.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <div className="flex justify-between items-center mt-6">
+          <button
+            onClick={handlePrev}
+            disabled={page === 0}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Anterior
+          </button>
+          <span className="text-gray-700">
+            Página {page + 1} de {totalPages}
+          </span>
+          <button
+            onClick={handleNext}
+            disabled={page >= totalPages - 1}
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

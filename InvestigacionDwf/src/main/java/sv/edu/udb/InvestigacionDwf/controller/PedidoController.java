@@ -2,6 +2,7 @@
 package sv.edu.udb.InvestigacionDwf.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
@@ -55,18 +56,21 @@ public class PedidoController {
     @GetMapping("/user/{idUser}")
     public PagedModel<PedidoResponse> getByUser(
             @PathVariable Long idUser,
-            Pageable pageable,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             PagedResourcesAssembler<Pedido> assembler
     ) {
-        // NOTA: aquí el assembler debe coincidir en genérico con el ServiceImpl
+        Pageable pageable = PageRequest.of(page, size);
         return pedidoService.findAllByUser(idUser, pageable);
     }
 
     @GetMapping("/all")
     public PagedModel<PedidoResponse> getAllPedidos(
-            Pageable pageable,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             PagedResourcesAssembler<Pedido> assembler
     ) {
+        Pageable pageable = PageRequest.of(page, size);
         return pedidoService.findAll(pageable);
     }
 

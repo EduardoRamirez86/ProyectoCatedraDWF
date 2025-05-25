@@ -20,6 +20,9 @@ import ProductDetail from './components/ProductDetail';
 import Checkout from './components/Checkout';
 import Cart from './components/Cart';
 import Profile from './pages/Profile';
+import OrderHistory from './components/OrderHistory';
+import PointsHistory from './components/PointsHistory';
+import UserOrders from './components/UserOrders';
 
 // Páginas de Atención al Cliente y Acerca de
 import ContactUs from './pages/ContactUs';
@@ -31,6 +34,9 @@ import Careers from './pages/Careers';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Blog from './pages/Blog';
+
+//Ver profile
+
 
 function PrivateRoute({ requiredRole, children }) {
   const { token, userData } = useContext(AuthContext);
@@ -66,8 +72,13 @@ export default function App() {
 
             {/* Rutas con Layout */}
             <Route element={<Layout />}>
-              {/* Perfil */}
-              <Route path="/profile" element={<Profile />} />
+              {/* Perfil y subrutas */}
+              <Route path="/profile" element={<Profile />}>
+                <Route index element={<></>} />
+                <Route path="user-orders" element={<UserOrders />} />
+                <Route path="puntos" element={<PointsHistory />} />
+                <Route path="pedidos" element={<OrderHistory />} />
+              </Route>
 
               {/* Atención al Cliente */}
               <Route path="/contact" element={<ContactUs />} />

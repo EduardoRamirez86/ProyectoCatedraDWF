@@ -70,7 +70,6 @@ export const getPedidosByUser = async (idUser, page = 0, size = 10) => {
     headers: { "Authorization": `Bearer ${token}` },
   });
   const data = await handleResponse(resp);
-  console.log("RAW PAGE MODEL (user):", data);
 
   const items = Array.isArray(data._embedded?.pedidoResponseList)
     ? data._embedded.pedidoResponseList

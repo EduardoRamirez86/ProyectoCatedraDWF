@@ -1,6 +1,7 @@
 package sv.edu.udb.InvestigacionDwf.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
 import sv.edu.udb.InvestigacionDwf.service.ProductoService;
+import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 
 @RestController
 @RequestMapping("/auth/producto")
@@ -17,7 +19,7 @@ import sv.edu.udb.InvestigacionDwf.service.ProductoService;
 public class ProductoController {
 
     private final ProductoService service;
-    private final PagedResourcesAssembler<sv.edu.udb.InvestigacionDwf.model.entity.Producto> assembler;
+    private final PagedResourcesAssembler<Producto> assembler;
 
     @PostMapping
     public ProductoResponse create(@RequestBody ProductoRequest req) {
@@ -34,10 +36,13 @@ public class ProductoController {
         service.delete(id);
     }
 
-    // ✅ Solo dejamos esta ruta para obtener productos paginados
     @GetMapping("/all")
-    public PagedModel<ProductoResponse> getAll(Pageable pageable) {
-        return service.findAll(pageable); // ✅ Lógica de paginación y detalles en el servicio
+    public PagedModel<ProductoResponse> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return service.findAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -50,8 +55,7 @@ public class ProductoController {
         var recomendaciones = service.findRecommendedByUser(idUser);
         return CollectionModel.of(recomendaciones);
     }
-
-}
+}  
 
 
 
