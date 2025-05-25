@@ -1,6 +1,12 @@
-// src/App.jsx
 import React, { useContext } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+  useLocation,
+} from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import Header from './components/Header';
@@ -13,8 +19,9 @@ import AdminPage from './pages/AdminPage';
 import ProductDetail from './components/ProductDetail';
 import Checkout from './components/Checkout';
 import Cart from './components/Cart';
+import Profile from './pages/Profile';
 
-// Nuevos componentes de Atención al Cliente
+// Páginas de Atención al Cliente y Acerca de
 import ContactUs from './pages/ContactUs';
 import FAQ from './pages/FAQ';
 import ShippingPolicy from './pages/ShippingPolicy';
@@ -27,10 +34,10 @@ import Blog from './pages/Blog';
 
 function PrivateRoute({ requiredRole, children }) {
   const { token, userData } = useContext(AuthContext);
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-  const roles = Array.isArray(userData?.roles) ? userData.roles : [userData?.roles];
+  if (!token) return <Navigate to="/login" replace />;
+  const roles = Array.isArray(userData?.roles)
+    ? userData.roles
+    : [userData?.roles];
   return roles.includes(requiredRole) ? children : <Navigate to="/" replace />;
 }
 
@@ -54,25 +61,32 @@ export default function App() {
       <CartProvider>
         <BrowserRouter>
           <Routes>
-            {/* Landing público */}
+            {/* Landing sin Header/Footer */}
             <Route path="/" element={<Landing />} />
 
-            {/* Rutas públicas de Atención al Cliente */}
-            <Route path="/contact" element={<ContactUs />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/shipping-policy" element={<ShippingPolicy />} />
-            <Route path="/returns" element={<ReturnsRefund />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/careers" element={<Careers />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/blog" element={<Blog />} />
-
-            {/* Rutas con layout (Header + Footer) */}
+            {/* Rutas con Layout */}
             <Route element={<Layout />}>
+              {/* Perfil */}
+              <Route path="/profile" element={<Profile />} />
+
+              {/* Atención al Cliente */}
+              <Route path="/contact" element={<ContactUs />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/shipping-policy" element={<ShippingPolicy />} />
+              <Route path="/returns" element={<ReturnsRefund />} />
+
+              {/* Acerca de */}
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/careers" element={<Careers />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/blog" element={<Blog />} />
+
+              {/* Autenticación */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
 
+              {/* Privadas Usuario */}
               <Route
                 path="/user"
                 element={
@@ -106,6 +120,7 @@ export default function App() {
                 }
               />
 
+              {/* Privada Admin */}
               <Route
                 path="/admin"
                 element={

@@ -58,7 +58,7 @@ export default function Header() {
       logout();
       navigate("/login", { replace: true });
     } else if (action === "user") {
-      navigate("/user");
+      navigate("/profile"); // Cambiado de "/user" a "/profile"
     } else if (action === "admin") {
       navigate("/admin");
     }
@@ -110,6 +110,7 @@ export default function Header() {
           ) : (
             <>
               {/* Notificaciones */}
+              
               <div className="relative" ref={notifRef}>
                 <button
                   className="relative bg-transparent border-none cursor-pointer text-gray-700 hover:text-indigo-600"

@@ -7,8 +7,8 @@ import lombok.AllArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequest {
-    private String username;
-    private String email;
-    private String password;
+public class UserUpdateRequest {
+    private String currentPassword;
+    private String newUsername;
+    private String newEmail;
 }

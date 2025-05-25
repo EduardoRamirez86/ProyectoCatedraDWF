@@ -44,7 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // b) Rutas públicas
                         .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth/ropa/**", "/auth/producto/**", "/auth/tipoproducto/**", "/auth/carrito/**" , "auth/carrito-item/**" , "auth/pedido/**", "/auth/resenas/**", "/auth/notificacion/**", "/auth/direcciones/**", "/auth/historial-puntos", "/auth/historial-pedidos").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/ropa/**", "/auth/producto/**", "/auth/tipoproducto/**", "/auth/carrito/**" , "auth/carrito-item/**" , "auth/pedido/**", "/auth/resenas/**", "/auth/notificacion/**", "/auth/direcciones/**", "/auth/historial-puntos", "/auth/historial-pedidos","/auth/users").permitAll()
                         .requestMatchers("/h2-console/**", "/error").permitAll()
                         // c) Rutas protegidas (ADMIN)
                         .requestMatchers(HttpMethod.POST,   "/auth/ropa/**").hasRole("ADMIN")
