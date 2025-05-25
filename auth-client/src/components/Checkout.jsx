@@ -43,7 +43,7 @@ export default function Checkout() {
     // Cargar descuento_cupon
     const fetchDescuento = async () => {
       try {
-        const param = await getParametroByClave('descuento_cupon');
+        const param = await getParametroByClave('descuento_cupon'); // <--- Already correct key
         setDescuentoCupon(param && param.valor ? Number(param.valor) / 100 : 0.15);
       } catch (e) {
         setDescuentoCupon(0.15);
@@ -52,7 +52,7 @@ export default function Checkout() {
     // Cargar costo_envio (por si CartContext aún no lo tiene actualizado)
     const fetchEnvio = async () => {
       try {
-        const param = await getParametroByClave('costo_envio');
+        const param = await getParametroByClave('costo_envio'); // <--- Already correct key
         setEnvioValor(param && param.valor ? Number(param.valor) : (envio ?? 5));
       } catch (e) {
         setEnvioValor(envio ?? 5);
@@ -68,6 +68,7 @@ export default function Checkout() {
   // Usar los valores parametrizados si están listos, si no fallback
   const envioFinal = envioValor !== null ? envioValor : envio ?? 5;
   const descuentoFinal = descuentoCupon !== null ? descuentoCupon : 0.15;
+  const porcentajeDescuento = descuentoCupon !== null ? (descuentoCupon * 100).toFixed(0) : "15";
   const subtotal = roundToTwo(total - envioFinal);
   const discount = hasCupon ? roundToTwo(subtotal * descuentoFinal) : 0;
   const totalWithDiscount = roundToTwo(subtotal - discount + envioFinal);
@@ -339,11 +340,11 @@ export default function Checkout() {
           </div>
           <div className="flex justify-between mb-2">
             <span className="font-medium">Envío:</span>
-            <span>${envio.toFixed(2)}</span>
+            <span>${envio !== undefined && envio !== null ? envio.toFixed(2) : '0.00'}</span>
           </div>
           {hasCupon && (
             <div className="flex justify-between mb-2">
-              <span className="font-medium">Descuento (15%):</span>
+              <span className="font-medium">Descuento ({porcentajeDescuento}%):</span>
               <span className="text-green-600">-${discount.toFixed(2)}</span>
             </div>
           )}

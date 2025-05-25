@@ -1,8 +1,8 @@
 // parametroService.js
 import { secureGetItem } from '../utils/secureStorage';
 
-// Change API_URL to match the base path of your controller
-const API_URL = "http://localhost:8080/auth/parametros"; // <--- CHANGE THIS LINE
+// THIS IS THE CRITICAL CHANGE: "parametro" -> "parametros"
+const API_URL = "http://localhost:8080/auth/parametros"; // Corrected to plural 'parametros'
 
 const handleResponse = async (resp) => {
   const contentType = resp.headers.get("content-type");
@@ -75,17 +75,20 @@ export const editarParametro = async (id, payload) => {
  * Si no existe, retorna null
  */
 export async function getParametroByClave(clave) {
-  const token = getToken(); // Ensure token is used for this call too if it's secured
+  const token = getToken();
   if (!token) {
     throw new Error('No se encontró el token de autenticación');
   }
   try {
-    // Correct URL construction: API_URL already has /parametros, and then /clave/{clave}
+    // This URL construction is now correct because API_URL is corrected
     const response = await fetch(`${API_URL}/clave/${clave}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    // Check for response.ok before parsing JSON
     if (!response.ok) {
-      throw new Error(`Error: ${await response.text()}`);
+      // Attempt to read error message from backend if available, otherwise use status text
+      const errorBody = await response.text(); // Read as text first
+      throw new Error(`Error ${response.status}: ${errorBody || response.statusText}`);
     }
     return await response.json();
   } catch (error) {
