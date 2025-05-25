@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useContext } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
@@ -11,14 +12,24 @@ import UserPage from './pages/UserPage';
 import AdminPage from './pages/AdminPage';
 import ProductDetail from './components/ProductDetail';
 import Checkout from './components/Checkout';
-import Cart from './components/Cart'; // Add this import
+import Cart from './components/Cart';
+
+// Nuevos componentes de Atención al Cliente
+import ContactUs from './pages/ContactUs';
+import FAQ from './pages/FAQ';
+import ShippingPolicy from './pages/ShippingPolicy';
+import ReturnsRefund from './pages/ReturnsRefund';
+import AboutUs from './pages/AboutUs';
+import Careers from './pages/Careers';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import Blog from './pages/Blog';
 
 function PrivateRoute({ requiredRole, children }) {
   const { token, userData } = useContext(AuthContext);
   if (!token) {
     return <Navigate to="/login" replace />;
   }
-  // userData.roles puede ser string o array
   const roles = Array.isArray(userData?.roles) ? userData.roles : [userData?.roles];
   return roles.includes(requiredRole) ? children : <Navigate to="/" replace />;
 }
@@ -32,7 +43,7 @@ function Layout() {
       <main style={{ minHeight: 'calc(100vh - 160px)' }}>
         <Outlet />
       </main>
-      <Footer />
+      {!hideHeaderFooter && <Footer />}
     </>
   );
 }
@@ -43,10 +54,25 @@ export default function App() {
       <CartProvider>
         <BrowserRouter>
           <Routes>
+            {/* Landing público */}
             <Route path="/" element={<Landing />} />
+
+            {/* Rutas públicas de Atención al Cliente */}
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
+            <Route path="/returns" element={<ReturnsRefund />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/careers" element={<Careers />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/blog" element={<Blog />} />
+
+            {/* Rutas con layout (Header + Footer) */}
             <Route element={<Layout />}>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+
               <Route
                 path="/user"
                 element={
@@ -72,14 +98,6 @@ export default function App() {
                 }
               />
               <Route
-                path="/admin"
-                element={
-                  <PrivateRoute requiredRole="ROLE_ADMIN">
-                    <AdminPage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
                 path="/producto/:idProducto"
                 element={
                   <PrivateRoute requiredRole="ROLE_USER">
@@ -87,6 +105,17 @@ export default function App() {
                   </PrivateRoute>
                 }
               />
+
+              <Route
+                path="/admin"
+                element={
+                  <PrivateRoute requiredRole="ROLE_ADMIN">
+                    <AdminPage />
+                  </PrivateRoute>
+                }
+              />
+
+              {/* Catch-all */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
