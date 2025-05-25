@@ -136,6 +136,9 @@ export default function Register() {
     }
   };
 
+  // Helper para saber si el input tiene valor (para floating label)
+  const hasValue = (name) => form[name] && form[name].length > 0;
+
   return (
     <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
       <motion.div
@@ -179,7 +182,13 @@ export default function Register() {
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       required
                     />
-                    <label htmlFor="username" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="username"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("username") || document.activeElement?.name === "username") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-user mr-2"></i>Usuario
                     </label>
                   </div>
@@ -193,7 +202,13 @@ export default function Register() {
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       required
                     />
-                    <label htmlFor="email" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="email"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("email") || document.activeElement?.name === "email") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-envelope mr-2"></i>Email
                     </label>
                   </div>
@@ -207,7 +222,13 @@ export default function Register() {
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       required
                     />
-                    <label htmlFor="password" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="password"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("password") || document.activeElement?.name === "password") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-lock mr-2"></i>Contraseña
                     </label>
                   </div>
@@ -221,7 +242,13 @@ export default function Register() {
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       required
                     />
-                    <label htmlFor="confirmPassword" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="confirmPassword"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("confirmPassword") || document.activeElement?.name === "confirmPassword") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-lock mr-2"></i>Confirmar Contraseña
                     </label>
                   </div>
@@ -252,7 +279,13 @@ export default function Register() {
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       required
                     />
-                    <label htmlFor="primerNombre" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="primerNombre"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("primerNombre") || document.activeElement?.name === "primerNombre") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-signature mr-2"></i>Primer Nombre
                     </label>
                   </div>
@@ -265,7 +298,13 @@ export default function Register() {
                       placeholder=" "
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     />
-                    <label htmlFor="segundoNombre" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="segundoNombre"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("segundoNombre") || document.activeElement?.name === "segundoNombre") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-signature mr-2"></i>Segundo Nombre
                     </label>
                   </div>
@@ -279,7 +318,13 @@ export default function Register() {
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       required
                     />
-                    <label htmlFor="primerApellido" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="primerApellido"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("primerApellido") || document.activeElement?.name === "primerApellido") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-signature mr-2"></i>Primer Apellido
                     </label>
                   </div>
@@ -292,7 +337,13 @@ export default function Register() {
                       placeholder=" "
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     />
-                    <label htmlFor="segundoApellido" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="segundoApellido"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("segundoApellido") || document.activeElement?.name === "segundoApellido") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-signature mr-2"></i>Segundo Apellido
                     </label>
                   </div>
@@ -306,7 +357,13 @@ export default function Register() {
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       required
                     />
-                    <label htmlFor="fechaNacimiento" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="fechaNacimiento"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("fechaNacimiento") || document.activeElement?.name === "fechaNacimiento") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-calendar-alt mr-2"></i>Fecha de Nacimiento
                     </label>
                   </div>
@@ -339,7 +396,13 @@ export default function Register() {
                       placeholder=" "
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     />
-                    <label htmlFor="telefono" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="telefono"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("telefono") || document.activeElement?.name === "telefono") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-phone mr-2"></i>Teléfono
                     </label>
                   </div>
@@ -353,7 +416,13 @@ export default function Register() {
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                       required
                     />
-                    <label htmlFor="dui" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="dui"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("dui") || document.activeElement?.name === "dui") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-id-card mr-2"></i>DUI
                     </label>
                   </div>
@@ -366,7 +435,13 @@ export default function Register() {
                       placeholder=" "
                       className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     />
-                    <label htmlFor="direccion" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                    <label
+                      htmlFor="direccion"
+                      className={
+                        "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                        ((hasValue("direccion") || document.activeElement?.name === "direccion") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                      }
+                    >
                       <i className="fas fa-home mr-2"></i>Dirección
                     </label>
                   </div>

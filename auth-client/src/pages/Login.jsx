@@ -52,6 +52,9 @@ export default function Login() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Helper para saber si el input tiene valor (para floating label)
+  const hasValue = (name) => form[name] && form[name].length > 0;
+
   return (
     <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
       <motion.div
@@ -95,7 +98,10 @@ export default function Login() {
               />
               <label
                 htmlFor="username"
-                className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-[-1rem] peer-focus:text-sm"
+                className={
+                  "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                  ((hasValue("username") || document.activeElement?.name === "username") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                }
               >
                 <i className="fas fa-user mr-2"></i>Usuario
               </label>
@@ -115,7 +121,10 @@ export default function Login() {
               />
               <label
                 htmlFor="password"
-                className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-[-1rem] peer-focus:text-sm"
+                className={
+                  "floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 " +
+                  ((hasValue("password") || document.activeElement?.name === "password") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
+                }
               >
                 <i className="fas fa-lock mr-2"></i>Contraseña
               </label>

@@ -31,6 +31,7 @@ export async function register({
         primerApellido,
         segundoApellido,
         fechaNacimiento,
+        
         telefono,
         dui,
         direccion
