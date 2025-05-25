@@ -1,3 +1,4 @@
+// src/main/java/sv/edu/udb/InvestigacionDwf/model/entity/Pedido.java
 package sv.edu.udb.InvestigacionDwf.model.entity;
 
 import java.math.BigDecimal;
@@ -61,6 +62,17 @@ public class Pedido {
     @JoinColumn(name = "id_direccion")
     private Direccion direccion;
 
+    // --- NUEVO: List of PedidoItems ---
+    /**
+     * Lista de los ítems de este pedido.
+     * `cascade = CascadeType.ALL` asegura que los PedidoItem se persistan, actualicen y eliminen con el Pedido.
+     * `orphanRemoval = true` asegura que si un PedidoItem se elimina de la lista, se elimine de la DB.
+     */
+    @Builder.Default
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // Evitar referencias circulares en serialización JSON
+    private List<PedidoItem> pedidoItems = new ArrayList<>();
+
     /** Garantiza que el builder inicialice la lista */
     @Builder.Default
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -80,7 +92,7 @@ public class Pedido {
                 .pedido(this)
                 .estado(nuevoEstado)
                 .fecha(LocalDateTime.now())
-                .user(usuario) // Changed from usuario to user
+                .user(usuario)
                 .build();
         this.historialPedidos.add(historial);
         this.estado = nuevoEstado;

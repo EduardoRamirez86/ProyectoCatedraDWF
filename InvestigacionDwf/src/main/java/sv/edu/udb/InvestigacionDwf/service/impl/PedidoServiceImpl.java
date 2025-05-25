@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
@@ -48,7 +49,8 @@ public class PedidoServiceImpl implements PedidoService {
     private final ParametroService parametroService;
     private final CuponRepository cuponRepository;
     private final ProductoRepository productoRepository; // <-- NECESARIO para actualizar stock
-    private final RegistroGananciaRepository registroGananciaRepository; // <-- NUEVO: Para registrar ganancias
+    private final RegistroGananciaRepository registroGananciaRepository;
+    private final PedidoItemRepository pedidoItemRepository;// <-- NUEVO: Para registrar ganancias
     private final PedidoAssembler pedidoAssembler;
     private final PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
@@ -101,6 +103,7 @@ public class PedidoServiceImpl implements PedidoService {
         // --- LÓGICA DE STOCK Y GANANCIAS ---
         BigDecimal subtotal = BigDecimal.ZERO;
         BigDecimal gananciaBrutaEstimada = BigDecimal.ZERO; // Ganancia bruta antes de descuentos
+        List<PedidoItemData> pedidoItemsData = new ArrayList<>(); // Lista temporal con datos para crear PedidoItems
 
         for (CarritoItem item : items) {
             Producto producto = item.getProducto();
@@ -120,7 +123,6 @@ public class PedidoServiceImpl implements PedidoService {
             productoRepository.save(producto); // Guarda el producto con el stock actualizado
             logger.info("Stock actualizado para producto '{}' (ID: {}). Nuevo stock: {}", producto.getNombre(), producto.getIdProducto(), producto.getCantidad());
 
-
             // 2. Calcular subtotal del pedido y ganancia bruta por item
             BigDecimal precioItem = producto.getPrecio().multiply(BigDecimal.valueOf(cantidadComprada));
             BigDecimal costoItem = producto.getCosto().multiply(BigDecimal.valueOf(cantidadComprada));
@@ -129,6 +131,9 @@ public class PedidoServiceImpl implements PedidoService {
             subtotal = subtotal.add(precioItem);
             gananciaBrutaEstimada = gananciaBrutaEstimada.add(gananciaItem);
             logger.debug("Item: {}, Precio: {}, Costo: {}, Ganancia: {}", producto.getNombre(), precioItem, costoItem, gananciaItem);
+
+            // 3. Almacenar datos para crear PedidoItem después
+            pedidoItemsData.add(new PedidoItemData(producto, cantidadComprada, producto.getPrecio()));
         }
 
         User user = carrito.getUser(); // El usuario ya se obtuvo del carrito y está validado por la seguridad
@@ -171,15 +176,16 @@ public class PedidoServiceImpl implements PedidoService {
         BigDecimal gananciaNeta = gananciaBrutaEstimada.subtract(descuentoAplicado);
         logger.info("Ganancia neta calculada para el pedido del usuario {}: {}", user.getUsername(), gananciaNeta);
 
-        // --- Construcción del Pedido ---
+        // --- Construcción del Pedido SIN PedidoItems inicialmente ---
         Pedido pedido = Pedido.builder()
                 .carrito(carrito)
                 .fechaInicio(LocalDateTime.now())
-                .subtotal(subtotal.add(descuentoAplicado)) // El subtotal original antes del descuento
+                .subtotal(subtotal.add(descuentoAplicado))
                 .descuentoAplicado(descuentoAplicado)
                 .total(total)
-                .gananciaEstimada(gananciaNeta) // Guardar la ganancia neta en el pedido
+                .gananciaEstimada(gananciaNeta)
                 .tipoPago(req.getTipoPago())
+                .pedidoItems(new ArrayList<>()) // Inicializa la lista vacía
                 .build();
 
         // Actualiza el estado del pedido a PENDIENTE (asumiendo que inicia en este estado)
@@ -234,8 +240,25 @@ public class PedidoServiceImpl implements PedidoService {
         }
         pedido.getHistorialPuntos().add(hp);
 
-        // Guarda el pedido y actualiza el usuario
-        var savedPedido = pedidoRepository.save(pedido); // Guarda el pedido y sus historial de puntos
+        // PASO 1: Guarda el pedido PRIMERO (sin PedidoItems)
+        var savedPedido = pedidoRepository.save(pedido);
+
+        // PASO 2: AHORA crea y asigna los PedidoItems con la referencia al pedido guardado
+        List<PedidoItem> pedidoItems = new ArrayList<>();
+        for (PedidoItemData data : pedidoItemsData) {
+            PedidoItem pedidoItem = PedidoItem.builder()
+                    .pedido(savedPedido) // Asigna la referencia al pedido guardado
+                    .producto(data.getProducto())
+                    .cantidad(data.getCantidad())
+                    .precioUnitario(data.getPrecioUnitario())
+                    .build();
+            pedidoItems.add(pedidoItem);
+        }
+
+        // PASO 3: Asigna los PedidoItems al pedido y guarda nuevamente
+        savedPedido.setPedidoItems(pedidoItems);
+        savedPedido = pedidoRepository.save(savedPedido);
+
         userRepository.save(user); // Guarda el usuario con los puntos actualizados
 
         // --- REGISTRO DE GANANCIA POR VENTA ---
@@ -247,7 +270,6 @@ public class PedidoServiceImpl implements PedidoService {
                 .build();
         registroGananciaRepository.save(registroGanancia);
         logger.info("Registro de ganancia creado para el pedido ID {}: Ganancia {}", savedPedido.getIdPedido(), gananciaNeta);
-
 
         // Si el usuario alcanza 30 puntos, genera un cupón y deduce los puntos
         if (user.getPuntos() >= 30) { // Usamos user.getPuntos() que ya está actualizado
@@ -274,7 +296,6 @@ public class PedidoServiceImpl implements PedidoService {
         crearNotificacion(user, savedPedido, "PAGADO");
         logger.info("Pedido {} procesado exitosamente para el usuario {}.", savedPedido.getIdPedido(), user.getUsername());
 
-
         // --- LIMPIEZA DEL CARRITO DESPUÉS DE UN CHECKOUT EXITOSO ---
         // Esta operación se realiza al final de la transacción para asegurar que
         // si todo lo demás fue exitoso, el carrito sea vaciado.
@@ -297,6 +318,22 @@ public class PedidoServiceImpl implements PedidoService {
 
         // Convierte el pedido guardado a un modelo HAL
         return pedidoAssembler.toModel(savedPedido);
+    }
+
+    private static class PedidoItemData {
+        private final Producto producto;
+        private final int cantidad;
+        private final BigDecimal precioUnitario;
+
+        public PedidoItemData(Producto producto, int cantidad, BigDecimal precioUnitario) {
+            this.producto = producto;
+            this.cantidad = cantidad;
+            this.precioUnitario = precioUnitario;
+        }
+
+        public Producto getProducto() { return producto; }
+        public int getCantidad() { return cantidad; }
+        public BigDecimal getPrecioUnitario() { return precioUnitario; }
     }
 
     @Override
@@ -465,36 +502,31 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     @Transactional(readOnly = true)
     public Map<String, Long> getProductosMasVendidos(int limit) {
-        logger.debug("Intentando obtener productos más vendidos con estado ENTREGADO.");
-        List<Object[]> rawData = carritoItemRepository.findTopSellingProductsRawByEstado(EstadoPedido.ENTREGADO);
-        logger.debug("Datos raw obtenidos del repositorio ({} filas): {}", rawData.size(), rawData); // Imprime el contenido de rawData
-        Map<String, Long> topProducts = new LinkedHashMap<>();
-
-        for (Object[] row : rawData) {
-            // Asegúrate de que el log de advertencia esté activo
-            if (row.length == 2 && row[0] instanceof Producto && row[1] instanceof Long) {
-                Producto producto = (Producto) row[0];
-                Long totalCantidad = (Long) row[1];
-                topProducts.put(producto.getNombre(), totalCantidad);
-                logger.debug("Producto '{}' con cantidad total: {}", producto.getNombre(), totalCantidad);
-            } else {
-                // Este WARN debería aparecer si el formato no es el esperado
-                logger.warn("El formato de los datos devueltos por findTopSellingProductsRawByEstado no es el esperado o nulo: {}", (row != null ? Arrays.toString(row) : "null"));
-            }
+        // Validar el límite para evitar valores negativos o cero si no es deseado
+        if (limit <= 0) {
+            throw new IllegalArgumentException("El límite debe ser un número positivo.");
         }
 
-        logger.debug("Mapa topProducts antes del límite: {}", topProducts);
+        // Creamos un objeto Pageable para pasar el límite al repositorio
+        // PageRequest.of(0, limit) significa la primera página (índice 0) y 'limit' elementos por página
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(0, limit);
 
-        if (limit <= 0 || topProducts.size() <= limit) {
-            return topProducts;
-        } else {
-            Map<String, Long> limitedProducts = topProducts.entrySet().stream()
-                    .limit(limit)
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                            (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-            logger.debug("Mapa topProducts después del límite: {}", limitedProducts);
-            return limitedProducts;
+        // Llamamos al método del repositorio para obtener los productos más vendidos
+        // de pedidos que ya están en estado "ENTREGADO". Esto asegura que solo contamos ventas reales.
+        List<Object[]> rawData = pedidoItemRepository.findTopSellingProductsRawByEstado(EstadoPedido.ENTREGADO, pageable);
+
+        // Procesamos la lista de Object[] para construir el Map<String, Long>
+        Map<String, Long> productosMasVendidos = new HashMap<>();
+        for (Object[] item : rawData) {
+            Producto producto = (Producto) item[0];
+            Long cantidadVendida = (Long) item[1];
+            productosMasVendidos.put(producto.getNombre(), cantidadVendida);
         }
+
+        // Aunque la consulta del repositorio ya ordena y limita,
+        // este bucle asegura que el mapa se construye con los datos correctos
+        // y el orden se mantiene implícitamente por cómo viene rawData.
+        return productosMasVendidos;
     }
 
 
