@@ -6,6 +6,7 @@ import MySwal from '../utils/swal';
 import { secureGetItem } from '../utils/secureStorage';
 import AddressPicker from './AddressPicker';
 import { CartContext } from '../context/CartContext';
+import { getParametroByClave } from '../services/parametroService';
 
 const paymentOptions = [
   { label: 'Tarjeta de Crédito', value: 'TARJETA_CREDITO' },
@@ -31,14 +32,45 @@ const fieldConfigs = {
 export default function Checkout() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { envio = 5 } = useContext(CartContext);
+  const { envio } = useContext(CartContext);
+  const [descuentoCupon, setDescuentoCupon] = useState(null); // null hasta que cargue
+  const [envioValor, setEnvioValor] = useState(null); // null hasta que cargue
   const total = state?.total || 0;
   const [hasCupon, setHasCupon] = useState(false);
 
+  // Cargar valores parametrizados de la base de datos
+  useEffect(() => {
+    // Cargar descuento_cupon
+    const fetchDescuento = async () => {
+      try {
+        const param = await getParametroByClave('descuento_cupon');
+        setDescuentoCupon(param && param.valor ? Number(param.valor) / 100 : 0.15);
+      } catch (e) {
+        setDescuentoCupon(0.15);
+      }
+    };
+    // Cargar costo_envio (por si CartContext aún no lo tiene actualizado)
+    const fetchEnvio = async () => {
+      try {
+        const param = await getParametroByClave('costo_envio');
+        setEnvioValor(param && param.valor ? Number(param.valor) : (envio ?? 5));
+      } catch (e) {
+        setEnvioValor(envio ?? 5);
+      }
+    };
+    fetchDescuento();
+    fetchEnvio();
+  }, [envio]);
+
+  // Helper function to round to two decimal places
   const roundToTwo = (num) => Math.round(num * 100) / 100;
-  const subtotal = roundToTwo(total - envio);
-  const discount = hasCupon ? roundToTwo(subtotal * 0.15) : 0;
-  const totalWithDiscount = roundToTwo(subtotal - discount + envio);
+
+  // Usar los valores parametrizados si están listos, si no fallback
+  const envioFinal = envioValor !== null ? envioValor : envio ?? 5;
+  const descuentoFinal = descuentoCupon !== null ? descuentoCupon : 0.15;
+  const subtotal = roundToTwo(total - envioFinal);
+  const discount = hasCupon ? roundToTwo(subtotal * descuentoFinal) : 0;
+  const totalWithDiscount = roundToTwo(subtotal - discount + envioFinal);
 
   const [form, setForm] = useState({
     nombre: '', tipoPago: '', cuponCodigo: '',

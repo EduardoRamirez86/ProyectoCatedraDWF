@@ -9,9 +9,13 @@ export default function Cart() {
   const [items, setItems] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
-  const envio = 5;
-  const { carrito, loading } = useContext(CartContext);
+  const { carrito, loading, envio } = useContext(CartContext);
+  const [envioValor, setEnvioValor] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setEnvioValor(envio ?? 5);
+  }, [envio]);
 
   // Agrupa items por producto
   const agruparItems = useCallback((itemsOriginales) => {
@@ -34,10 +38,11 @@ export default function Cart() {
       (sum, i) => sum + (i.cantidad * (i.producto?.precio || 0)),
       0
     );
-    const newTotal = newSubtotal + envio;
+    const envioFinal = envioValor !== null ? envioValor : envio ?? 5;
+    const newTotal = newSubtotal + envioFinal;
     setSubtotal(newSubtotal);
     setTotal(newTotal);
-  }, [envio]);
+  }, [envioValor, envio]);
 
   // Carga inicial de items
   const load = useCallback(async () => {
