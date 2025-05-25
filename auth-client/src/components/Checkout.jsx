@@ -6,7 +6,6 @@ import MySwal from '../utils/swal';
 import { secureGetItem } from '../utils/secureStorage';
 import AddressPicker from './AddressPicker';
 import { CartContext } from '../context/CartContext';
-import '../style/Checkout.css';
 
 const paymentOptions = [
   { label: 'Tarjeta de Crédito', value: 'TARJETA_CREDITO' },
@@ -32,64 +31,14 @@ const fieldConfigs = {
 export default function Checkout() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { envio } = useContext(CartContext);
-  const total = state?.total || 0; // Total already includes the shipping fee
+  const { envio = 5 } = useContext(CartContext);
+  const total = state?.total || 0;
   const [hasCupon, setHasCupon] = useState(false);
 
-  // Helper function to round to two decimal places
   const roundToTwo = (num) => Math.round(num * 100) / 100;
-
-  const subtotal = roundToTwo(total - envio); // Ensure consistent rounding for subtotal
-  const discount = hasCupon ? roundToTwo(subtotal * 0.15) : 0; // 15% discount
-  const totalWithDiscount = roundToTwo(subtotal - discount + envio); // Final total
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-    setLoading(true);
-
-    try {
-      const idCarrito = parseInt(secureGetItem('carritoId'), 10);
-      if (!idCarrito) throw new Error('Carrito no disponible');
-
-      let dirId = form.direccionId;
-      if (addingNew) {
-        const uid = parseInt(secureGetItem('userId'), 10);
-        const nueva = {
-          alias: form.alias,
-          calle: form.calle,
-          ciudad: form.ciudad,
-          departamento: form.departamento,
-          latitud: form.latitud,
-          longitud: form.longitud,
-        };
-        const respDir = await saveDireccion(nueva, uid);
-        dirId = respDir.idDireccion;
-      }
-
-      if (!dirId || dirId === 'nueva') {
-        throw new Error('Debe seleccionar o crear una dirección válida');
-      }
-
-      const payload = {
-        idCarrito,
-        tipoPago: form.tipoPago,
-        cuponCodigo: hasCupon ? form.cuponCodigo.trim() : null,
-        idDireccion: dirId,
-      };
-
-      const resp = await checkoutPedido(payload);
-      sessionStorage.setItem('orderNumber', resp.idPedido);
-      sessionStorage.setItem('orderTotal', resp.total);
-      await MySwal.fire('¡Compra Exitosa!', `Pedido #${resp.idPedido}`, 'success');
-      navigate('/confirmation');
-    } catch (err) {
-      console.error(err);
-      await MySwal.fire('Error en la compra', err.message || 'Fallo al procesar', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const subtotal = roundToTwo(total - envio);
+  const discount = hasCupon ? roundToTwo(subtotal * 0.15) : 0;
+  const totalWithDiscount = roundToTwo(subtotal - discount + envio);
 
   const [form, setForm] = useState({
     nombre: '', tipoPago: '', cuponCodigo: '',
@@ -126,10 +75,8 @@ export default function Checkout() {
   const validateForm = () => {
     const err = {};
     let ok = true;
-
     if (!form.nombre.trim()) { err.nombre = 'Requerido'; ok = false; }
     if (!form.tipoPago) { err.tipoPago = 'Requerido'; ok = false; }
-
     if (addingNew) {
       if (!form.alias.trim()) { err.alias = 'Alias requerido'; ok = false; }
       if (!form.calle.trim()) { err.calle = 'Calle requerida'; ok = false; }
@@ -145,65 +92,114 @@ export default function Checkout() {
         ok = false;
       }
     }
-
     (fieldConfigs[form.tipoPago] || []).forEach(fld => {
       if (!fld.regex.test(form[fld.name] || '')) {
         err[fld.name] = 'Formato inválido';
         ok = false;
       }
     });
-
     if (hasCupon && !form.cuponCodigo.trim()) {
       err.cuponCodigo = 'Ingrese un cupón válido';
       ok = false;
     }
-
     setErrors(err);
     return ok;
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    setLoading(true);
+    try {
+      const idCarrito = parseInt(secureGetItem('carritoId'), 10);
+      if (!idCarrito) throw new Error('Carrito no disponible');
+      let dirId = form.direccionId;
+      if (addingNew) {
+        const uid = parseInt(secureGetItem('userId'), 10);
+        const nueva = {
+          alias: form.alias,
+          calle: form.calle,
+          ciudad: form.ciudad,
+          departamento: form.departamento,
+          latitud: form.latitud,
+          longitud: form.longitud,
+        };
+        const respDir = await saveDireccion(nueva, uid);
+        dirId = respDir.idDireccion;
+      }
+      if (!dirId || dirId === 'nueva') {
+        throw new Error('Debe seleccionar o crear una dirección válida');
+      }
+      const payload = {
+        idCarrito,
+        tipoPago: form.tipoPago,
+        cuponCodigo: hasCupon ? form.cuponCodigo.trim() : null,
+        idDireccion: dirId,
+      };
+      const resp = await checkoutPedido(payload);
+      sessionStorage.setItem('orderNumber', resp.idPedido);
+      sessionStorage.setItem('orderTotal', resp.total);
+      await MySwal.fire('¡Compra Exitosa!', `Pedido #${resp.idPedido}`, 'success');
+      navigate('/confirmation');
+    } catch (err) {
+      console.error(err);
+      await MySwal.fire('Error en la compra', err.message || 'Fallo al procesar', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const renderPaymentFields = () =>
     (fieldConfigs[form.tipoPago] || []).map(fld => (
-      <div key={fld.name} className="input-group">
+      <div key={fld.name} className="mb-4">
+        <label className="block text-sm font-medium mb-1">{fld.label}</label>
         <input
           id={fld.name}
           name={fld.name}
           value={form[fld.name]}
           onChange={handleChange}
-          className={`floating-input ${errors[fld.name] ? 'error' : ''}`}
-          placeholder=" "
+          className={`w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 ${errors[fld.name] ? 'border-red-400' : ''}`}
+          placeholder={fld.label}
         />
-        <label htmlFor={fld.name} className="floating-label">{fld.label}</label>
-        {errors[fld.name] && <span className="error-message">{errors[fld.name]}</span>}
+        {errors[fld.name] && <span className="text-red-500 text-xs">{errors[fld.name]}</span>}
       </div>
     ));
 
   return (
-    <div className="checkout-container">
-      <button className="back-button" onClick={() => navigate(-1)}>
-        ← Volver
+    <div className="container mx-auto px-4 py-8">
+      <button
+        className="mb-6 text-indigo-600 hover:underline flex items-center gap-2"
+        onClick={() => navigate(-1)}
+      >
+        <i className="fas fa-arrow-left"></i> Volver
       </button>
-      <h1>Finalizar Compra</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-section">
-          <h2>Información Personal</h2>
-          <div className="input-group">
+      <h1 className="text-3xl font-bold mb-8 text-indigo-700 flex items-center gap-2">
+        <i className="fas fa-credit-card text-indigo-400"></i>
+        Finalizar Compra
+      </h1>
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-xl p-8 max-w-2xl mx-auto">
+        {/* Información Personal */}
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold mb-4 text-indigo-700">Información Personal</h2>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Nombre Completo</label>
             <input
               id="nombre"
               name="nombre"
               value={form.nombre}
               onChange={handleChange}
-              className={`floating-input ${errors.nombre ? 'error' : ''}`}
-              placeholder=" "
+              className={`w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 ${errors.nombre ? 'border-red-400' : ''}`}
+              placeholder="Nombre completo"
             />
-            <label htmlFor="nombre" className="floating-label">Nombre Completo</label>
-            {errors.nombre && <span className="error-message">{errors.nombre}</span>}
+            {errors.nombre && <span className="text-red-500 text-xs">{errors.nombre}</span>}
           </div>
         </div>
 
-        <div className="form-section">
-          <h2>Dirección de Envío</h2>
-          <div className="input-group">
+        {/* Dirección de Envío */}
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold mb-4 text-indigo-700">Dirección de Envío</h2>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Dirección</label>
             <select
               name="direccionId"
               value={form.direccionId}
@@ -213,7 +209,7 @@ export default function Checkout() {
                 setForm(f => ({ ...f, direccionId: value }));
                 setErrors(e => ({ ...e, direccionId: '' }));
               }}
-              className={`floating-input ${errors.direccionId ? 'error' : ''}`}
+              className={`w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 ${errors.direccionId ? 'border-red-400' : ''}`}
             >
               <option value="">–Seleccione–</option>
               {direcciones.map(d => (
@@ -223,115 +219,118 @@ export default function Checkout() {
               ))}
               <option value="nueva">+ Nueva Dirección</option>
             </select>
-            <label className="floating-label">Dirección</label>
-            {errors.direccionId && <span className="error-message">{errors.direccionId}</span>}
+            {errors.direccionId && <span className="text-red-500 text-xs">{errors.direccionId}</span>}
           </div>
-
           {addingNew && (
-            <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {['alias', 'calle', 'ciudad', 'departamento'].map(field => (
-                <div key={field} className="input-group">
+                <div key={field}>
+                  <label className="block text-sm font-medium mb-1 capitalize">{field}</label>
                   <input
                     name={field}
                     value={form[field]}
                     onChange={handleChange}
-                    className={`floating-input ${errors[field] ? 'error' : ''}`}
-                    placeholder=" "
+                    className={`w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 ${errors[field] ? 'border-red-400' : ''}`}
+                    placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
                   />
-                  <label className="floating-label">
-                    {field.charAt(0).toUpperCase() + field.slice(1)}
-                  </label>
-                  {errors[field] && <span className="error-message">{errors[field]}</span>}
+                  {errors[field] && <span className="text-red-500 text-xs">{errors[field]}</span>}
                 </div>
               ))}
-              <div className="map-section">
-                <p>Seleccione ubicación en el mapa:</p>
+              <div className="md:col-span-2">
+                <p className="text-sm text-gray-600 mb-2">Seleccione ubicación en el mapa:</p>
                 <AddressPicker onSelect={({ latitud, longitud }) => {
                   setForm(f => ({ ...f, latitud, longitud }));
                   setErrors(e => ({ ...e, latitud: '', longitud: '' }));
                 }} />
                 {(errors.latitud || errors.longitud) && (
-                  <span className="error-message">
+                  <span className="text-red-500 text-xs">
                     {errors.latitud || errors.longitud}
                   </span>
                 )}
               </div>
-            </>
+            </div>
           )}
         </div>
 
-        <div className="form-section">
-          <h2>Pago</h2>
-          <div className="input-group">
+        {/* Pago */}
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold mb-4 text-indigo-700">Pago</h2>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Método de Pago</label>
             <select
               name="tipoPago"
               value={form.tipoPago}
               onChange={handleChange}
-              className={`floating-input ${errors.tipoPago ? 'error' : ''}`}
+              className={`w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 ${errors.tipoPago ? 'border-red-400' : ''}`}
             >
               <option value="">–Seleccione método de pago–</option>
               {paymentOptions.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
-            <label className="floating-label">Método de Pago</label>
-            {errors.tipoPago && <span className="error-message">{errors.tipoPago}</span>}
+            {errors.tipoPago && <span className="text-red-500 text-xs">{errors.tipoPago}</span>}
           </div>
-
           {renderPaymentFields()}
         </div>
 
-        <div className="form-section">
-          <label>
+        {/* Cupón */}
+        <div className="mb-6">
+          <label className="flex items-center gap-2">
             <input
               type="checkbox"
               checked={hasCupon}
               onChange={e => setHasCupon(e.target.checked)}
+              className="form-checkbox"
             />
             ¿Tienes un cupón de descuento?
           </label>
           {hasCupon && (
-            <div className="input-group">
+            <div className="mt-2">
+              <label className="block text-sm font-medium mb-1">Código de Cupón</label>
               <input
                 name="cuponCodigo"
                 value={form.cuponCodigo}
                 onChange={handleChange}
-                className={`floating-input ${errors.cuponCodigo ? 'error' : ''}`}
-                placeholder=" "
+                className={`w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 ${errors.cuponCodigo ? 'border-red-400' : ''}`}
+                placeholder="Código de cupón"
               />
-              <label className="floating-label">Código de Cupón</label>
-              {errors.cuponCodigo && <span className="error-message">{errors.cuponCodigo}</span>}
+              {errors.cuponCodigo && <span className="text-red-500 text-xs">{errors.cuponCodigo}</span>}
             </div>
           )}
         </div>
 
-        <div className="form-section">
-          <button type="submit" disabled={loading} className="submit-button">
+        {/* Resumen */}
+        <div className="mb-6 bg-indigo-50 rounded-lg p-4">
+          <div className="flex justify-between mb-2">
+            <span className="font-medium">Subtotal:</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between mb-2">
+            <span className="font-medium">Envío:</span>
+            <span>${envio.toFixed(2)}</span>
+          </div>
+          {hasCupon && (
+            <div className="flex justify-between mb-2">
+              <span className="font-medium">Descuento (15%):</span>
+              <span className="text-green-600">-${discount.toFixed(2)}</span>
+            </div>
+          )}
+          <div className="flex justify-between text-lg font-bold text-indigo-700">
+            <span>Total:</span>
+            <span>${totalWithDiscount.toFixed(2)}</span>
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition w-full md:w-auto"
+          >
             {loading ? 'Procesando...' : 'Finalizar Compra'}
           </button>
         </div>
       </form>
-
-      <div className="checkout-summary">
-        <div className="summary-row">
-          <span>Subtotal:</span>
-          <span>${subtotal.toFixed(2)}</span>
-        </div>
-        <div className="summary-row">
-          <span>Envío:</span>
-          <span>${envio.toFixed(2)}</span>
-        </div>
-        {hasCupon && (
-          <div className="summary-row">
-            <span>Descuento (15%):</span>
-            <span>-${discount.toFixed(2)}</span>
-          </div>
-        )}
-        <div className="summary-row total">
-          <span>Total:</span>
-          <span>${totalWithDiscount.toFixed(2)}</span>
-        </div>
-      </div>
     </div>
   );
 }
