@@ -94,13 +94,13 @@ public class AuthServiceImpl implements AuthService {
                 .email(registerRequest.getEmail())
                 .role(userRole)
                 .primerNombre(registerRequest.getPrimerNombre())
-                .segundoNombre(registerRequest.getSegundoNombre()) // Puede ser nulo o vacío
+                .segundoNombre(registerRequest.getSegundoNombre())
                 .primerApellido(registerRequest.getPrimerApellido())
-                .segundoApellido(registerRequest.getSegundoApellido()) // Puede ser nulo o vacío
+                .segundoApellido(registerRequest.getSegundoApellido())
                 .fechaNacimiento(registerRequest.getFechaNacimiento())
-                .telefono(registerRequest.getTelefono()) // Puede ser nulo o vacío
+                .telefono(registerRequest.getTelefono())
                 .DUI(registerRequest.getDui())
-                .direccion(registerRequest.getDireccion()) // Puede ser nulo o vacío (si la dirección se gestiona aparte)
+                .direccion(registerRequest.getDireccion())
                 .build();
 
         userRepository.save(user); // Guarda el nuevo usuario en la base de datos

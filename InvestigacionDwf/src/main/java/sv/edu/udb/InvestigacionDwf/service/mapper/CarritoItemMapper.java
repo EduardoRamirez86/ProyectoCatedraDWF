@@ -63,6 +63,5 @@ public abstract class CarritoItemMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "carrito", expression = "java(Objects.nonNull(request.getIdCarrito()) ? carritoRepository.getReferenceById(request.getIdCarrito()) : targetItem.getCarrito())")
     @Mapping(target = "producto", expression = "java(Objects.nonNull(request.getIdProducto()) ? productoRepository.getReferenceById(request.getIdProducto()) : targetItem.getProducto())")
-    // ¡LA LÍNEA PROBLEMÁTICA SE ELIMINÓ AQUÍ!
     public abstract void updateEntityFromRequest(CarritoItemRequest request, @MappingTarget CarritoItem targetItem);
 }

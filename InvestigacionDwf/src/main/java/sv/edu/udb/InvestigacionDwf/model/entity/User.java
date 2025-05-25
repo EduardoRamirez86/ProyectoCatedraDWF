@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "User")
+@Table(name = "users") // Cambie este nombre porque User es una palabra reservada jajaja y me daba error
 public class User {
 
     @Id

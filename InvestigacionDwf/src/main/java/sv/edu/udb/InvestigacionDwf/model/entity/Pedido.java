@@ -30,7 +30,6 @@ public class Pedido {
     private LocalDateTime fechaFinal;
 
     @Column(precision = 10, scale = 2, nullable = false)
-    @NotNull(message = "El total es obligatorio")
     private BigDecimal total;
 
     @Column(nullable = false)

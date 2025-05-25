@@ -71,45 +71,153 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Maven.InvestigacionDwf [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.InvestigacionDwf [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.InvestigacionDwf [package].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.InvestigacionDwfApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Parametros&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Windows/Desktop/ProyectoCatedraDWF/InvestigacionDwf&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.AuthControllerTest.executor": "Run",
+    "JUnit.AuthControllerTest.register_whenValidRequest_returnsToken.executor": "Run",
+    "JUnit.AuthServiceImplTest.executor": "Run",
+    "JUnit.CarritoItemRepositoryTest.executor": "Run",
+    "JUnit.CarritoItemRepositoryTest.testFindAll.executor": "Run",
+    "JUnit.CarritoItemTest.executor": "Run",
+    "JUnit.CarritoRepositoryTest.executor": "Run",
+    "JUnit.CarritoTest.executor": "Run",
+    "JUnit.CuponServiceImplTest.executor": "Run",
+    "JUnit.CuponTest.executor": "Run",
+    "JUnit.DireccionRepositoryTest.executor": "Run",
+    "JUnit.DireccionServiceImplTest.executor": "Run",
+    "JUnit.DireccionTest.executor": "Run",
+    "JUnit.HistorialPedidoRepositoryTest.executor": "Run",
+    "JUnit.HistorialPedidoTest.executor": "Run",
+    "JUnit.HistorialPuntosRepositoryTest.executor": "Run",
+    "JUnit.HistorialPuntosTest.executor": "Run",
+    "JUnit.NotificacionRepositoryTest.executor": "Run",
+    "JUnit.NotificacionServiceImplTest.executor": "Run",
+    "JUnit.NotificacionTest.executor": "Run",
+    "JUnit.ParametroRepositoryTest.executor": "Run",
+    "JUnit.ParametroTest.executor": "Run",
+    "JUnit.PedidoRepositoryTest.executor": "Run",
+    "JUnit.PedidoTest.executor": "Run",
+    "JUnit.ProductoServiceImplTest.executor": "Run",
+    "JUnit.ProductoTest.executor": "Run",
+    "JUnit.ResenaRepositoryTest.executor": "Run",
+    "JUnit.ResenaTest.executor": "Run",
+    "JUnit.RoleRepositoryTest.executor": "Run",
+    "JUnit.RoleTest.executor": "Run",
+    "JUnit.RopaTest.executor": "Run",
+    "JUnit.TipoProductoServiceImplTest.executor": "Run",
+    "JUnit.TipoProductoTest.executor": "Run",
+    "JUnit.UserRepositoryTest.executor": "Run",
+    "JUnit.UserRepositoryTest.shouldCheckIfEmailExists_ReturnsTrue.executor": "Run",
+    "JUnit.UserRepositoryTest.shouldCheckIfNonExistentUser_ReturnsFalse.executor": "Run",
+    "JUnit.UserRepositoryTest.shouldHasOneUser_When_FindAll.executor": "Run",
+    "JUnit.UserRepositoyTest.executor": "Run",
+    "JUnit.UserRepositoyTest.testGuardarYBuscarUsuarioPorUsername.executor": "Debug",
+    "JUnit.UserTest.executor": "Run",
+    "JUnit.impl in InvestigacionDwf.executor": "Run",
+    "JUnit.model in InvestigacionDwf.executor": "Run",
+    "JUnit.repository in InvestigacionDwf.executor": "Run",
+    "Maven.InvestigacionDwf [clean].executor": "Run",
+    "Maven.InvestigacionDwf [install].executor": "Run",
+    "Maven.InvestigacionDwf [package].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.InvestigacionDwfApplication.executor": "Run",
+    "Spring Boot.Unnamed.executor": "Run",
+    "git-widget-placeholder": "FrontEndMejora1",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Windows/Documents/GitHub/ProyectoCatedraDWF/InvestigacionDwf",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ],
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;Properties&quot;,
-      &quot;Haskell&quot;
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "Properties",
+      "Haskell"
     ]
   }
-}</component>
-  <component name="RunManager">
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Windows\Documents\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\test\resources" />
+      <recent name="C:\Users\Windows\Documents\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\main\resources" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="sv.edu.udb.InvestigacionDwf.service.impl" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.impl in InvestigacionDwf">
+    <configuration name="AuthControllerTest.register_whenValidRequest_returnsToken" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf.controller" />
+      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.controller.AuthControllerTest" />
+      <option name="METHOD_NAME" value="register_whenValidRequest_returnsToken" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CarritoItemRepositoryTest.testFindAll" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf.repository" />
+      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.repository.CarritoItemRepositoryTest" />
+      <option name="METHOD_NAME" value="testFindAll" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="impl in InvestigacionDwf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/sv/edu/udb/InvestigacionDwf/service/impl" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="model in InvestigacionDwf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/sv/edu/udb/InvestigacionDwf/model" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="repository in InvestigacionDwf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/sv/edu/udb/InvestigacionDwf/repository" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Unnamed" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="InvestigacionDwf" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="sv.edu.udb.InvestigacionDwf.InvestigacionDwfApplication" />
@@ -117,6 +225,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.impl in InvestigacionDwf" />
+        <item itemvalue="JUnit.repository in InvestigacionDwf" />
+        <item itemvalue="JUnit.model in InvestigacionDwf" />
+        <item itemvalue="JUnit.CarritoItemRepositoryTest.testFindAll" />
+        <item itemvalue="JUnit.AuthControllerTest.register_whenValidRequest_returnsToken" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -170,6 +287,9 @@
       <workItem from="1748073175481" duration="11444000" />
       <workItem from="1748095631471" duration="1181000" />
       <workItem from="1748114341341" duration="1912000" />
+      <workItem from="1748143935136" duration="7880000" />
+      <workItem from="1748181887082" duration="6088000" />
+      <workItem from="1748188331939" duration="17625000" />
     </task>
     <servers />
   </component>
