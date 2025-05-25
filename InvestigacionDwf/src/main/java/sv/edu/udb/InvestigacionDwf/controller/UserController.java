@@ -1,8 +1,10 @@
 package sv.edu.udb.InvestigacionDwf.controller;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import sv.edu.udb.InvestigacionDwf.service.UserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -16,7 +18,8 @@ public class UserController {
 
     // Ejemplo de endpoint protegido para listar usuarios
     @GetMapping
-    public ResponseEntity<?> listUsers() {
-        return ResponseEntity.ok(userService.findAllUsers());
+    @ResponseStatus(HttpStatus.OK) // Indica que se devuelve un 200 OK
+    public List<?> listUsers() { // Usamos List<?> si el tipo exacto del DTO de usuario no está definido aquí
+        return userService.findAllUsers();
     }
 }

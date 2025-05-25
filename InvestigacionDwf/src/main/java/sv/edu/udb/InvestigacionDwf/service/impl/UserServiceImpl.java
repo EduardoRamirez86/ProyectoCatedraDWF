@@ -1,7 +1,7 @@
 package sv.edu.udb.InvestigacionDwf.service.impl;
 
 import org.springframework.stereotype.Service;
-import sv.edu.udb.InvestigacionDwf.model.User;
+import sv.edu.udb.InvestigacionDwf.model.entity.User;
 import sv.edu.udb.InvestigacionDwf.repository.UserRepository;
 import sv.edu.udb.InvestigacionDwf.service.UserService;
 

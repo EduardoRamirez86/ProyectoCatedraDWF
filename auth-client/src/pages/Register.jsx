@@ -1,7 +1,6 @@
-// components/Register.jsx
 import React, { useState, useContext } from 'react';
 import { motion } from 'framer-motion';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { register as registerService } from '../services/authService';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
@@ -12,109 +11,388 @@ export default function Register() {
     username: '',
     email: '',
     password: '',
+    confirmPassword: '',
     primerNombre: '',
     segundoNombre: '',
     primerApellido: '',
     segundoApellido: '',
     fechaNacimiento: '',
     telefono: '',
-    DUI: '',
+    dui: '',
     direccion: ''
   });
+
+  const [step, setStep] = useState(1);
   const [error, setError] = useState('');
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleChange = e =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = async e => {
+  const validateStep = (currentStep) => {
+    let isValid = true;
+    if (currentStep === 1) {
+      if (!form.username || !form.email || !form.password || !form.confirmPassword) {
+        setError('Todos los campos son requeridos');
+        return false;
+      }
+      if (form.password !== form.confirmPassword) {
+        setError('Las contraseñas no coinciden');
+        return false;
+      }
+      if (form.password.length < 8) {
+        setError('La contraseña debe tener al menos 8 caracteres');
+        return false;
+      }
+    }
+
+    if (currentStep === 2) {
+      if (!form.primerNombre || !form.primerApellido || !form.fechaNacimiento) {
+        setError('Los campos marcados con * son obligatorios');
+        return false;
+      }
+    }
+
+    if (currentStep === 3) {
+      // Validar formato teléfono: 4 dígitos - 4 dígitos
+      if (form.telefono && !/^\d{4}-\d{4}$/.test(form.telefono)) {
+        setError('El teléfono debe tener el formato 1234-5678');
+        return false;
+      }
+      // Validar formato DUI: 8 dígitos - 1 dígito
+      if (form.dui && !/^\d{8}-\d{1}$/.test(form.dui)) {
+        setError('El DUI debe tener el formato 12345678-9');
+        return false;
+      }
+    }
+
+    setError('');
+    return isValid;
+  };
+
+  const nextStep = (currentStep) => {
+    if (!validateStep(currentStep)) return;
+    setStep((prev) => prev + 1);
+  };
+
+  const prevStep = () => {
+    setStep((prev) => prev - 1);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateStep(1) || !validateStep(2) || !validateStep(3)) return;
+
     try {
-      const token = await registerService(form);
-      login(token);
-      const { roles } = jwtDecode(token);
-      navigate(roles === 'ROLE_ADMIN' ? '/admin' : '/user');
+      // Validar y convertir fecha
+      let fechaFormateada = form.fechaNacimiento;
+      if (fechaFormateada && fechaFormateada.includes('-')) {
+        const [yyyy, mm, dd] = fechaFormateada.split('-');
+        fechaFormateada = `${dd}/${mm}/${yyyy}`;
+      }
+      if (!fechaFormateada || !/^\d{2}\/\d{2}\/\d{4}$/.test(fechaFormateada)) {
+        setError('La fecha de nacimiento es obligatoria y debe tener formato dd/MM/yyyy');
+        return;
+      }
+
+      const { fechaNacimiento, ...rest } = form;
+      const response = await registerService({ ...rest, fechaNacimiento: fechaFormateada });
+
+      if (typeof response === "string") {
+        login(response);
+        const decoded = jwtDecode(response);
+        const roles = decoded.roles || [];
+        navigate(roles.includes('ROLE_ADMIN') ? '/admin' : '/user');
+      } else {
+        // Si el backend retorna un objeto, revisa si hay errores
+        if (response.errors && Array.isArray(response.errors) && response.errors.length > 0) {
+          setError(response.errors.map(e => e.description || e.title || e.message).join(' | '));
+        } else if (response && typeof response === "string") {
+          setError(response);
+        } else {
+          setError('Error en el registro');
+        }
+      }
     } catch (err) {
-      setError(err.message);
+      // Mostrar mensaje exacto del backend si existe
+      if (err && err.response && err.response.data) {
+        // Si el backend retorna un array de errores
+        if (Array.isArray(err.response.data.errors) && err.response.data.errors.length > 0) {
+          setError(err.response.data.errors.map(e => e.description || e.title || e.message).join(' | '));
+        } else if (typeof err.response.data === "string") {
+          setError(err.response.data);
+        } else if (err.response.data.message) {
+          setError(err.response.data.message);
+        } else {
+          setError('Error en el registro');
+        }
+      } else if (err && err.message) {
+        setError(err.message);
+      } else {
+        setError('Error en el registro');
+      }
     }
   };
 
   return (
-    <motion.div
-      className="auth-container"
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
-      <h2 className="auth-title">Registro</h2>
-      {error && <p className="error-message">{error}</p>}
-
-      <form onSubmit={handleSubmit}>
-        {/* Usuario, Email y Contraseña */}
-        {['username','email','password'].map(field => (
-          <div className="form-group" key={field}>
-            <input
-              name={field}
-              type={field === 'email' ? 'email' : field === 'password' ? 'password' : 'text'}
-              placeholder=" "
-              value={form[field]}
-              onChange={handleChange}
-              required
-            />
-            <label>
-              {field === 'username'
-                ? 'Usuario'
-                : field.charAt(0).toUpperCase() + field.slice(1)}
-            </label>
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="slide-up bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-2xl"
+      >
+        {/* Header */}
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-90"></div>
+          <div className="relative z-10 p-8 text-center text-white">
+            <h1 className="text-3xl font-bold mb-2">Crea tu cuenta</h1>
+            <p>Completa el formulario para registrarte</p>
           </div>
-        ))}
-
-        {/* Nombres y Apellidos */}
-        <div className="form-group">
-          <input name="primerNombre" placeholder=" " value={form.primerNombre} onChange={handleChange} required/>
-          <label>Primer Nombre</label>
-        </div>
-        <div className="form-group">
-          <input name="segundoNombre" placeholder=" " value={form.segundoNombre} onChange={handleChange}/>
-          <label>Segundo Nombre</label>
-        </div>
-        <div className="form-group">
-          <input name="primerApellido" placeholder=" " value={form.primerApellido} onChange={handleChange} required/>
-          <label>Primer Apellido</label>
-        </div>
-        <div className="form-group">
-          <input name="segundoApellido" placeholder=" " value={form.segundoApellido} onChange={handleChange}/>
-          <label>Segundo Apellido</label>
         </div>
 
-        {/* Fecha de Nacimiento */}
-        <div className="form-group">
-          <input name="fechaNacimiento" type="date" placeholder=" " value={form.fechaNacimiento} onChange={handleChange} required/>
-          <label>Fecha de Nacimiento</label>
-        </div>
+        <div className="p-8 pt-6">
+          {error && (
+            <div id="errorMessage" className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm error-shake">
+              {error}
+            </div>
+          )}
 
-        {/* Teléfono, DUI y Dirección */}
-        <div className="form-group">
-          <input name="telefono" placeholder=" " value={form.telefono} onChange={handleChange}/>
-          <label>Teléfono</label>
-        </div>
-        <div className="form-group">
-          <input name="DUI" placeholder=" " value={form.DUI} onChange={handleChange}/>
-          <label>DUI</label>
-        </div>
-        <div className="form-group">
-          <input name="direccion" placeholder=" " value={form.direccion} onChange={handleChange}/>
-          <label>Dirección</label>
-        </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Step 1: Información básica */}
+            {step === 1 && (
+              <div id="step1" className="form-section">
+                <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                  <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center mr-2">1</span>
+                  Información básica
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="username"
+                      value={form.username}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      required
+                    />
+                    <label htmlFor="username" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-user mr-2"></i>Usuario
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      name="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      required
+                    />
+                    <label htmlFor="email" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-envelope mr-2"></i>Email
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="password"
+                      name="password"
+                      value={form.password}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      required
+                    />
+                    <label htmlFor="password" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-lock mr-2"></i>Contraseña
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      value={form.confirmPassword}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      required
+                    />
+                    <label htmlFor="confirmPassword" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-lock mr-2"></i>Confirmar Contraseña
+                    </label>
+                  </div>
+                </div>
+                <div className="flex justify-end mt-4">
+                  <button type="button" onClick={() => nextStep(1)} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                    Siguiente <i className="fas fa-arrow-right ml-2"></i>
+                  </button>
+                </div>
+              </div>
+            )}
 
-        <button className="form-button" type="submit">Registrar</button>
-      </form>
+            {/* Step 2: Información personal */}
+            {step === 2 && (
+              <div id="step2" className="form-section">
+                <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                  <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center mr-2">2</span>
+                  Información personal
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="primerNombre"
+                      value={form.primerNombre}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      required
+                    />
+                    <label htmlFor="primerNombre" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-signature mr-2"></i>Primer Nombre
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="segundoNombre"
+                      value={form.segundoNombre}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    />
+                    <label htmlFor="segundoNombre" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-signature mr-2"></i>Segundo Nombre
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="primerApellido"
+                      value={form.primerApellido}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      required
+                    />
+                    <label htmlFor="primerApellido" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-signature mr-2"></i>Primer Apellido
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="segundoApellido"
+                      value={form.segundoApellido}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    />
+                    <label htmlFor="segundoApellido" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-signature mr-2"></i>Segundo Apellido
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      name="fechaNacimiento"
+                      value={form.fechaNacimiento}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      required
+                    />
+                    <label htmlFor="fechaNacimiento" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-calendar-alt mr-2"></i>Fecha de Nacimiento
+                    </label>
+                  </div>
+                </div>
+                <div className="flex justify-between mt-4">
+                  <button type="button" onClick={prevStep} className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition">
+                    <i className="fas fa-arrow-left mr-2"></i> Anterior
+                  </button>
+                  <button type="button" onClick={() => nextStep(2)} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                    Siguiente <i className="fas fa-arrow-right ml-2"></i>
+                  </button>
+                </div>
+              </div>
+            )}
 
-      <div className="auth-footer-text">
-        ¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link>
-      </div>
-    </motion.div>
+            {/* Step 3: Información de contacto */}
+            {step === 3 && (
+              <div id="step3" className="form-section">
+                <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                  <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center mr-2">3</span>
+                  Información de contacto
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="relative">
+                    <input
+                      type="tel"
+                      name="telefono"
+                      value={form.telefono}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    />
+                    <label htmlFor="telefono" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-phone mr-2"></i>Teléfono
+                    </label>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="dui"
+                      value={form.dui}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      required
+                    />
+                    <label htmlFor="dui" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-id-card mr-2"></i>DUI
+                    </label>
+                  </div>
+                  <div className="relative col-span-1 md:col-span-2">
+                    <input
+                      type="text"
+                      name="direccion"
+                      value={form.direccion}
+                      onChange={handleChange}
+                      placeholder=" "
+                      className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    />
+                    <label htmlFor="direccion" className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500">
+                      <i className="fas fa-home mr-2"></i>Dirección
+                    </label>
+                  </div>
+                </div>
+                <div className="flex justify-between mt-4">
+                  <button type="button" onClick={prevStep} className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition">
+                    <i className="fas fa-arrow-left mr-2"></i> Anterior
+                  </button>
+                  <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
+                    <i className="fas fa-user-plus mr-2"></i> Registrar cuenta
+                  </button>
+                </div>
+              </div>
+            )}
+          </form>
+
+          <div className="mt-6 text-center text-sm">
+            <p className="text-gray-600">
+              ¿Ya tienes una cuenta?{' '}
+              <Link to="/login" className="text-blue-600 font-medium hover:underline">
+                Inicia sesión
+              </Link>
+            </p>
+          </div>
+        </div>
+      </motion.div>
+    </div>
   );
 }
-

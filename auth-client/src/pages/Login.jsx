@@ -1,71 +1,164 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { jwtDecode } from 'jwt-decode';
 import { login as loginService } from '../services/authService';
+import { getOrCreateCarrito } from '../services/carritoService';
 import { AuthContext } from '../context/AuthContext';
+import { CartContext } from '../context/CartContext';
 import { useNavigate, Link } from 'react-router-dom';
-import '../style/AuthForm.css';
+import { secureSetItem, secureRemoveItem } from '../utils/secureStorage';
 
 export default function Login() {
   const [form, setForm] = useState({ username: '', password: '' });
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
-  const { login } = useContext(AuthContext);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { userData, login } = useContext(AuthContext);
+  const { setCarrito } = useContext(CartContext);
   const navigate = useNavigate();
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  // Redirigir si ya hay sesión iniciada
+  useEffect(() => {
+    const handlePostLogin = async () => {
+      if (!userData) return;
+      try {
+        const cart = await getOrCreateCarrito(userData.userId);
+        setCarrito(cart);
+        secureSetItem('carritoId', cart.idCarrito.toString());
+        const targetRoute = userData.roles.includes('ROLE_ADMIN') ? '/admin' : '/user';
+        navigate(targetRoute, { replace: true });
+      } catch (error) {
+        setError('Error al cargar el carrito');
+      }
+    };
+    handlePostLogin();
+  }, [userData, navigate, setCarrito]);
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setIsSubmitting(true);
+
     try {
       const token = await loginService(form.username, form.password);
       login(token);
-      const { roles } = jwtDecode(token);
-      navigate(roles === 'ROLE_ADMIN' ? '/admin' : '/user');
+      if (rememberMe) {
+        secureSetItem('token', token);
+      } else {
+        secureRemoveItem('token');
+      }
+
+      // Simular un delay para mostrar spinner
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 500);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Usuario o contraseña incorrectos');
+      setIsSubmitting(false);
+      document.getElementById('errorMessage').classList.remove('hidden');
+      document.getElementById('errorMessage').classList.add('error-shake');
+
+      setTimeout(() => {
+        document.getElementById('errorMessage').classList.remove('error-shake');
+      }, 500);
     }
   };
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
   return (
-    <motion.div
-      className="auth-container"
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
-      <h2 className="auth-title">Login</h2>
-      {error && <p className="error-message">{error}</p>}
-
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <input
-            name="username"
-            placeholder=" "
-            value={form.username}
-            onChange={handleChange}
-            required
-          />
-          <label>Usuario</label>
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="slide-up bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-md"
+      >
+        {/* Header */}
+        <div className="relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-90"></div>
+          <div className="relative z-10 p-8 text-center text-white">
+            <h1
+              className="text-3xl font-bold mb-2"
+              style={{ color: "#fff" }}
+            >
+              Bienvenido de vuelta
+            </h1>
+            <p style={{ color: "#fff" }}>Inicia sesión para acceder a tu cuenta</p>
+          </div>
         </div>
 
-        <div className="form-group">
-          <input
-            name="password"
-            type="password"
-            placeholder=" "
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-          <label>Contraseña</label>
+        {/* Formulario */}
+        <div className="p-8 pt-6">
+          <div id="errorMessage" className={`hidden mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm ${error ? 'block' : ''}`}>
+            {error}
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Usuario */}
+            <div className="relative">
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={form.username}
+                onChange={handleChange}
+                className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                placeholder=" "
+                required
+              />
+              <label
+                htmlFor="username"
+                className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-[-1rem] peer-focus:text-sm"
+              >
+                <i className="fas fa-user mr-2"></i>Usuario
+              </label>
+            </div>
+
+            {/* Contraseña */}
+            <div className="relative">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                placeholder=" "
+                required
+              />
+              <label
+                htmlFor="password"
+                className="floating-label absolute left-4 top-3 text-gray-500 pointer-events-none transition-all duration-200 peer-focus:text-blue-500 peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-[-1rem] peer-focus:text-sm"
+              >
+                <i className="fas fa-lock mr-2"></i>Contraseña
+              </label>
+            </div>
+
+            {/* Botón submit */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium rounded-lg shadow-md transition duration-300 flex items-center justify-center"
+            >
+              <span id="buttonText">{isSubmitting ? 'Iniciando sesión...' : 'Iniciar sesión'}</span>
+              {isSubmitting && <i id="spinner" className="fas fa-spinner fa-spin ml-2"></i>}
+            </button>
+          </form>
+
+          {/* Registro */}
+          <div className="mt-6 text-center text-sm">
+            <p className="text-gray-600">
+              ¿No tienes una cuenta?{' '}
+              <Link to="/register" className="text-blue-600 font-medium hover:underline">
+                Regístrate
+              </Link>
+            </p>
+          </div>
         </div>
-
-        <button className="form-button" type="submit">Entrar</button>
-      </form>
-
-      <div className="auth-footer-text">
-        ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
