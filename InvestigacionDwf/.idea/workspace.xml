@@ -5,23 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/assembler/ResenaAssembler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/InvestigacionDwfApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/InvestigacionDwfApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/HateoasConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/HateoasConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/ResenaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/controller/ResenaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ResenaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/ResenaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/ResenaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/ResenaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/ResenaServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/impl/ResenaServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/InvestigacionDwfApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/InvestigacionDwfApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/config/HateoasConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/config/HateoasConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/ResenaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/ResenaController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse$ResenaResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse$ResenaResponseBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/ResenaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/repository/ResenaRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/ResenaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/ResenaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/ResenaServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/service/impl/ResenaServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,44 +57,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Maven.InvestigacionDwf [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.InvestigacionDwf [install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.InvestigacionDwf [package].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.InvestigacionDwfApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Parametros&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Windows/Desktop/ProyectoCatedraDWF/InvestigacionDwf&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.InvestigacionDwf [clean].executor": "Run",
+    "Maven.InvestigacionDwf [install].executor": "Run",
+    "Maven.InvestigacionDwf [package].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.InvestigacionDwfApplication.executor": "Run",
+    "Spring Boot.Unnamed.executor": "Run",
+    "git-widget-placeholder": "FrontEndMejora1",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Windows/Desktop/ProyectoCatedraDWF/InvestigacionDwf",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ],
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;Properties&quot;,
-      &quot;Haskell&quot;
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "Properties",
+      "Haskell"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Unnamed" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="InvestigacionDwf" />
@@ -121,8 +107,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
       </set>
     </attachedChunks>
   </component>
@@ -170,6 +156,7 @@
       <workItem from="1748073175481" duration="11444000" />
       <workItem from="1748095631471" duration="1181000" />
       <workItem from="1748114341341" duration="1912000" />
+      <workItem from="1748132737136" duration="963000" />
     </task>
     <servers />
   </component>

@@ -9,58 +9,42 @@ import { secureSetItem, secureRemoveItem } from '../utils/secureStorage';
 
 export default function Login() {
   const [form, setForm] = useState({ username: '', password: '' });
-  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const { userData, login } = useContext(AuthContext);
   const { setCarrito } = useContext(CartContext);
   const navigate = useNavigate();
 
-  // Redirigir si ya hay sesión iniciada
+  // Redirigir y asignar carrito si hay sesión iniciada
   useEffect(() => {
     const handlePostLogin = async () => {
       if (!userData) return;
+
       try {
         const cart = await getOrCreateCarrito(userData.userId);
         setCarrito(cart);
         secureSetItem('carritoId', cart.idCarrito.toString());
+
         const targetRoute = userData.roles.includes('ROLE_ADMIN') ? '/admin' : '/user';
         navigate(targetRoute, { replace: true });
       } catch (error) {
         setError('Error al cargar el carrito');
       }
     };
+
     handlePostLogin();
   }, [userData, navigate, setCarrito]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setIsSubmitting(true);
 
     try {
       const token = await loginService(form.username, form.password);
       login(token);
-      if (rememberMe) {
-        secureSetItem('token', token);
-      } else {
-        secureRemoveItem('token');
-      }
-
-      // Simular un delay para mostrar spinner
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 500);
+      // El token no se almacena aquí, ya que el segundo código no lo hace
     } catch (err) {
       setError(err.message || 'Usuario o contraseña incorrectos');
-      setIsSubmitting(false);
-      document.getElementById('errorMessage').classList.remove('hidden');
-      document.getElementById('errorMessage').classList.add('error-shake');
-
-      setTimeout(() => {
-        document.getElementById('errorMessage').classList.remove('error-shake');
-      }, 500);
+      secureRemoveItem('token');
     }
   };
 
@@ -80,19 +64,19 @@ export default function Login() {
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-90"></div>
           <div className="relative z-10 p-8 text-center text-white">
-            <h1
-              className="text-3xl font-bold mb-2"
-              style={{ color: "#fff" }}
-            >
+            <h1 className="text-3xl font-bold mb-2" style={{ color: '#fff' }}>
               Bienvenido de vuelta
             </h1>
-            <p style={{ color: "#fff" }}>Inicia sesión para acceder a tu cuenta</p>
+            <p style={{ color: '#fff' }}>Inicia sesión para acceder a tu cuenta</p>
           </div>
         </div>
 
         {/* Formulario */}
         <div className="p-8 pt-6">
-          <div id="errorMessage" className={`hidden mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm ${error ? 'block' : ''}`}>
+          <div
+            id="errorMessage"
+            className={`mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm ${error ? 'block' : 'hidden'}`}
+          >
             {error}
           </div>
 
@@ -140,11 +124,9 @@ export default function Login() {
             {/* Botón submit */}
             <button
               type="submit"
-              disabled={isSubmitting}
               className="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-medium rounded-lg shadow-md transition duration-300 flex items-center justify-center"
             >
-              <span id="buttonText">{isSubmitting ? 'Iniciando sesión...' : 'Iniciar sesión'}</span>
-              {isSubmitting && <i id="spinner" className="fas fa-spinner fa-spin ml-2"></i>}
+              Iniciar sesión
             </button>
           </form>
 
