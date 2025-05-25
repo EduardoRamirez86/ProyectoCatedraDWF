@@ -31,6 +31,8 @@ public class HistorialPedido {
     @Column(nullable = false, length = 20)
     private EstadoPedido estado; // Usando enum
 
+
+
     private LocalDateTime fecha;
     private String descripcion;
 }

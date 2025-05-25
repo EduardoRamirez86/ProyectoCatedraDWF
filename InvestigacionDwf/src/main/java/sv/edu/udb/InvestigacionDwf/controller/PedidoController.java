@@ -1,4 +1,3 @@
-// src/main/java/sv/edu/udb/InvestigacionDwf/controller/PedidoController.java
 package sv.edu.udb.InvestigacionDwf.controller;
 
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,10 @@ import sv.edu.udb.InvestigacionDwf.dto.request.PedidoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.PedidoResponse;
 import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
 import sv.edu.udb.InvestigacionDwf.service.PedidoService;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth/pedido")
@@ -78,9 +81,26 @@ public class PedidoController {
     public PedidoResponse getById(@PathVariable Long id) {
         return pedidoService.getById(id);
     }
+
+    // --- NUEVOS ENDPOINTS PARA EL DASHBOARD DE GANANCIAS ---
+
+    @GetMapping("/dashboard/ganancias/totales")
+    public BigDecimal getGananciasTotales() {
+        return pedidoService.getGananciasTotales();
+    }
+
+    @GetMapping("/dashboard/ganancias/periodo")
+    public BigDecimal getGananciasPorPeriodo(
+            @RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+            @RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) LocalDate fechaFin) {
+        return pedidoService.getGananciasPorPeriodo(fechaInicio, fechaFin);
+    }
+
+    @GetMapping("/dashboard/productos-mas-vendidos")
+    public Map<String, Long> getProductosMasVendidos(@RequestParam(defaultValue = "5") int limit) {
+        return pedidoService.getProductosMasVendidos(limit);
+    }
 }
-
-
 
 
 

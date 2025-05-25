@@ -126,3 +126,43 @@ export const updatePedidoEstado = async (idPedido, newEstado) => {
   });
   return handleResponse(resp);
 };
+
+/**
+ * Dashboard: ganancias totales
+ */
+export const getGananciasTotales = async () => {
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+  const resp = await fetch(`${API_URL}/dashboard/ganancias/totales`, {
+    headers: { "Authorization": `Bearer ${token}` },
+  });
+  if (!resp.ok) throw new Error(await resp.text());
+  return await resp.json();
+};
+
+/**
+ * Dashboard: ganancias por periodo
+ */
+export const getGananciasPorPeriodo = async (fechaInicio, fechaFin) => {
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+  const params = new URLSearchParams({ fechaInicio, fechaFin });
+  const resp = await fetch(`${API_URL}/dashboard/ganancias/periodo?${params}`, {
+    headers: { "Authorization": `Bearer ${token}` },
+  });
+  if (!resp.ok) throw new Error(await resp.text());
+  return await resp.json();
+};
+
+/**
+ * Dashboard: productos más vendidos
+ */
+export const getProductosMasVendidos = async (limit = 5) => {
+  const token = getToken();
+  if (!token) throw new Error('No se encontró el token de autenticación');
+  const resp = await fetch(`${API_URL}/dashboard/productos-mas-vendidos?limit=${limit}`, {
+    headers: { "Authorization": `Bearer ${token}` },
+  });
+  if (!resp.ok) throw new Error(await resp.text());
+  return await resp.json();
+};

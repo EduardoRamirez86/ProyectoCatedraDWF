@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import PedidoCrud from "../components/PedidoCrud";
 import ProductoCrud from "../components/ProductoCrud";
+import AdminDashboard from "../components/AdminDashboard";
 import "../style/adminPage.css";
 
 // Elimina imports y estados no usados, y muestra el CRUD según el menú
@@ -15,7 +16,21 @@ export default function AdminPage() {
           <i className="fas fa-tools text-indigo-400"></i>
           Panel de Administración
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          <button
+            className={`bg-white rounded-xl shadow-lg p-6 border border-indigo-100 hover:shadow-xl transition w-full text-left ${
+              menu === "dashboard" ? "ring-2 ring-indigo-400" : ""
+            }`}
+            onClick={() => setMenu("dashboard")}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <i className="fas fa-chart-line text-indigo-500 text-2xl"></i>
+              <h2 className="text-xl font-semibold text-indigo-800">Dashboard</h2>
+            </div>
+            <p className="text-gray-600">
+              Estadísticas de ventas y productos más vendidos.
+            </p>
+          </button>
           <button
             className={`bg-white rounded-xl shadow-lg p-6 border border-indigo-100 hover:shadow-xl transition w-full text-left ${
               menu === "productos" ? "ring-2 ring-indigo-400" : ""
@@ -61,21 +76,10 @@ export default function AdminPage() {
         </div>
         {/* Renderizado condicional del contenido */}
         <div>
+          {menu === "dashboard" && <AdminDashboard />}
           {menu === "pedidos" && <PedidoCrud />}
           {menu === "productos" && <ProductoCrud />}
-          {menu === "dashboard" && (
-            <div className="bg-white rounded-xl shadow p-8 border border-indigo-100">
-              <h3 className="text-2xl font-semibold text-indigo-700 mb-2">
-                ¡Bienvenido, Administrador!
-              </h3>
-              <p className="text-gray-700">
-                Desde este panel puedes gestionar todos los aspectos clave de la
-                tienda. Utiliza las tarjetas de arriba para acceder rápidamente a
-                cada módulo. Si tienes dudas, consulta la documentación interna o
-                contacta al soporte técnico.
-              </p>
-            </div>
-          )}
+          {/* Aquí puedes agregar UserCrud si lo tienes */}
         </div>
       </div>
     </div>

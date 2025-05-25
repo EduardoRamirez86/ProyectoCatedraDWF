@@ -62,10 +62,12 @@ public class Producto {
     @JsonIgnore
     private List<Resena> resenas;
 
-    public void actualizarStock(Integer nuevoStock) {
-        int anterior = this.cantidad;
-        this.cantidad = nuevoStock;
-        this.fechaActualizacion = LocalDateTime.now();
-        // historial opcional si implementado
+    // En Producto.java
+    public void actualizarStock(Integer cantidad) {
+        if (this.cantidad + cantidad < 0) { // Esto es para sumar o restar
+            // Si la cantidad actual + la cantidad a ajustar es menor a 0, significa que se va a volver negativo
+            throw new IllegalArgumentException("El stock no puede ser negativo.");
+        }
+        this.cantidad += cantidad;
     }
 }

@@ -26,9 +26,11 @@ import sv.edu.udb.InvestigacionDwf.service.PedidoService;
 import sv.edu.udb.InvestigacionDwf.service.assembler.PedidoAssembler;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode; // Importar para redondeo
+import java.time.LocalDate; // Importar para rangos de fecha del dashboard
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors; // Para procesar productos más vendidos
 
 @Service
 @RequiredArgsConstructor
@@ -41,10 +43,12 @@ public class PedidoServiceImpl implements PedidoService {
     private final CarritoItemRepository carritoItemRepository;
     private final DireccionRepository direccionRepository;
     private final UserRepository userRepository;
-    private final NotificacionRepository notificacionRepository; // Mantener si la usas directamente aquí
+    private final NotificacionRepository notificacionRepository;
     private final CuponService cuponService;
     private final ParametroService parametroService;
     private final CuponRepository cuponRepository;
+    private final ProductoRepository productoRepository; // <-- NECESARIO para actualizar stock
+    private final RegistroGananciaRepository registroGananciaRepository; // <-- NUEVO: Para registrar ganancias
     private final PedidoAssembler pedidoAssembler;
     private final PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
 
@@ -94,18 +98,41 @@ public class PedidoServiceImpl implements PedidoService {
             throw new IllegalStateException("No se puede realizar la compra con el carrito vacío.");
         }
 
-        // Calcula el subtotal sumando el precio de cada ítem multiplicado por su cantidad
-        BigDecimal subtotal = items.stream()
-                .map(i -> {
-                    if (Objects.isNull(i.getProducto()) || Objects.isNull(i.getProducto().getPrecio())) {
-                        logger.error("Ítem de carrito con producto o precio nulo. Ítem ID: {}. Carrito ID: {}", i.getIdCarritoItem(), carrito.getIdCarrito());
-                        throw new IllegalStateException("Uno de los productos en el carrito no tiene precio o es nulo.");
-                    }
-                    return i.getProducto().getPrecio().multiply(BigDecimal.valueOf(i.getCantidad()));
-                })
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        // --- LÓGICA DE STOCK Y GANANCIAS ---
+        BigDecimal subtotal = BigDecimal.ZERO;
+        BigDecimal gananciaBrutaEstimada = BigDecimal.ZERO; // Ganancia bruta antes de descuentos
+
+        for (CarritoItem item : items) {
+            Producto producto = item.getProducto();
+            int cantidadComprada = item.getCantidad();
+
+            if (Objects.isNull(producto) || Objects.isNull(producto.getPrecio()) || Objects.isNull(producto.getCosto()) || Objects.isNull(producto.getCantidad())) {
+                logger.error("Producto con datos incompletos en el carrito. Ítem ID: {}", item.getIdCarritoItem());
+                throw new IllegalStateException("Uno de los productos en el carrito tiene datos incompletos (precio, costo o stock nulo).");
+            }
+
+            // 1. Reducir stock del producto
+            if (producto.getCantidad() < cantidadComprada) {
+                logger.warn("Stock insuficiente para el producto '{}' (ID: {}). Cantidad disponible: {}, Cantidad solicitada: {}", producto.getNombre(), producto.getIdProducto(), producto.getCantidad(), cantidadComprada);
+                throw new IllegalStateException("Stock insuficiente para el producto: " + producto.getNombre() + ". Solo quedan " + producto.getCantidad() + " unidades.");
+            }
+            producto.actualizarStock(cantidadComprada * -1); // Resta la cantidad
+            productoRepository.save(producto); // Guarda el producto con el stock actualizado
+            logger.info("Stock actualizado para producto '{}' (ID: {}). Nuevo stock: {}", producto.getNombre(), producto.getIdProducto(), producto.getCantidad());
+
+
+            // 2. Calcular subtotal del pedido y ganancia bruta por item
+            BigDecimal precioItem = producto.getPrecio().multiply(BigDecimal.valueOf(cantidadComprada));
+            BigDecimal costoItem = producto.getCosto().multiply(BigDecimal.valueOf(cantidadComprada));
+            BigDecimal gananciaItem = precioItem.subtract(costoItem);
+
+            subtotal = subtotal.add(precioItem);
+            gananciaBrutaEstimada = gananciaBrutaEstimada.add(gananciaItem);
+            logger.debug("Item: {}, Precio: {}, Costo: {}, Ganancia: {}", producto.getNombre(), precioItem, costoItem, gananciaItem);
+        }
 
         User user = carrito.getUser(); // El usuario ya se obtuvo del carrito y está validado por la seguridad
+        BigDecimal descuentoAplicado = BigDecimal.ZERO;
 
         // --- Aplicación de Cupón ---
         if (Objects.nonNull(req.getCuponCodigo()) && !req.getCuponCodigo().isBlank()) {
@@ -116,11 +143,15 @@ public class PedidoServiceImpl implements PedidoService {
                             return new ResourceNotFoundException("Cupón no encontrado: " + req.getCuponCodigo());
                         });
                 // Calcula el descuento basado en el porcentaje del cupón
-                BigDecimal descuento = subtotal.multiply(
-                        BigDecimal.valueOf(cupon.getPorcentajeDescuento()).divide(BigDecimal.valueOf(100), BigDecimal.ROUND_HALF_EVEN) // Usar un RoundingMode
+                descuentoAplicado = subtotal.multiply(
+                        BigDecimal.valueOf(cupon.getPorcentajeDescuento()).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN) // Usar un RoundingMode
                 );
-                subtotal = subtotal.subtract(descuento);
-                logger.info("Cupón '{}' aplicado para usuario {}. Descuento: {}", req.getCuponCodigo(), user.getUsername(), descuento);
+                // Asegurarse de que el descuento no exceda el subtotal
+                if (descuentoAplicado.compareTo(subtotal) > 0) {
+                    descuentoAplicado = subtotal;
+                }
+                subtotal = subtotal.subtract(descuentoAplicado);
+                logger.info("Cupón '{}' aplicado para usuario {}. Descuento: {}", req.getCuponCodigo(), user.getUsername(), descuentoAplicado);
                 // Redime el cupón para que no se use nuevamente
                 cuponService.redeemCoupon(req.getCuponCodigo(), user);
             } else {
@@ -135,11 +166,19 @@ public class PedidoServiceImpl implements PedidoService {
         BigDecimal total = subtotal.add(shippingCost);
         logger.info("Calculando total para usuario {}: Subtotal={}, CostoEnvio={}, Total={}", user.getUsername(), subtotal, shippingCost, total);
 
+        // Ajustar la ganancia total para reflejar el descuento aplicado
+        // La ganancia neta es la ganancia bruta menos el descuento, ya que el descuento reduce el ingreso.
+        BigDecimal gananciaNeta = gananciaBrutaEstimada.subtract(descuentoAplicado);
+        logger.info("Ganancia neta calculada para el pedido del usuario {}: {}", user.getUsername(), gananciaNeta);
+
         // --- Construcción del Pedido ---
         Pedido pedido = Pedido.builder()
                 .carrito(carrito)
                 .fechaInicio(LocalDateTime.now())
+                .subtotal(subtotal.add(descuentoAplicado)) // El subtotal original antes del descuento
+                .descuentoAplicado(descuentoAplicado)
                 .total(total)
+                .gananciaEstimada(gananciaNeta) // Guardar la ganancia neta en el pedido
                 .tipoPago(req.getTipoPago())
                 .build();
 
@@ -199,6 +238,17 @@ public class PedidoServiceImpl implements PedidoService {
         var savedPedido = pedidoRepository.save(pedido); // Guarda el pedido y sus historial de puntos
         userRepository.save(user); // Guarda el usuario con los puntos actualizados
 
+        // --- REGISTRO DE GANANCIA POR VENTA ---
+        // Se crea un registro de ganancia una vez que el pedido es guardado exitosamente.
+        var registroGanancia = RegistroGanancia.builder()
+                .pedido(savedPedido)
+                .fechaRegistro(LocalDateTime.now())
+                .montoGanancia(gananciaNeta) // La ganancia neta ya considera el descuento
+                .build();
+        registroGananciaRepository.save(registroGanancia);
+        logger.info("Registro de ganancia creado para el pedido ID {}: Ganancia {}", savedPedido.getIdPedido(), gananciaNeta);
+
+
         // Si el usuario alcanza 30 puntos, genera un cupón y deduce los puntos
         if (user.getPuntos() >= 30) { // Usamos user.getPuntos() que ya está actualizado
             logger.info("Usuario {} alcanzó {} puntos. Generando cupón y deduciendo puntos.", user.getUsername(), user.getPuntos());
@@ -239,6 +289,8 @@ public class PedidoServiceImpl implements PedidoService {
             // si la limpieza es CRÍTICA y no "best-effort" (es decir, el pedido no debería existir si el carrito no se vacía).
             logger.error("Error crítico al limpiar el carrito del usuario {} (ID: {}) después del pedido {}. Causa: {}",
                     user.getUsername(), carrito.getIdCarrito(), savedPedido.getIdPedido(), e.getMessage(), e);
+            // Dependiendo de la política de negocio, podrías relanzar un IllegalStateException o simplemente logear.
+            // Para asegurar la consistencia si la limpieza del carrito es vital, relanzamos:
             throw new IllegalStateException("El pedido se ha creado, pero ocurrió un error crítico al limpiar el carrito. Revise los logs.", e);
         }
         // --- FIN LIMPIEZA DEL CARRITO ---
@@ -389,13 +441,70 @@ public class PedidoServiceImpl implements PedidoService {
         return pedidoAssembler.toModel(getPedidoOrThrow(id));
     }
 
+    // En PedidoServiceImpl.java
+
+    @Override
+    @Transactional(readOnly = true)
+    public BigDecimal getGananciasTotales() {
+        return pedidoRepository.sumGananciaEstimadaByEstado(EstadoPedido.ENTREGADO).orElse(BigDecimal.ZERO);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BigDecimal getGananciasPorPeriodo(LocalDate fechaInicio, LocalDate fechaFin) {
+        // Es CRÍTICO asegurarse de que fechaInicio y fechaFin se conviertan correctamente a LocalDateTime
+        // para que coincidan con el tipo de dato en la entidad Pedido (fechaInicio)
+        LocalDateTime startOfDay = fechaInicio.atStartOfDay();
+        LocalDateTime endOfDay = fechaFin.atTime(23, 59, 59, 999999999); // Final del día
+
+        return pedidoRepository.sumGananciaEstimadaByFechaBetweenAndEstado(
+                startOfDay, endOfDay, EstadoPedido.ENTREGADO).orElse(BigDecimal.ZERO);
+    }
+
+    // En PedidoServiceImpl.java, dentro del método getProductosMasVendidos
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Long> getProductosMasVendidos(int limit) {
+        logger.debug("Intentando obtener productos más vendidos con estado ENTREGADO.");
+        List<Object[]> rawData = carritoItemRepository.findTopSellingProductsRawByEstado(EstadoPedido.ENTREGADO);
+        logger.debug("Datos raw obtenidos del repositorio ({} filas): {}", rawData.size(), rawData); // Imprime el contenido de rawData
+        Map<String, Long> topProducts = new LinkedHashMap<>();
+
+        for (Object[] row : rawData) {
+            // Asegúrate de que el log de advertencia esté activo
+            if (row.length == 2 && row[0] instanceof Producto && row[1] instanceof Long) {
+                Producto producto = (Producto) row[0];
+                Long totalCantidad = (Long) row[1];
+                topProducts.put(producto.getNombre(), totalCantidad);
+                logger.debug("Producto '{}' con cantidad total: {}", producto.getNombre(), totalCantidad);
+            } else {
+                // Este WARN debería aparecer si el formato no es el esperado
+                logger.warn("El formato de los datos devueltos por findTopSellingProductsRawByEstado no es el esperado o nulo: {}", (row != null ? Arrays.toString(row) : "null"));
+            }
+        }
+
+        logger.debug("Mapa topProducts antes del límite: {}", topProducts);
+
+        if (limit <= 0 || topProducts.size() <= limit) {
+            return topProducts;
+        } else {
+            Map<String, Long> limitedProducts = topProducts.entrySet().stream()
+                    .limit(limit)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                            (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+            logger.debug("Mapa topProducts después del límite: {}", limitedProducts);
+            return limitedProducts;
+        }
+    }
+
+
     // --- Métodos auxiliares ---
 
     private PedidoResponse saveAndNotify(Pedido p, String estado) {
         // Se podría validar 'p' y 'estado' aquí si se llaman desde otros lugares
         if (Objects.isNull(p) || Objects.isNull(estado) || estado.isBlank()) {
             logger.error("Parámetros nulos o vacíos al guardar y notificar pedido. Pedido: {}, Estado: {}", p, estado);
-            throw new IllegalArgumentException("El pedido o el estado no pueden ser nulos/vacíos.");
+            throw new IllegalArgumentException("Los parámetros del pedido o estado no pueden ser nulos/vacíos.");
         }
         var saved = pedidoRepository.save(p);
         // LLAMADA A LOS MÉTODOS PRIVADOS DE NOTIFICACIÓN EN ESTA MISMA CLASE

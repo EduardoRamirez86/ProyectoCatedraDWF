@@ -1,4 +1,3 @@
-// src/main/java/sv/edu/udb/InvestigacionDwf/model/entity/Pedido.java
 package sv.edu.udb.InvestigacionDwf.model.entity;
 
 import java.math.BigDecimal;
@@ -32,6 +31,16 @@ public class Pedido {
     @Column(precision = 10, scale = 2, nullable = false)
     @NotNull(message = "El total es obligatorio")
     private BigDecimal total;
+
+    // --- NUEVOS CAMPOS ---
+    @Column(precision = 10, scale = 2) // Opcional, pero útil para tener el subtotal registrado
+    private BigDecimal subtotal;
+
+    @Column(name = "descuento_aplicado", precision = 10, scale = 2)
+    private BigDecimal descuentoAplicado = BigDecimal.ZERO; // Almacena el descuento aplicado
+
+    @Column(name = "ganancia_estimada", precision = 10, scale = 2)
+    private BigDecimal gananciaEstimada; // Ganancia neta para este pedido
 
     @Column(nullable = false)
     private Integer puntosTotales = 0;
@@ -69,9 +78,9 @@ public class Pedido {
     public void actualizarEstado(EstadoPedido nuevoEstado, User usuario) {
         var historial = HistorialPedido.builder()
                 .pedido(this)
-                .user(usuario)
                 .estado(nuevoEstado)
                 .fecha(LocalDateTime.now())
+                .user(usuario) // Changed from usuario to user
                 .build();
         this.historialPedidos.add(historial);
         this.estado = nuevoEstado;
