@@ -20,9 +20,16 @@ public interface PedidoMapper {
     @Mapping(source = "tipoPago", target = "tipoPago")
     @Mapping(source = "estado", target = "estado")
     @Mapping(target = "idDireccion", expression = "java(pedido.getDireccion() != null ? pedido.getDireccion().getIdDireccion() : null)")
+
+    // *** AÑADE ESTAS LÍNEAS PARA MAPEAR LOS DETALLES DE LA DIRECCIÓN ***
+    @Mapping(source = "direccion.alias", target = "aliasDireccion")
+    @Mapping(source = "direccion.calle", target = "calleDireccion")
+    @Mapping(source = "direccion.ciudad", target = "ciudadDireccion")
+    @Mapping(source = "direccion.departamento", target = "departamentoDireccion")
+        // *******************************************************************
+
     PedidoResponse toResponse(Pedido pedido);
 }
-
 
 
 

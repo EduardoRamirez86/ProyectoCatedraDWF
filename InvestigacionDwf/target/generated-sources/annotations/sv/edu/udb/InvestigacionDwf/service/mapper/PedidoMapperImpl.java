@@ -10,7 +10,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-26T02:43:45-0600",
+    date = "2025-05-26T04:39:23-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
@@ -42,6 +42,10 @@ public class PedidoMapperImpl implements PedidoMapper {
         pedidoResponse.idCarrito( pedidoCarritoIdCarrito( pedido ) );
         pedidoResponse.tipoPago( pedido.getTipoPago() );
         pedidoResponse.estado( pedido.getEstado() );
+        pedidoResponse.aliasDireccion( pedidoDireccionAlias( pedido ) );
+        pedidoResponse.calleDireccion( pedidoDireccionCalle( pedido ) );
+        pedidoResponse.ciudadDireccion( pedidoDireccionCiudad( pedido ) );
+        pedidoResponse.departamentoDireccion( pedidoDireccionDepartamento( pedido ) );
         pedidoResponse.idPedido( pedido.getIdPedido() );
         pedidoResponse.fechaInicio( pedido.getFechaInicio() );
         pedidoResponse.fechaFinal( pedido.getFechaFinal() );
@@ -83,5 +87,37 @@ public class PedidoMapperImpl implements PedidoMapper {
             return null;
         }
         return carrito.getIdCarrito();
+    }
+
+    private String pedidoDireccionAlias(Pedido pedido) {
+        Direccion direccion = pedido.getDireccion();
+        if ( direccion == null ) {
+            return null;
+        }
+        return direccion.getAlias();
+    }
+
+    private String pedidoDireccionCalle(Pedido pedido) {
+        Direccion direccion = pedido.getDireccion();
+        if ( direccion == null ) {
+            return null;
+        }
+        return direccion.getCalle();
+    }
+
+    private String pedidoDireccionCiudad(Pedido pedido) {
+        Direccion direccion = pedido.getDireccion();
+        if ( direccion == null ) {
+            return null;
+        }
+        return direccion.getCiudad();
+    }
+
+    private String pedidoDireccionDepartamento(Pedido pedido) {
+        Direccion direccion = pedido.getDireccion();
+        if ( direccion == null ) {
+            return null;
+        }
+        return direccion.getDepartamento();
     }
 }
