@@ -67,6 +67,19 @@ export default function PedidoCrud() {
     if (page < totalPages - 1) setPage(page + 1);
   };
 
+  // Función utilitaria para mostrar la dirección de un pedido
+  function renderDireccion(pedido) {
+    const alias = pedido.aliasDireccion;
+    const calle = pedido.calleDireccion;
+    const ciudad = pedido.ciudadDireccion;
+    const depto = pedido.departamentoDireccion;
+    if (alias || calle || ciudad || depto) {
+      return [alias, calle, ciudad, depto].filter(Boolean).join(", ");
+    }
+    // Fallback si no hay detalles, muestra el idDireccion
+    return pedido.idDireccion ? `ID: ${pedido.idDireccion}` : "-";
+  }
+
   if (loading) return <p className="text-center">Cargando pedidos...</p>;
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
@@ -85,11 +98,10 @@ export default function PedidoCrud() {
               <thead>
                 <tr className="bg-indigo-50">
                   <th className="py-2 px-3 font-semibold">ID</th>
-                  <th className="py-2 px-3 font-semibold">Usuario</th>
+                  <th className="py-2 px-3 font-semibold">Dirección</th>
                   <th className="py-2 px-3 font-semibold">Fecha</th>
                   <th className="py-2 px-3 font-semibold">Total</th>
                   <th className="py-2 px-3 font-semibold">Estado</th>
-                  <th className="py-2 px-3 font-semibold">Tipo Pago</th>
                   <th className="py-2 px-3 font-semibold">Acciones</th>
                 </tr>
               </thead>
@@ -97,7 +109,7 @@ export default function PedidoCrud() {
                 {pedidos.map((pedido) => (
                   <tr key={pedido.idPedido} className="border-b">
                     <td className="py-2 px-3">{pedido.idPedido}</td>
-                    <td className="py-2 px-3">{pedido.idUsuario || "-"}</td>
+                    <td className="py-2 px-3">{renderDireccion(pedido)}</td>
                     <td className="py-2 px-3">
                       {pedido.fechaInicio
                         ? new Date(pedido.fechaInicio).toLocaleString()
@@ -118,8 +130,7 @@ export default function PedidoCrud() {
                         {pedido.estado}
                       </span>
                     </td>
-                    <td className="py-2 px-3">{pedido.tipoPago}</td>
-                    <td className="py-2 px-3">
+                    <td className="py-2 px-3 flex gap-2">
                       <select
                         className="border rounded px-2 py-1 mr-2"
                         value={estadoUpdate[pedido.idPedido] || ""}

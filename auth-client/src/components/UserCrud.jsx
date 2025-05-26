@@ -8,6 +8,7 @@ export default function UserCrud() {
   const [roleUpdate, setRoleUpdate] = useState({});
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState("");
   const size = 10;
 
   const fetchUsers = async (pageNum = 0) => {
@@ -15,9 +16,9 @@ export default function UserCrud() {
     setError(null);
     try {
       const result = await getAllUsers(pageNum, size);
-      setUsers(Array.isArray(result.items) ? result.items : []);
-      setPage(result.page ?? 0);
-      setTotalPages(result.totalPages ?? 1);
+      setUsers(Array.isArray(result.content) ? result.content : []);
+      setPage(typeof result.number === "number" ? result.number : 0);
+      setTotalPages(typeof result.totalPages === "number" ? result.totalPages : 1);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -63,6 +64,11 @@ export default function UserCrud() {
     if (page < totalPages - 1) setPage(page + 1);
   };
 
+  // Filtrado por nombre de usuario
+  const filteredUsers = users.filter(user =>
+    (user.username || "").toLowerCase().includes(search.toLowerCase())
+  );
+
   if (loading) return <p className="text-center">Cargando usuarios...</p>;
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
@@ -72,8 +78,22 @@ export default function UserCrud() {
         <i className="fas fa-users-cog text-indigo-400"></i>
         Gestión de Usuarios
       </h2>
+      <div className="mb-4 flex justify-end">
+        <div className="relative w-72">
+          <input
+            type="text"
+            placeholder="🔍 Buscar por nombre..."
+            className="border border-indigo-300 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 px-4 py-2 pl-10 rounded-full shadow-sm w-full transition"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          <span className="absolute left-3 top-2.5 text-indigo-400 pointer-events-none">
+            <i className="fas fa-search"></i>
+          </span>
+        </div>
+      </div>
       <div className="bg-white shadow-md rounded-xl p-6">
-        {users.length === 0 ? (
+        {filteredUsers.length === 0 ? (
           <p>No hay usuarios registrados.</p>
         ) : (
           <div className="overflow-x-auto">
@@ -83,19 +103,23 @@ export default function UserCrud() {
                   <th className="py-2 px-3 font-semibold">ID</th>
                   <th className="py-2 px-3 font-semibold">Nombre</th>
                   <th className="py-2 px-3 font-semibold">Email</th>
-                  <th className="py-2 px-3 font-semibold">Rol</th>
+                  <th className="py-2 px-3 font-semibold">Fecha Nacimiento</th>
+                  <th className="py-2 px-3 font-semibold">Teléfono</th>
+                  <th className="py-2 px-3 font-semibold">roleName</th>
                   <th className="py-2 px-3 font-semibold">Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <tr key={user.id} className="border-b">
                     <td className="py-2 px-3">{user.id}</td>
                     <td className="py-2 px-3">{user.username || user.nombre || '-'}</td>
                     <td className="py-2 px-3">{user.email}</td>
+                    <td className="py-2 px-3">{user.fechaNacimiento || '-'}</td>
+                    <td className="py-2 px-3">{user.telefono || '-'}</td>
                     <td className="py-2 px-3">
-                      <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">
-                        {Array.isArray(user.roles) ? user.roles.join(", ") : user.roles}
+                      <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+                        {user.roleName || '-'}
                       </span>
                     </td>
                     <td className="py-2 px-3 flex gap-2">

@@ -3,12 +3,31 @@ import React, { useState } from "react";
 import PedidoCrud from "../components/PedidoCrud";
 import ProductoCrud from "../components/ProductoCrud";
 import AdminDashboard from "../components/AdminDashboard";
-import ParametroCrud from "../components/ParametroCrud";
+import ParametroCrud from "../components/ParametroCrud"; // Agrega este import
+import UserCrud from "../components/UserCrud";
+import { secureGetItem } from "../utils/secureStorage";
+import { jwtDecode } from "jwt-decode";
 import "../style/adminPage.css";
 
 // Elimina imports y estados no usados, y muestra el CRUD según el menú
 export default function AdminPage() {
   const [menu, setMenu] = useState("dashboard");
+
+  // Obtener el rol del usuario autenticado desde el token
+  let isAdmin = false;
+  try {
+    const token = secureGetItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      // El backend suele enviar roles como array o string
+      const roles = decoded?.roles || decoded?.authorities || [];
+      isAdmin = Array.isArray(roles)
+        ? roles.includes("ROLE_ADMIN")
+        : roles === "ROLE_ADMIN";
+    }
+  } catch (e) {
+    isAdmin = false;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white py-10 px-4">
@@ -60,20 +79,23 @@ export default function AdminPage() {
               Revisa, gestiona y actualiza el estado de los pedidos de los clientes.
             </p>
           </button>
-          <button
-            className={`bg-white rounded-xl shadow-lg p-6 border border-indigo-100 hover:shadow-xl transition w-full text-left ${
-              menu === "usuarios" ? "ring-2 ring-indigo-400" : ""
-            }`}
-            onClick={() => setMenu("usuarios")}
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <i className="fas fa-users-cog text-indigo-500 text-2xl"></i>
-              <h2 className="text-xl font-semibold text-indigo-800">Usuarios</h2>
-            </div>
-            <p className="text-gray-600">
-              Gestiona los usuarios registrados, roles y permisos.
-            </p>
-          </button>
+          {/* Solo mostrar el botón de usuarios si es admin */}
+          {isAdmin && (
+            <button
+              className={`bg-white rounded-xl shadow-lg p-6 border border-indigo-100 hover:shadow-xl transition w-full text-left ${
+                menu === "usuarios" ? "ring-2 ring-indigo-400" : ""
+              }`}
+              onClick={() => setMenu("usuarios")}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <i className="fas fa-users-cog text-indigo-500 text-2xl"></i>
+                <h2 className="text-xl font-semibold text-indigo-800">Usuarios</h2>
+              </div>
+              <p className="text-gray-600">
+                Gestiona los usuarios registrados, roles y permisos.
+              </p>
+            </button>
+          )}
           <button
             className={`bg-white rounded-xl shadow-lg p-6 border border-indigo-100 hover:shadow-xl transition w-full text-left ${
               menu === "parametros" ? "ring-2 ring-indigo-400" : ""
@@ -95,7 +117,8 @@ export default function AdminPage() {
           {menu === "pedidos" && <PedidoCrud />}
           {menu === "productos" && <ProductoCrud />}
           {menu === "parametros" && <ParametroCrud />}
-          {/* Aquí puedes agregar UserCrud si lo tienes */}
+          {/* Renderizar UserCrud solo si es admin */}
+          {isAdmin && menu === "usuarios" && <UserCrud />}
         </div>
       </div>
     </div>

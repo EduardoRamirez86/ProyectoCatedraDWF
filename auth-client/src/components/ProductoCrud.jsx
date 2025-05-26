@@ -17,6 +17,7 @@ export default function ProductoCrud() {
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [size] = useState(10);
+  const [search, setSearch] = useState("");
 
   const [tiposProducto, setTiposProducto] = useState([]);
 
@@ -100,6 +101,11 @@ export default function ProductoCrud() {
     if (page < totalPages - 1) setPage(page + 1);
   };
 
+  // Filtrado por nombre de producto
+  const filteredProducts = productos.filter(producto =>
+    (producto.nombre || producto.name || "").toLowerCase().includes(search.toLowerCase())
+  );
+
   if (loading) return <p className="text-center">Cargando productos...</p>;
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
@@ -109,16 +115,22 @@ export default function ProductoCrud() {
         <i className="fas fa-boxes text-indigo-400"></i>
         Gestión de Productos
       </h2>
-      <div className="bg-white shadow-md rounded-xl p-6">
-        <div className="flex justify-end mb-4">
-          <button
-            className="px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
-            onClick={() => { setEditProducto(null); setModalOpen(true); }}
-          >
-            + Nuevo Producto
-          </button>
+      <div className="mb-4 flex justify-end">
+        <div className="relative w-72">
+          <input
+            type="text"
+            placeholder="🔍 Buscar producto..."
+            className="border border-indigo-300 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 px-4 py-2 pl-10 rounded-full shadow-sm w-full transition"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          <span className="absolute left-3 top-2.5 text-indigo-400 pointer-events-none">
+            <i className="fas fa-search"></i>
+          </span>
         </div>
-        {productos.length === 0 ? (
+      </div>
+      <div className="bg-white shadow-md rounded-xl p-6">
+        {filteredProducts.length === 0 ? (
           <p>No hay productos registrados.</p>
         ) : (
           <div className="overflow-x-auto">
@@ -138,7 +150,7 @@ export default function ProductoCrud() {
                 </tr>
               </thead>
               <tbody>
-                {productos.map((producto) => (
+                {filteredProducts.map((producto) => (
                   <tr key={producto.idProducto} className="border-b">
                     <td className="py-2 px-3">{producto.idProducto}</td>
                     <td className="py-2 px-3">{producto.nombre}</td>
