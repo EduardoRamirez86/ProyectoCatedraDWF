@@ -5,15 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/auth-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/carrito-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/carrito-item-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/direccion-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/historial-pedido-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/historial-puntos-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/notificacion-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/parametro-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/pedido-controller.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/producto-controller.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/resena-controller.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/ropa-controller.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/secure-controller.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/tipo-producto-controller.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/user-controller.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/RoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/RoleRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +78,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.InvestigacionDwfApplication.executor": "Run",
     "Spring Boot.Unnamed.executor": "Run",
-    "git-widget-placeholder": "Merging Swagger",
+    "git-widget-placeholder": "Swagger",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/wamp64/www/ProyectoCatedraDWF",
@@ -179,7 +179,7 @@
       <workItem from="1748219198480" duration="7000" />
       <workItem from="1748219385131" duration="7491000" />
       <workItem from="1748228152876" duration="3745000" />
-      <workItem from="1748231917682" duration="1602000" />
+      <workItem from="1748231917682" duration="4986000" />
     </task>
     <servers />
   </component>

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import PedidoCrud from "../components/PedidoCrud";
 import ProductoCrud from "../components/ProductoCrud";
 import AdminDashboard from "../components/AdminDashboard";
-import ParametroCrud from "../components/ParametroCrud"; // Agrega este import
+import ParametroCrud from "../components/ParametroCrud";
 import "../style/adminPage.css";
 
 // Elimina imports y estados no usados, y muestra el CRUD según el menú
