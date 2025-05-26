@@ -142,14 +142,14 @@ export const getAllUsers = getAllUsersPaginated;
 export const updateUserRole = async (userId, newRole) => {
   const token = getToken();
   if (!token) throw new Error('No autenticado');
-  // Suponiendo que el backend espera un array de roles
+  // El backend espera { roleName: ... }
   const resp = await fetch(`${API_URL}/${userId}/admin`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ roles: [newRole] }),
+    body: JSON.stringify({ roleName: newRole }),
   });
   if (!resp.ok) {
     const text = await resp.text();

@@ -16,7 +16,9 @@ export default function UserCrud() {
     setError(null);
     try {
       const result = await getAllUsers(pageNum, size);
-      setUsers(Array.isArray(result.content) ? result.content : []);
+      // Soporta respuesta paginada estándar de Spring Data
+      const content = Array.isArray(result.content) ? result.content : [];
+      setUsers(content);
       setPage(typeof result.number === "number" ? result.number : 0);
       setTotalPages(typeof result.totalPages === "number" ? result.totalPages : 1);
     } catch (err) {
@@ -40,7 +42,10 @@ export default function UserCrud() {
     if (!newRole) return;
     try {
       await updateUserRole(userId, newRole);
-      fetchUsers(page);
+      setRoleUpdate((prev) => ({ ...prev, [userId]: "" }));
+      // Espera a que termine y luego refresca la página 0 para evitar inconsistencias
+      fetchUsers(0);
+      setPage(0);
     } catch (err) {
       alert("Error al actualizar el rol: " + err.message);
     }
@@ -105,7 +110,7 @@ export default function UserCrud() {
                   <th className="py-2 px-3 font-semibold">Email</th>
                   <th className="py-2 px-3 font-semibold">Fecha Nacimiento</th>
                   <th className="py-2 px-3 font-semibold">Teléfono</th>
-                  <th className="py-2 px-3 font-semibold">roleName</th>
+                  <th className="py-2 px-3 font-semibold">Rol</th>
                   <th className="py-2 px-3 font-semibold">Acciones</th>
                 </tr>
               </thead>
@@ -119,7 +124,7 @@ export default function UserCrud() {
                     <td className="py-2 px-3">{user.telefono || '-'}</td>
                     <td className="py-2 px-3">
                       <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
-                        {user.roleName || '-'}
+                        {user.roleName || user.roles?.[0] || '-'}
                       </span>
                     </td>
                     <td className="py-2 px-3 flex gap-2">
@@ -130,6 +135,7 @@ export default function UserCrud() {
                       >
                         <option value="">Cambiar rol</option>
                         <option value="ROLE_USER">Usuario</option>
+                        <option value="ROLE_EMPLOYEE">Empleado</option>
                         <option value="ROLE_ADMIN">Administrador</option>
                       </select>
                       <button
