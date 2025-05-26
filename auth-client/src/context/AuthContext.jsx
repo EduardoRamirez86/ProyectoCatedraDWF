@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { secureGetItem, secureSetItem, secureRemoveItem } from '../utils/secureStorage';
 import UserContext from '../context/UserContext';
 import secureLs from '../utils/secureStorage';
@@ -34,6 +34,10 @@ export function AuthProvider({ children }) {
           setUserId(decoded.userId);
           secureSetItem('userId', decoded.userId.toString());
         }
+        // Asignar carrito para empleados igual que para admin/usuarios
+        if (decoded?.carritoId) {
+          secureSetItem('carritoId', decoded.carritoId.toString());
+        }
       }
     };
 
@@ -49,6 +53,10 @@ export function AuthProvider({ children }) {
     if (decoded.userId) {
       setUserId(decoded.userId);
       secureSetItem('userId', decoded.userId.toString());
+    }
+    // Asignar carrito para empleados igual que para admin/usuarios
+    if (decoded.carritoId) {
+      secureSetItem('carritoId', decoded.carritoId.toString());
     }
   };
 

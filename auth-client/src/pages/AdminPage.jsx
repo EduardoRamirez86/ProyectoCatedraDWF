@@ -9,15 +9,16 @@ import { AuthContext } from "../context/AuthContext";
 
 export default function AdminPage() {
   const [menu, setMenu] = useState("dashboard");
-  const { userData } = useContext(AuthContext);            // <-- cambia aquí
+  const { userData } = useContext(AuthContext);
 
-  // Asegura que roles sea un array
+  // Asegura que roles sea un array y maneja bien el caso de empleado
   const roles = Array.isArray(userData?.roles)
     ? userData.roles
     : typeof userData?.roles === "string"
     ? [userData.roles]
     : [];
 
+  // Permite acceso si tiene ROLE_EMPLOYEE o ROLE_ADMIN
   const isAdmin = roles.includes("ROLE_ADMIN");
   const isEmployee = roles.includes("ROLE_EMPLOYEE");
 

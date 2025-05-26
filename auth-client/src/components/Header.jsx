@@ -66,11 +66,12 @@ export default function Header() {
 
   const isUser = userData?.roles?.includes('ROLE_USER');
   const isAdmin = userData?.roles?.includes('ROLE_ADMIN');
+  const isEmployee = userData?.roles?.includes('ROLE_EMPLOYEE');
 
   const handleLogoClick = () => {
     if (isUser) {
       navigate('/user');
-    } else if (isAdmin) {
+    } else if (isAdmin || isEmployee) {
       navigate('/admin');
     } else {
       navigate('/');
@@ -161,7 +162,6 @@ export default function Header() {
                   </div>
                 )}
               </div>
-
               {/* Carrito */}
               {isUser && (
                 <button
@@ -193,6 +193,9 @@ export default function Header() {
                     )}
                     {userData.roles.includes("ROLE_ADMIN") && (
                       <li className="py-2 px-4 hover:bg-indigo-50 cursor-pointer text-gray-900 font-medium" onClick={() => handleAction("admin")}>Admin Panel</li>
+                    )}
+                    {userData.roles.includes("ROLE_EMPLOYEE") && (
+                      <li className="py-2 px-4 hover:bg-indigo-50 cursor-pointer text-gray-900 font-medium" onClick={() => handleAction("admin")}>Empleado Panel</li>
                     )}
                     <li className="py-2 px-4 hover:bg-indigo-50 cursor-pointer text-gray-900 font-medium" onClick={() => handleAction("logout")}>Cerrar Sesión</li>
                   </ul>
@@ -269,6 +272,12 @@ export default function Header() {
                   <button className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 font-medium text-left bg-transparent border-none" style={{ background: "none" }} onClick={() => { setMobileMenuOpen(false); handleAction("admin"); }}>
                     <i className="fas fa-user"></i>
                     <span>Admin Panel</span>
+                  </button>
+                )}
+                {userData.roles.includes("ROLE_EMPLOYEE") && (
+                  <button className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 font-medium text-left bg-transparent border-none" style={{ background: "none" }} onClick={() => { setMobileMenuOpen(false); handleAction("admin"); }}>
+                    <i className="fas fa-user"></i>
+                    <span>Empleado Panel</span>
                   </button>
                 )}
                 <button className="flex items-center space-x-2 text-gray-700 hover:text-indigo-600 font-medium text-left bg-transparent border-none" style={{ background: "none" }} onClick={() => { setMobileMenuOpen(false); handleAction("logout"); }}>

@@ -24,8 +24,17 @@ export default function Login() {
         setCarrito(cart);
         secureSetItem('carritoId', cart.idCarrito.toString());
 
-        const targetRoute = userData.roles.includes('ROLE_ADMIN') ? '/admin' : '/user';
-        navigate(targetRoute, { replace: true });
+        // Redirección robusta: permite acceso a empleados y admins
+        const roles = Array.isArray(userData.roles)
+          ? userData.roles
+          : typeof userData.roles === "string"
+          ? [userData.roles]
+          : [];
+        if (roles.includes('ROLE_ADMIN') || roles.includes('ROLE_EMPLOYEE')) {
+          navigate('/admin', { replace: true });
+        } else {
+          navigate('/user', { replace: true });
+        }
       } catch (error) {
         setError('Error al cargar el carrito');
       }
@@ -41,7 +50,7 @@ export default function Login() {
     try {
       const token = await loginService(form.username, form.password);
       login(token);
-      // El token no se almacena aquí, ya que el segundo código no lo hace
+      // No navegues aquí, espera a que userData se actualice y useEffect redirigirá correctamente
     } catch (err) {
       setError(err.message || 'Usuario o contraseña incorrectos');
       secureRemoveItem('token');

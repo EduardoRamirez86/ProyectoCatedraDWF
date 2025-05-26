@@ -1,13 +1,16 @@
 package sv.edu.udb.InvestigacionDwf.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
+
 import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
+import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 import sv.edu.udb.InvestigacionDwf.service.ProductoService;
 
 @RestController
@@ -17,41 +20,65 @@ import sv.edu.udb.InvestigacionDwf.service.ProductoService;
 public class ProductoController {
 
     private final ProductoService service;
-    private final PagedResourcesAssembler<sv.edu.udb.InvestigacionDwf.model.entity.Producto> assembler;
 
+    /**
+     * Crea un nuevo producto.
+     */
     @PostMapping
     public ProductoResponse create(@RequestBody ProductoRequest req) {
         return service.create(req);
     }
 
+    /**
+     * Actualiza un producto existente.
+     */
     @PutMapping("/{id}")
-    public ProductoResponse update(@PathVariable Long id, @RequestBody ProductoRequest req) {
+    public ProductoResponse update(
+            @PathVariable Long id,
+            @RequestBody ProductoRequest req
+    ) {
         return service.update(id, req);
     }
 
+    /**
+     * Elimina un producto por su ID.
+     */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
 
-    // ✅ Solo dejamos esta ruta para obtener productos paginados
+    /**
+     * Devuelve todos los productos paginados.
+     * Ejemplo: GET /auth/producto/all?page=0&size=10
+     */
     @GetMapping("/all")
-    public PagedModel<ProductoResponse> getAll(Pageable pageable) {
-        return service.findAll(pageable); // ✅ Lógica de paginación y detalles en el servicio
+    public PagedModel<ProductoResponse> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "15") int size,
+            PagedResourcesAssembler<Producto> assembler
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        // Asume que service.findAll devuelve un PagedModel<ProductoResponse>
+        return service.findAll(pageable);
     }
 
+    /**
+     * Obtiene un producto por su ID.
+     */
     @GetMapping("/{id}")
     public ProductoResponse getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
+    /**
+     * Devuelve productos recomendados para un usuario.
+     */
     @GetMapping("/recomendados/{idUser}")
-    public CollectionModel<ProductoResponse> getRecommendedByUser(@PathVariable Long idUser) {
+    public CollectionModel<ProductoResponse> getRecommendedByUser(
+            @PathVariable Long idUser
+    ) {
         var recomendaciones = service.findRecommendedByUser(idUser);
         return CollectionModel.of(recomendaciones);
     }
-
 }
-
-
-

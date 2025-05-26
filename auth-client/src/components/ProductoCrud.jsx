@@ -1,57 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { getAllProductos, createProducto, updateProducto, deleteProducto } from "../services/productoService";
-
-// Simulación de tipos de producto (deberías traerlos de la API real)
-const fetchTiposProducto = async () => [
-  { idTipoProducto: 1, nombre: "Camisa" },
-  { idTipoProducto: 2, nombre: "Pantalón" },
-  { idTipoProducto: 3, nombre: "Calzado" }
-];
+import React, { useEffect, useState, useContext } from "react";
+import { getAllProductosPaged, createProducto, updateProducto, deleteProducto } from "../services/productoService";
+import { AuthContext } from "../context/AuthContext";
 
 export default function ProductoCrud() {
   const [productos, setProductos] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [editProducto, setEditProducto] = useState(null);
-  const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
   const [size] = useState(10);
   const [search, setSearch] = useState("");
 
-  const [tiposProducto, setTiposProducto] = useState([]);
+  const { userData } = useContext(AuthContext);
+  const roles = Array.isArray(userData?.roles) ? userData.roles : [userData?.roles];
+  const isAdmin = roles.includes("ROLE_ADMIN");
 
-  useEffect(() => {
-    fetchProductos(page);
-    fetchTiposProducto().then(setTiposProducto);
-    // eslint-disable-next-line
-  }, [page]);
-
+  // --- Lógica de paginación igual a PedidoCrud ---
   const fetchProductos = async (pageNum = 0) => {
     setLoading(true);
     setError(null);
     try {
-      const result = await getAllProductos(pageNum, size);
-      // Si el backend devuelve la estructura HAL con paginación
-      if (result && result.page && result._embedded?.productoResponseList) {
-        setProductos(result._embedded.productoResponseList);
-        setPage(result.page.number ?? 0);
-        setTotalPages(result.page.totalPages ?? 1);
-      } else if (result && Array.isArray(result.items)) {
-        // Si el servicio ya devuelve { items, page, totalPages, ... }
-        setProductos(result.items);
-        setPage(result.page ?? 0);
-        setTotalPages(result.totalPages ?? 1);
-      } else if (Array.isArray(result)) {
-        // fallback legacy
-        setProductos(result.slice(pageNum * size, pageNum * size + size));
-        setPage(pageNum);
-        setTotalPages(Math.ceil(result.length / size));
-      } else {
-        setProductos([]);
-        setPage(0);
-        setTotalPages(1);
-      }
+      const result = await getAllProductosPaged(pageNum, size);
+      // result: { items, page, size, totalPages, totalElements }
+      setProductos(result.items || []);
+      setPage(result.page ?? 0);
+      setTotalPages(result.totalPages ?? 1);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -59,37 +34,31 @@ export default function ProductoCrud() {
     }
   };
 
+  useEffect(() => {
+    fetchProductos(page);
+    // eslint-disable-next-line
+  }, [page, size]);
+
   const handleEdit = (producto) => {
+    if (!isAdmin) return;
     setEditProducto(producto);
     setModalOpen(true);
   };
 
+  const handleAdd = () => {
+    if (!isAdmin) return;
+    setEditProducto(null);
+    setModalOpen(true);
+  };
+
   const handleDelete = async (id) => {
+    if (!isAdmin) return;
     if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
     try {
       await deleteProducto(id);
       fetchProductos(page);
     } catch (err) {
       alert("Error al eliminar: " + err.message);
-    }
-  };
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-    setEditProducto(null);
-  };
-
-  const handleModalSave = async (producto) => {
-    try {
-      if (producto.idProducto) {
-        await updateProducto(producto.idProducto, producto);
-      } else {
-        await createProducto(producto);
-      }
-      handleModalClose();
-      fetchProductos(page);
-    } catch (err) {
-      alert("Error al guardar: " + err.message);
     }
   };
 
@@ -101,13 +70,15 @@ export default function ProductoCrud() {
     if (page < totalPages - 1) setPage(page + 1);
   };
 
-  // Filtrado por nombre de producto
-  const filteredProducts = productos.filter(producto =>
-    (producto.nombre || producto.name || "").toLowerCase().includes(search.toLowerCase())
-  );
+  // Filtrado solo para la tabla actual
+  const filtered = search
+    ? productos.filter(p =>
+        (p.nombre || "").toLowerCase().includes(search.toLowerCase())
+      )
+    : productos;
 
   if (loading) return <p className="text-center">Cargando productos...</p>;
-  if (error) return <p className="text-red-500 text-center">{error}</p>;
+  if (error)   return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -115,22 +86,31 @@ export default function ProductoCrud() {
         <i className="fas fa-boxes text-indigo-400"></i>
         Gestión de Productos
       </h2>
-      <div className="mb-4 flex justify-end">
-        <div className="relative w-72">
-          <input
-            type="text"
-            placeholder="🔍 Buscar producto..."
-            className="border border-indigo-300 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 px-4 py-2 pl-10 rounded-full shadow-sm w-full transition"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-          <span className="absolute left-3 top-2.5 text-indigo-400 pointer-events-none">
-            <i className="fas fa-search"></i>
+      {isAdmin && (
+        <div className="mb-6 flex justify-between items-center">
+          <span className="text-lg font-medium text-gray-700">
+            Agrega nuevos productos al catálogo
           </span>
+          <button
+            className="flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-full font-semibold shadow hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            onClick={handleAdd}
+          >
+            <i className="fas fa-plus"></i>
+            Agregar Producto
+          </button>
         </div>
+      )}
+      <div className="mb-4 flex justify-end">
+        <input
+          type="text"
+          placeholder="🔍 Buscar producto..."
+          className="border px-4 py-2 rounded-full w-64"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
       </div>
       <div className="bg-white shadow-md rounded-xl p-6">
-        {filteredProducts.length === 0 ? (
+        {filtered.length === 0 ? (
           <p>No hay productos registrados.</p>
         ) : (
           <div className="overflow-x-auto">
@@ -150,7 +130,7 @@ export default function ProductoCrud() {
                 </tr>
               </thead>
               <tbody>
-                {filteredProducts.map((producto) => (
+                {filtered.map((producto) => (
                   <tr key={producto.idProducto} className="border-b">
                     <td className="py-2 px-3">{producto.idProducto}</td>
                     <td className="py-2 px-3">{producto.nombre}</td>
@@ -169,12 +149,16 @@ export default function ProductoCrud() {
                       <button
                         className="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition"
                         onClick={() => handleEdit(producto)}
+                        disabled={!isAdmin}
+                        title={isAdmin ? "Editar producto" : "Solo el administrador puede editar"}
                       >
                         Editar
                       </button>
                       <button
                         className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
                         onClick={() => handleDelete(producto.idProducto)}
+                        disabled={!isAdmin}
+                        title={isAdmin ? "Eliminar producto" : "Solo el administrador puede eliminar"}
                       >
                         Eliminar
                       </button>
@@ -205,20 +189,24 @@ export default function ProductoCrud() {
           </button>
         </div>
       </div>
-      {/* Modal para crear/editar producto */}
-      {modalOpen && (
+      {/* Modal de creación/edición */}
+      {modalOpen && isAdmin && (
         <ProductoModal
           producto={editProducto}
-          onClose={handleModalClose}
-          onSave={handleModalSave}
-          tiposProducto={tiposProducto}
+          onClose={() => setModalOpen(false)}
+          onSave={async prod => {
+            if (prod.idProducto) await updateProducto(prod.idProducto, prod);
+            else              await createProducto(prod);
+            setModalOpen(false);
+            fetchProductos(page);
+          }}
+          tiposProducto={[]} // Si tienes tipos, pásalos aquí
         />
       )}
     </div>
   );
 }
 
-// Modal de producto mejorado con todos los campos
 function ProductoModal({ producto, onClose, onSave, tiposProducto }) {
   const [form, setForm] = useState(
     producto || {
@@ -243,7 +231,6 @@ function ProductoModal({ producto, onClose, onSave, tiposProducto }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Si el tipoProducto es solo id, puedes mapearlo aquí si lo necesitas
     onSave(form);
   };
 
@@ -342,7 +329,7 @@ function ProductoModal({ producto, onClose, onSave, tiposProducto }) {
               required
             >
               <option value="">Selecciona un tipo</option>
-              {tiposProducto.map(tp => (
+              {tiposProducto && tiposProducto.map(tp => (
                 <option key={tp.idTipoProducto} value={tp.idTipoProducto}>
                   {tp.nombre}
                 </option>

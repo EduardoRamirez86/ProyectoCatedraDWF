@@ -44,6 +44,16 @@ function PrivateRoute({ requiredRole, children }) {
   const roles = Array.isArray(userData?.roles)
     ? userData.roles
     : [userData?.roles];
+
+  // Permitir acceso a /admin tanto a ROLE_ADMIN como a ROLE_EMPLOYEE
+  if (requiredRole === "ROLE_ADMIN") {
+    if (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_EMPLOYEE")) {
+      return children;
+    }
+    return <Navigate to="/" replace />;
+  }
+
+  // Acceso normal para otros roles
   return roles.includes(requiredRole) ? children : <Navigate to="/" replace />;
 }
 

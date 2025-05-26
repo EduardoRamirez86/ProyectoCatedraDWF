@@ -8,19 +8,40 @@ export default function UserCrud() {
   const [roleUpdate, setRoleUpdate] = useState({});
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [size, setSize] = useState(10);
   const [search, setSearch] = useState("");
-  const size = 10;
 
   const fetchUsers = async (pageNum = 0) => {
     setLoading(true);
     setError(null);
     try {
       const result = await getAllUsers(pageNum, size);
+      let list = [];
+      let total = 1;
+      let pageNumber = 0;
+      let pageSize = size;
       // Soporta respuesta paginada estándar de Spring Data
-      const content = Array.isArray(result.content) ? result.content : [];
-      setUsers(content);
-      setPage(typeof result.number === "number" ? result.number : 0);
-      setTotalPages(typeof result.totalPages === "number" ? result.totalPages : 1);
+      if (Array.isArray(result.content)) {
+        list = result.content;
+        total = typeof result.totalPages === "number" ? result.totalPages : 1;
+        pageNumber = typeof result.number === "number" ? result.number : 0;
+        pageSize = typeof result.size === "number" ? result.size : size;
+      } else if (result.items) {
+        list = result.items;
+        total = result.totalPages || 1;
+        pageNumber = result.page ?? pageNum;
+        pageSize = result.size || size;
+      } else if (Array.isArray(result)) {
+        // fallback legacy
+        list = result.slice(pageNum * size, pageNum * size + size);
+        total = Math.ceil(result.length / size);
+        pageNumber = pageNum;
+        pageSize = size;
+      }
+      setUsers(list);
+      setPage(pageNumber);
+      setTotalPages(total);
+      setSize(pageSize);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -31,7 +52,7 @@ export default function UserCrud() {
   useEffect(() => {
     fetchUsers(page);
     // eslint-disable-next-line
-  }, [page]);
+  }, [page, size]);
 
   const handleRoleChange = (userId, newRole) => {
     setRoleUpdate((prev) => ({ ...prev, [userId]: newRole }));
@@ -43,9 +64,7 @@ export default function UserCrud() {
     try {
       await updateUserRole(userId, newRole);
       setRoleUpdate((prev) => ({ ...prev, [userId]: "" }));
-      // Espera a que termine y luego refresca la página 0 para evitar inconsistencias
-      fetchUsers(0);
-      setPage(0);
+      fetchUsers(page);
     } catch (err) {
       alert("Error al actualizar el rol: " + err.message);
     }
@@ -69,10 +88,12 @@ export default function UserCrud() {
     if (page < totalPages - 1) setPage(page + 1);
   };
 
-  // Filtrado por nombre de usuario
-  const filteredUsers = users.filter(user =>
-    (user.username || "").toLowerCase().includes(search.toLowerCase())
-  );
+  // Filtrado por nombre de usuario solo para la tabla actual
+  const filteredUsers = search
+    ? users.filter(user =>
+        (user.username || "").toLowerCase().includes(search.toLowerCase())
+      )
+    : users;
 
   if (loading) return <p className="text-center">Cargando usuarios...</p>;
   if (error) return <p className="text-red-500 text-center">{error}</p>;

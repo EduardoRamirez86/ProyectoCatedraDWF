@@ -5,9 +5,10 @@ const TIPO_URL = "http://localhost:8080/auth/tipoproducto";
 const getToken = () => secureGetItem('token');
 
 /**
- * Admin / público: obtiene productos paginados
+ * Admin / público: obtiene productos paginados (ESTE ES EL QUE DEBES USAR EN ProductoCrud)
  * @param {number} page Índice de página (0-based)
  * @param {number} size Tamaño de página
+ * @returns { items, page, size, totalPages, totalElements }
  */
 export const getAllProductosPaged = async (page = 0, size = 10) => {
   const token = getToken();
@@ -24,6 +25,7 @@ export const getAllProductosPaged = async (page = 0, size = 10) => {
   }
 
   const data = await resp.json();
+  // Igual que PedidoCrud: items, page, size, totalPages, totalElements
   const items    = data._embedded?.productoResponseList || [];
   const pageInfo = data.page || {};
 
