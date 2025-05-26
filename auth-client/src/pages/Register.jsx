@@ -66,6 +66,11 @@ export default function Register() {
         setError('El DUI debe tener el formato 12345678-9');
         return false;
       }
+      // Validar que el nombre de usuario tenga entre 5 y 20 caracteres
+            if (form.username.length < 5) {
+        setError('El nombre de usuario tiene que llevar entre 5 y 20 caracteres');
+        return false;
+      }
     }
 
     setError('');
@@ -99,7 +104,7 @@ export default function Register() {
 
       const { fechaNacimiento, ...rest } = form;
       const response = await registerService({ ...rest, fechaNacimiento: fechaFormateada });
-
+      
       if (typeof response === "string") {
         login(response);
         const decoded = jwtDecode(response);
