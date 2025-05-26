@@ -25,7 +25,7 @@ import sv.edu.udb.InvestigacionDwf.service.CuponService;
 import sv.edu.udb.InvestigacionDwf.service.ParametroService;
 import sv.edu.udb.InvestigacionDwf.service.PedidoService;
 import sv.edu.udb.InvestigacionDwf.service.assembler.PedidoAssembler;
-
+import sv.edu.udb.InvestigacionDwf.service.impl.Auxiliar.PedidoItemData;
 import java.math.BigDecimal;
 import java.math.RoundingMode; // Importar para redondeo
 import java.time.LocalDate; // Importar para rangos de fecha del dashboard
@@ -318,23 +318,6 @@ public class PedidoServiceImpl implements PedidoService {
 
         // Convierte el pedido guardado a un modelo HAL
         return pedidoAssembler.toModel(savedPedido);
-    }
-
-    // Clase auxiliar para almacenar datos temporalmente
-    private static class PedidoItemData {
-        private final Producto producto;
-        private final int cantidad;
-        private final BigDecimal precioUnitario;
-
-        public PedidoItemData(Producto producto, int cantidad, BigDecimal precioUnitario) {
-            this.producto = producto;
-            this.cantidad = cantidad;
-            this.precioUnitario = precioUnitario;
-        }
-
-        public Producto getProducto() { return producto; }
-        public int getCantidad() { return cantidad; }
-        public BigDecimal getPrecioUnitario() { return precioUnitario; }
     }
 
     @Override
