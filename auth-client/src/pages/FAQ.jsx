@@ -2,13 +2,12 @@ import React from 'react';
 
 export default function FAQ() {
   return (
-    <>
-      
-      <main className="container mx-auto px-4 py-6">
-        <h1 className="text-2xl font-semibold mb-4">Preguntas Frecuentes</h1>
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">Pedidos y Compras</h2>
-          <ul className="list-disc list-inside space-y-2">
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+      <main className="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-8">
+        <h1 className="text-3xl font-bold mb-6 text-indigo-700">Preguntas Frecuentes</h1>
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold mb-2 text-indigo-700">Pedidos y Compras</h2>
+          <ul className="list-disc list-inside space-y-2 text-gray-700">
             <li>
               <strong>¿Cómo puedo hacer un pedido?</strong> Para realizar un pedido, selecciona el producto, elige la cantidad y haz clic en "Agregar al carrito". Luego, sigue el proceso de pago.
             </li>
@@ -20,9 +19,9 @@ export default function FAQ() {
             </li>
           </ul>
         </section>
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">Envíos</h2>
-          <ul className="list-disc list-inside space-y-2">
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold mb-2 text-indigo-700">Envíos</h2>
+          <ul className="list-disc list-inside space-y-2 text-gray-700">
             <li>
               <strong>¿Cuánto tarda el envío?</strong> El envío estándar tarda de 3 a 5 días hábiles. El envío exprés tarda de 1 a 2 días hábiles.
             </li>
@@ -34,9 +33,9 @@ export default function FAQ() {
             </li>
           </ul>
         </section>
-        <section className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">Devoluciones y Reembolsos</h2>
-          <ul className="list-disc list-inside space-y-2">
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold mb-2 text-indigo-700">Devoluciones y Reembolsos</h2>
+          <ul className="list-disc list-inside space-y-2 text-gray-700">
             <li>
               <strong>¿Puedo devolver un producto?</strong> Sí, tienes 30 días para solicitar una devolución si el producto está en condiciones originales.
             </li>
@@ -49,10 +48,10 @@ export default function FAQ() {
           </ul>
         </section>
         <section>
-          <h2 className="text-xl font-semibold mb-2">Soporte y Contacto</h2>
-          <ul className="list-disc list-inside space-y-2">
+          <h2 className="text-xl font-semibold mb-2 text-indigo-700">Soporte y Contacto</h2>
+          <ul className="list-disc list-inside space-y-2 text-gray-700">
             <li>
-              <strong>¿Cómo puedo contactar al soporte?</strong> Escríbenos a <a href="mailto:soporte@tiendaecommerce.com" className="text-blue-500">soporte@tiendaecommerce.com</a> o llama al +503 1234-5678.
+              <strong>¿Cómo puedo contactar al soporte?</strong> Escríbenos a <a href="mailto:soporte@tiendaecommerce.com" className="text-blue-600 hover:underline">soporte@tiendaecommerce.com</a> o llama al <span className="text-gray-800">+503 1234-5678</span>.
             </li>
             <li>
               <strong>¿Tienen atención presencial?</strong> Sí, puedes visitarnos en nuestra tienda física en San Salvador.
@@ -60,7 +59,6 @@ export default function FAQ() {
           </ul>
         </section>
       </main>
-
-    </>
+    </div>
   );
 }

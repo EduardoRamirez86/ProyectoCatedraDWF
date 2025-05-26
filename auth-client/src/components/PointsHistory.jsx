@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import getHistorialPuntos from '../services/historialPuntosService';
+import { getHistorialPuntosByUser } from '../services/historialPuntosService';
 
 export default function PointsHistory() {
-  const { token } = useContext(AuthContext);
+  const { userData, token } = useContext(AuthContext);
   const [pointsHistory, setPointsHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,13 +13,13 @@ export default function PointsHistory() {
 
   useEffect(() => {
     const fetchPointsHistory = async () => {
-      if (!token) {
+      if (!token || !userData?.userId) {
         setError('Usuario no autenticado');
         setLoading(false);
         return;
       }
       try {
-        const data = await getHistorialPuntos(page, size);
+        const data = await getHistorialPuntosByUser(userData.userId, page, size);
         const historial = data._embedded?.historialPuntosResponseList || [];
         setPointsHistory(historial);
         setTotalPages(data.page?.totalPages || 1);
@@ -34,7 +34,7 @@ export default function PointsHistory() {
 
     setLoading(true);
     fetchPointsHistory();
-  }, [token, page]);
+  }, [token, userData, page]);
 
   if (loading) return <p className="text-center">Cargando...</p>;
   if (error) return <p className="text-red-500 text-center">{error}</p>;

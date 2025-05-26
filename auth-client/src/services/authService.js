@@ -56,14 +56,27 @@ export async function login(username, password) {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*' // Aseguramos que se permita el origen
+        'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify({ username, password })
     });
 
     if (!res.ok) {
-      const err = await res.json(); // Intentamos obtener un mensaje JSON del servidor
-      throw new Error(err.message || 'Error al iniciar sesión');
+      let errorMsg = 'Error al iniciar sesión';
+      try {
+        const err = await res.json();
+        // Si el backend retorna un mensaje específico, úsalo
+        if (err && err.message) {
+          errorMsg = err.message;
+        } else if (res.status === 401) {
+          errorMsg = 'Usuario o contraseña incorrectos';
+        }
+      } catch {
+        if (res.status === 401) {
+          errorMsg = 'Usuario o contraseña incorrectos';
+        }
+      }
+      throw new Error(errorMsg);
     }
 
     const token = await res.text();

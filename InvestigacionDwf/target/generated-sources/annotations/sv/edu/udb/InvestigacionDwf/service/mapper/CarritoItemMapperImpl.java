@@ -12,7 +12,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-26T02:43:45-0600",
+    date = "2025-05-26T05:03:37-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component

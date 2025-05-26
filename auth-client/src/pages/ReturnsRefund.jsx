@@ -2,16 +2,19 @@ import React from 'react';
 
 export default function ReturnsRefund() {
   return (
-    <>
-
-      <main className="container mx-auto px-4 py-6">
-        <h1 className="text-2xl font-semibold mb-4">Devoluciones y Reembolsos</h1>
-        <p className="mb-4">
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+      <main className="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-8">
+        <h1 className="text-3xl font-bold mb-6 text-indigo-700">Devoluciones y Reembolsos</h1>
+        <p className="mb-4 text-gray-700">
           Queremos que estés satisfecho con tu compra. Si necesitas devolver un producto, sigue estos pasos:
         </p>
-        <ol className="list-decimal list-inside mb-4 space-y-2">
+        <ol className="list-decimal list-inside mb-6 space-y-2 text-gray-700">
           <li>
-            <strong>Solicita la devolución:</strong> Escríbenos a <a href="mailto:soporte@tiendaecommerce.com" className="text-blue-500">soporte@tiendaecommerce.com</a> indicando tu número de pedido y motivo de la devolución.
+            <strong>Solicita la devolución:</strong> Escríbenos a{' '}
+            <a href="mailto:soporte@tiendaecommerce.com" className="text-blue-600 hover:underline">
+              soporte@tiendaecommerce.com
+            </a>{' '}
+            indicando tu número de pedido y motivo de la devolución.
           </li>
           <li>
             <strong>Prepara el producto:</strong> El producto debe estar sin uso, en su empaque original y con todos los accesorios.
@@ -23,7 +26,7 @@ export default function ReturnsRefund() {
             <strong>Procesamiento del reembolso:</strong> Una vez recibido y revisado el producto, procesaremos el reembolso en un plazo de 5–7 días hábiles.
           </li>
         </ol>
-        <ul className="list-disc list-inside mb-4 space-y-2">
+        <ul className="list-disc list-inside mb-6 space-y-2 text-gray-700">
           <li>
             <strong>Plazo para devoluciones:</strong> 30 días desde la fecha de compra.
           </li>
@@ -34,10 +37,10 @@ export default function ReturnsRefund() {
             <strong>Reembolsos parciales:</strong> Si el producto presenta daños por mal uso, el reembolso puede ser parcial o rechazado.
           </li>
         </ul>
-        <p>
+        <p className="text-gray-700">
           Si tienes dudas sobre el proceso, contáctanos y con gusto te ayudaremos.
         </p>
       </main>
-    </>
+    </div>
   );
 }

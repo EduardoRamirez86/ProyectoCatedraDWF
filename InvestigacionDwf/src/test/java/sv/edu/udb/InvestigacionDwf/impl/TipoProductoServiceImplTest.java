@@ -1,4 +1,4 @@
-package sv.edu.udb.InvestigacionDwf.service.impl;
+package sv.edu.udb.InvestigacionDwf.impl;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +8,7 @@ import sv.edu.udb.InvestigacionDwf.dto.response.TipoProductoResponse;
 import sv.edu.udb.InvestigacionDwf.exception.ResourceNotFoundException;
 import sv.edu.udb.InvestigacionDwf.model.entity.TipoProducto;
 import sv.edu.udb.InvestigacionDwf.repository.TipoProductoRepository;
+import sv.edu.udb.InvestigacionDwf.service.impl.TipoProductoServiceImpl;
 import sv.edu.udb.InvestigacionDwf.service.mapper.TipoProductoMapper;
 
 import java.util.List;

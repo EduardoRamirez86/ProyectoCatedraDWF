@@ -59,6 +59,24 @@ export default function Profile() {
 
   const handleUpdateProfile = async () => {
     setProfileMsg(null);
+    // Validación de username
+    if (
+      !formValues.newUsername ||
+      formValues.newUsername.length < 5 ||
+      formValues.newUsername.length > 20
+    ) {
+      setProfileMsg('El nombre de usuario debe tener entre 5 y 20 caracteres.');
+      return;
+    }
+    // Validación de email básica (opcional, ya que el backend valida)
+    if (!formValues.newEmail || !/\S+@\S+\.\S+/.test(formValues.newEmail)) {
+      setProfileMsg('Por favor ingresa un correo electrónico válido.');
+      return;
+    }
+    if (!formValues.currentPassword) {
+      setProfileMsg('Por favor ingresa tu contraseña actual.');
+      return;
+    }
     try {
       const updated = await updateProfile({
         userId,
@@ -70,7 +88,21 @@ export default function Profile() {
       setProfileMsg('Perfil actualizado correctamente.');
       setEditMode(false);
     } catch (err) {
-      setProfileMsg(`Error: ${err.message}`);
+      // Manejo de mensaje de contraseña incorrecta
+      let msg = err.message;
+      try {
+        // Si el error es un string con JSON, intenta parsear
+        const match = msg && msg.match(/"description":"([^"]+)"/);
+        if (match && match[1] && match[1].toLowerCase().includes('contraseña actual incorrecta')) {
+          msg = 'Contraseña incorrecta';
+        }
+        // Si el error es un objeto con errors
+        if (err.errors && Array.isArray(err.errors)) {
+          const found = err.errors.find(e => e.description && e.description.toLowerCase().includes('contraseña actual incorrecta'));
+          if (found) msg = 'Contraseña incorrecta';
+        }
+      } catch {}
+      setProfileMsg(`Error: ${msg}`);
     }
   };
 
@@ -80,8 +112,17 @@ export default function Profile() {
 
   const handleChangePassword = async () => {
     setPwdMsg(null);
+    // Validación de longitud de nueva contraseña
+    if (pwdValues.newPassword.length < 8) {
+      setPwdMsg('La nueva contraseña debe tener al menos 8 caracteres.');
+      return;
+    }
     if (pwdValues.newPassword !== pwdValues.confirmPassword) {
       setPwdMsg('La nueva contraseña y su confirmación no coinciden.');
+      return;
+    }
+    if (!pwdValues.currentPassword) {
+      setPwdMsg('Por favor ingresa tu contraseña actual.');
       return;
     }
     try {
@@ -93,7 +134,19 @@ export default function Profile() {
       setPwdMsg('Contraseña cambiada con éxito.');
       setPwdValues({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (err) {
-      setPwdMsg(`Error: ${err.message}`);
+      // Manejo de mensaje de contraseña incorrecta
+      let msg = err.message;
+      try {
+        const match = msg && msg.match(/"description":"([^"]+)"/);
+        if (match && match[1] && match[1].toLowerCase().includes('contraseña actual incorrecta')) {
+          msg = 'Contraseña incorrecta';
+        }
+        if (err.errors && Array.isArray(err.errors)) {
+          const found = err.errors.find(e => e.description && e.description.toLowerCase().includes('contraseña actual incorrecta'));
+          if (found) msg = 'Contraseña incorrecta';
+        }
+      } catch {}
+      setPwdMsg(`Error: ${msg}`);
     }
   };
 

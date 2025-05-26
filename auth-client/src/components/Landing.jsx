@@ -23,14 +23,17 @@ export default function Landing() {
     const fetchProductos = async () => {
       try {
         const all = await getAllProductos();
+        console.log("Productos obtenidos:", all); // <-- Agrega este log
         const destacados = all.sort((a, b) => b.precio - a.precio).slice(0, 5);
+        console.log("Productos destacados:", destacados); // <-- Y este log
         setProductosDestacados(destacados);
         if (userId) {
           const rec = await getRecommendedProductos(userId);
+          console.log("Productos recomendados:", rec); // <-- Y este log
           setRecomendados(rec);
         }
       } catch (e) {
-        console.error(e);
+        console.error("Error obteniendo productos:", e); // <-- Mejora el log de error
       } finally {
         setLoading(false);
       }

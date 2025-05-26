@@ -54,5 +54,26 @@ const getHistorialPuntosById = async (id) => {
   return resp.json();
 };
 
+/**
+ * Obtiene el historial de puntos de un usuario específico (paginado)
+ * @param {number} userId - ID del usuario
+ * @param {number} page - Página solicitada (default: 0)
+ * @param {number} size - Tamaño de la página (default: 10)
+ */
+export const getHistorialPuntosByUser = async (userId, page = 0, size = 10) => {
+  if (typeof userId !== 'number') throw new Error('El parámetro userId debe ser un número');
+  const token = getToken();
+  if (!token) throw new Error('No autenticado');
+  const url = `${API_URL}/usuario/${userId}?page=${page}&size=${size}`;
+  const resp = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(text || 'Error al obtener historial de puntos');
+  }
+  return resp.json();
+};
+
 export default getHistorialPuntos;
 export { getHistorialPuntosById };

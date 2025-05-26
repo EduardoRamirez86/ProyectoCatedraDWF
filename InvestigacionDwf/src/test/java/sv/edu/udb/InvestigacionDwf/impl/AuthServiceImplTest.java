@@ -1,4 +1,4 @@
-package sv.edu.udb.InvestigacionDwf.service.impl;
+package sv.edu.udb.InvestigacionDwf.impl;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +16,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.User;
 import sv.edu.udb.InvestigacionDwf.repository.RoleRepository;
 import sv.edu.udb.InvestigacionDwf.repository.UserRepository;
 import sv.edu.udb.InvestigacionDwf.security.jwt.JwtUtils;
+import sv.edu.udb.InvestigacionDwf.service.impl.AuthServiceImpl;
 
 import java.time.LocalDate;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package sv.edu.udb.InvestigacionDwf.service.impl;
+package sv.edu.udb.InvestigacionDwf.impl;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +8,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Cupon;
 import sv.edu.udb.InvestigacionDwf.model.entity.User;
 import sv.edu.udb.InvestigacionDwf.repository.CuponRepository;
 import sv.edu.udb.InvestigacionDwf.service.ParametroService;
+import sv.edu.udb.InvestigacionDwf.service.impl.CuponServiceImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

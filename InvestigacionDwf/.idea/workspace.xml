@@ -67,6 +67,7 @@
     "JUnit.CuponServiceImplTest.executor": "Run",
     "JUnit.CuponTest.executor": "Run",
     "JUnit.DireccionRepositoryTest.executor": "Run",
+    "JUnit.DireccionServiceImplTest.executor": "Run",
     "JUnit.DireccionServiceImplTest.save_shouldThrowIfNull.executor": "Run",
     "JUnit.DireccionTest.executor": "Run",
     "JUnit.HistorialPedidoRepositoryTest.executor": "Run",
@@ -96,6 +97,10 @@
     "JUnit.TipoProductoTest.executor": "Run",
     "JUnit.UserRepositoryTest.executor": "Run",
     "JUnit.UserTest.executor": "Run",
+    "JUnit.controller in InvestigacionDwf.executor": "Run",
+    "JUnit.impl in InvestigacionDwf.executor": "Run",
+    "JUnit.model in InvestigacionDwf.executor": "Run",
+    "JUnit.repository in InvestigacionDwf.executor": "Run",
     "Maven.InvestigacionDwf [clean,-DforkCount=0...].executor": "Debug",
     "Maven.InvestigacionDwf [clean].executor": "Run",
     "Maven.InvestigacionDwf [install].executor": "Run",
@@ -140,26 +145,12 @@
       <recent name="C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF2\InvestigacionDwf\src\main\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Windows\Documents\GitHub\ProyectoCatedraDWF\InvestigacionDwf\src\test" />
       <recent name="C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF2\InvestigacionDwf\src\test\java\sv\edu\udb\InvestigacionDwf" />
       <recent name="C:\wamp64\www\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\documentacion" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.Unnamed">
-    <configuration name="CarritoItemRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="InvestigacionDwf" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.repository.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf.repository" />
-      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.repository.CarritoItemRepositoryTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="InvestigacionDwfApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="InvestigacionDwf" />
       <extension name="coverage">
@@ -175,47 +166,34 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParametroRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="controller in InvestigacionDwf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="InvestigacionDwf" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.repository.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf.repository" />
-      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.repository.ParametroRepositoryTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/sv/edu/udb/InvestigacionDwf/controller" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TipoProductoRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="impl in InvestigacionDwf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="InvestigacionDwf" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.repository.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf.repository" />
-      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.repository.TipoProductoRepositoryTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/sv/edu/udb/InvestigacionDwf/impl" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="model in InvestigacionDwf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="InvestigacionDwf" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.repository.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf.repository" />
-      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.repository.UserRepositoryTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/sv/edu/udb/InvestigacionDwf/model" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="repository in InvestigacionDwf" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/sv/edu/udb/InvestigacionDwf/repository" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -229,19 +207,19 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.controller in InvestigacionDwf" />
+        <item itemvalue="JUnit.impl in InvestigacionDwf" />
+        <item itemvalue="JUnit.repository in InvestigacionDwf" />
+        <item itemvalue="JUnit.model in InvestigacionDwf" />
         <item itemvalue="JUnit.InvestigacionDwfApplicationTests" />
-        <item itemvalue="JUnit.UserRepositoryTest" />
-        <item itemvalue="JUnit.CarritoItemRepositoryTest" />
-        <item itemvalue="JUnit.TipoProductoRepositoryTest" />
-        <item itemvalue="JUnit.ParametroRepositoryTest" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
-        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
       </set>
     </attachedChunks>
   </component>
@@ -301,6 +279,7 @@
       <workItem from="1748228152876" duration="3745000" />
       <workItem from="1748231917682" duration="4986000" />
       <workItem from="1748247395608" duration="8909000" />
+      <workItem from="1748257030486" duration="9103000" />
     </task>
     <servers />
   </component>

@@ -1,4 +1,4 @@
-package sv.edu.udb.InvestigacionDwf.service.impl;
+package sv.edu.udb.InvestigacionDwf.impl;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +10,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.User;
 import sv.edu.udb.InvestigacionDwf.model.enums.EstadoNotificacion;
 import sv.edu.udb.InvestigacionDwf.repository.NotificacionRepository;
 import sv.edu.udb.InvestigacionDwf.repository.UserRepository;
+import sv.edu.udb.InvestigacionDwf.service.impl.NotificacionServiceImpl;
 import sv.edu.udb.InvestigacionDwf.service.mapper.NotificacionMapper;
 
 import java.util.List;

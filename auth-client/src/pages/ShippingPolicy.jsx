@@ -2,13 +2,13 @@ import React from 'react';
 
 export default function ShippingPolicy() {
   return (
-    <>
-      <main className="container mx-auto px-4 py-6">
-        <h1 className="text-2xl font-semibold mb-4">Política de Envíos</h1>
-        <p className="mb-4">
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+      <main className="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-8">
+        <h1 className="text-3xl font-bold mb-6 text-indigo-700">Política de Envíos</h1>
+        <p className="mb-4 text-gray-700">
           En Tienda Ecommerce nos comprometemos a entregar tus productos de manera rápida y segura. Consulta los detalles de nuestra política de envíos:
         </p>
-        <ul className="list-disc list-inside mb-4 space-y-2">
+        <ul className="list-disc list-inside mb-6 space-y-2 text-gray-700">
           <li>
             <strong>Opciones de envío:</strong> Ofrecemos envío estándar (3–5 días hábiles) y exprés (1–2 días hábiles) dentro de El Salvador.
           </li>
@@ -25,13 +25,14 @@ export default function ShippingPolicy() {
             <strong>Restricciones:</strong> No realizamos envíos a apartados postales ni fuera de El Salvador.
           </li>
         </ul>
-        <p className="mb-2">
-          <strong>Recomendaciones:</strong> Verifica que la dirección de entrega esté completa y correcta para evitar retrasos. Si tienes dudas sobre tu envío, contáctanos a <a href="mailto:soporte@tiendaecommerce.com" className="text-blue-500">soporte@tiendaecommerce.com</a>.
+        <p className="mb-2 text-gray-700">
+          <strong>Recomendaciones:</strong> Verifica que la dirección de entrega esté completa y correcta para evitar retrasos. Si tienes dudas sobre tu envío, contáctanos a{' '}
+          <a href="mailto:soporte@tiendaecommerce.com" className="text-blue-600 hover:underline">soporte@tiendaecommerce.com</a>.
         </p>
-        <p>
+        <p className="text-gray-700">
           Nos esforzamos por cumplir los plazos de entrega, pero pueden presentarse demoras por causas ajenas a nuestra empresa (clima, tráfico, etc.).
         </p>
       </main>
-    </>
+    </div>
   );
 }

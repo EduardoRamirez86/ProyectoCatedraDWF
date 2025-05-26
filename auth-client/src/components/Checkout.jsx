@@ -170,13 +170,44 @@ export default function Checkout() {
         idDireccion: dirId,
       };
       const resp = await checkoutPedido(payload);
-      sessionStorage.setItem('orderNumber', resp.idPedido);
-      sessionStorage.setItem('orderTotal', resp.total);
-      await MySwal.fire('¡Compra Exitosa!', `Pedido #${resp.idPedido}`, 'success');
+      // Asegúrate de que resp es un objeto y tiene idPedido
+      let orderId = resp && typeof resp === 'object' && ('idPedido' in resp) ? resp.idPedido : null;
+      let orderTotal = resp && typeof resp === 'object' && ('total' in resp) ? resp.total : null;
+
+      // Si el backend retorna un string (por error), intenta parsear
+      if (!orderId && typeof resp === 'string') {
+        try {
+          const parsed = JSON.parse(resp);
+          orderId = parsed.idPedido;
+          orderTotal = parsed.total;
+        } catch {}
+      }
+
+      if (!orderId) {
+        await MySwal.fire('¡Compra Exitosa!', `Pedido realizado correctamente.`, 'success');
+      } else {
+        sessionStorage.setItem('orderNumber', orderId);
+        sessionStorage.setItem('orderTotal', orderTotal);
+        await MySwal.fire('¡Compra Exitosa!', `Pedido #${orderId}`, 'success');
+      }
       navigate('/confirmation');
     } catch (err) {
       console.error(err);
-      await MySwal.fire('Error en la compra', err.message || 'Fallo al procesar', 'error');
+      // Manejo de mensaje de cupón inválido
+      let msg = err.message || 'Fallo al procesar';
+      try {
+        // Si el error es un string con JSON, intenta parsear
+        const match = msg.match(/"description":"([^"]+)"/);
+        if (match && match[1] && match[1].toLowerCase().includes('cupón inválido')) {
+          msg = 'Cupón inválido';
+        }
+        // Si el error es un objeto con errors
+        if (err.errors && Array.isArray(err.errors)) {
+          const found = err.errors.find(e => e.description && e.description.toLowerCase().includes('cupón inválido'));
+          if (found) msg = 'Cupón inválido';
+        }
+      } catch {}
+      await MySwal.fire('Error en la compra', msg, 'error');
     } finally {
       setLoading(false);
     }

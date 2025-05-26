@@ -28,7 +28,31 @@ export default function Register() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    let newValue = value;
+
+    // Formateo automático para DUI: 12345678-9
+    if (name === "dui") {
+      // Elimina todo lo que no sea dígito
+      const digits = value.replace(/\D/g, "");
+      if (digits.length <= 8) {
+        newValue = digits;
+      } else {
+        newValue = digits.slice(0, 8) + "-" + digits.slice(8, 9);
+      }
+    }
+
+    // Formateo automático para teléfono: 1234-5678
+    if (name === "telefono") {
+      const digits = value.replace(/\D/g, "");
+      if (digits.length <= 4) {
+        newValue = digits;
+      } else {
+        newValue = digits.slice(0, 4) + "-" + digits.slice(4, 8);
+      }
+    }
+
+    setForm({ ...form, [name]: newValue });
   };
 
   const validateStep = (currentStep) => {
@@ -97,10 +121,7 @@ export default function Register() {
         const [yyyy, mm, dd] = fechaFormateada.split('-');
         fechaFormateada = `${dd}/${mm}/${yyyy}`;
       }
-      if (!fechaFormateada || !/^\d{2}\/\d{2}\/\d{4}$/.test(fechaFormateada)) {
-        setError('La fecha de nacimiento es obligatoria y debe tener formato dd/MM/yyyy');
-        return;
-      }
+      
 
       const { fechaNacimiento, ...rest } = form;
       const response = await registerService({ ...rest, fechaNacimiento: fechaFormateada });
@@ -369,7 +390,7 @@ export default function Register() {
                         ((hasValue("fechaNacimiento") || document.activeElement?.name === "fechaNacimiento") ? "transform -translate-y-6 scale-90 text-blue-500 bg-white px-1" : "")
                       }
                     >
-                      <i className="fas fa-calendar-alt mr-2"></i>Fecha de Nacimiento
+                      <i className="fas fa-calendar-alt mr-2"></i>
                     </label>
                   </div>
                 </div>

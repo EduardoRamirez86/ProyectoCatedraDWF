@@ -8,5 +8,7 @@ import sv.edu.udb.InvestigacionDwf.model.entity.HistorialPuntos;
 public interface HistorialPuntosService {
     Page<HistorialPuntos> findAllEntities(Pageable pageable);
     HistorialPuntos getByIdEntity(Long id);
+    Page<HistorialPuntos> findByUserIdOrderByPedidoDesc(Long idUser, Pageable pageable);
+    
 }
 

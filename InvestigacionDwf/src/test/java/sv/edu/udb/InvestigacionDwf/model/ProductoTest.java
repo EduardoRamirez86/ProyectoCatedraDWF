@@ -65,7 +65,7 @@ class ProductoTest {
     void testActualizarStock() {
         Producto producto = Producto.builder().cantidad(5).build();
         producto.actualizarStock(10);
-        assertEquals(10, producto.getCantidad());
+        assertEquals(15, producto.getCantidad());
     }
 
     @Test

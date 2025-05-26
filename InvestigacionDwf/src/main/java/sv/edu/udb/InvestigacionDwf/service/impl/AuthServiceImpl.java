@@ -98,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
                 .primerApellido(registerRequest.getPrimerApellido())
                 .segundoApellido(registerRequest.getSegundoApellido()) // Puede ser nulo o vacío
                 .fechaNacimiento(registerRequest.getFechaNacimiento())
-                .telefono(registerRequest.getTelefono()) // Puede ser nulo o vacío
+                .telefono(registerRequest.getTelefono())
                 .DUI(registerRequest.getDui())
                 .direccion(registerRequest.getDireccion()) // Puede ser nulo o vacío (si la dirección se gestiona aparte)
                 .build();
@@ -129,12 +129,12 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> {
                     logger.warn("Intento de login fallido: Usuario '{}' no encontrado.", loginRequest.getUsername());
                     // Usamos BadCredentialsException para ocultar si fue el usuario o la contraseña incorrecta
-                    return new BadCredentialsException("Credenciales inválidas.");
+                    return new BadCredentialsException("Credenciales inválidas(Usuario no encontrado).");
                 });
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             logger.warn("Intento de login fallido para usuario '{}': Contraseña incorrecta.", loginRequest.getUsername());
-            throw new BadCredentialsException("Credenciales inválidas.");
+            throw new BadCredentialsException("Credenciales inválidas(Contraseña mala).");
         }
 
         String role = user.getRole().getName(); // Obtiene el nombre del rol del usuario

@@ -26,5 +26,11 @@ public class HistorialPuntosServiceImpl implements HistorialPuntosService {
         return repo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Historial no encontrado ID: " + id));
     }
+
+
+    @Override
+    public Page<HistorialPuntos> findByUserIdOrderByPedidoDesc(Long idUser, Pageable pageable) {
+        return repo.findByUser_IdUserOrderByPedido_IdPedidoDesc(idUser, pageable);
+    }
 }
 

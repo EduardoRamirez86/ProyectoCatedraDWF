@@ -34,6 +34,16 @@ public class HistorialPuntosController {
         var entity = service.getByIdEntity(id);
         return assembler.toModel(entity);
     }
+
+    @GetMapping("/usuario/{idUser}")
+    public PagedModel<HistorialPuntosResponse> getByUser(
+            @PathVariable Long idUser,
+            Pageable pageable,
+            PagedResourcesAssembler<HistorialPuntos> pagedAssembler
+    ) {
+        var page = service.findByUserIdOrderByPedidoDesc(idUser, pageable);
+        return pagedAssembler.toModel(page, assembler);
+    }
 }
 
 
