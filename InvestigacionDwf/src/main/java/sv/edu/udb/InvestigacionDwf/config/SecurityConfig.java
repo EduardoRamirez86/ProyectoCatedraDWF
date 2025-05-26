@@ -132,7 +132,9 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:3000")); // Puedes añadir más orígenes si es necesario
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization","Content-Type")); // Asegúrate de incluir Authorization
+        // *** CAMBIA ESTA LÍNEA: Permite todos los encabezados ***
+        config.setAllowedHeaders(List.of("*"));
+        // ******************************************************
         config.setAllowCredentials(true); // Permite el envío de cookies y credenciales
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

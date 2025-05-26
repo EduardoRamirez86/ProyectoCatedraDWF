@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/config/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -300,7 +300,7 @@
       <workItem from="1748219385131" duration="7491000" />
       <workItem from="1748228152876" duration="3745000" />
       <workItem from="1748231917682" duration="4986000" />
-      <workItem from="1748247395608" duration="8556000" />
+      <workItem from="1748247395608" duration="8909000" />
     </task>
     <servers />
   </component>
