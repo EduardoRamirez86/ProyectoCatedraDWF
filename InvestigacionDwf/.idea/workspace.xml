@@ -5,15 +5,82 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d68e7ba-0954-490f-b671-6db1d05ba7e6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/producto-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/resena-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/ropa-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/secure-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/tipo-producto-controller.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/documentacion/user-controller.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/DireccionResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/DireccionResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/NotificacionResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/NotificacionResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/TipoProductoResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/dto/response/TipoProductoResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/model/entity/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/RoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sv/edu/udb/InvestigacionDwf/repository/RoleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-test.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-test.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/InvestigacionDwf-0.0.1-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application-test.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application-test.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/TipoProductoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/controller/TipoProductoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/HistorialPuntosRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/HistorialPuntosRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/PagoRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/PagoRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/PedidoRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/PedidoRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/ProductoRequest$ProductoRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/ProductoRequest$ProductoRequestBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/RegisterRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/RegisterRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/ResenaRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/request/ResenaRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/CarritoItemResponse$CarritoItemResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/CarritoItemResponse$CarritoItemResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/CarritoItemResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/CarritoItemResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/CarritoResponse$CarritoResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/CarritoResponse$CarritoResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/CarritoResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/CarritoResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/CuponResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/CuponResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/DireccionResponse$DireccionResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/DireccionResponse$DireccionResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/DireccionResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/DireccionResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/HistorialPedidoResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/HistorialPedidoResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/HistorialPuntosResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/HistorialPuntosResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/NotificacionResponse$NotificacionResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/NotificacionResponse$NotificacionResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/NotificacionResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/NotificacionResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse$PedidoResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse$PedidoResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/PedidoResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ProductoResponse$ProductoResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ProductoResponse$ProductoResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse$ResenaResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse$ResenaResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/ResenaResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/TipoProductoResponse$TipoProductoResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/TipoProductoResponse$TipoProductoResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/TipoProductoResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/TipoProductoResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/UserResponse$UserResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/UserResponse$UserResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/UserResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/dto/response/UserResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Carrito$CarritoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Carrito$CarritoBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Carrito.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Carrito.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/CarritoItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/CarritoItem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Cupon$CuponBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Cupon$CuponBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Cupon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Cupon.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Direccion$DireccionBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Direccion$DireccionBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Direccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Direccion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/HistorialPedido$HistorialPedidoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/HistorialPedido$HistorialPedidoBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/HistorialPedido.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/HistorialPedido.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/HistorialPuntos$HistorialPuntosBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/HistorialPuntos$HistorialPuntosBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/HistorialPuntos.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/HistorialPuntos.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Notificacion$NotificacionBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Notificacion$NotificacionBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Notificacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Notificacion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Pedido$PedidoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Pedido$PedidoBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Pedido.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Pedido.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/PedidoItem$PedidoItemBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/PedidoItem$PedidoItemBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/PedidoItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/PedidoItem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Producto$ProductoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Producto$ProductoBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Producto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Producto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/RegistroGanancia$RegistroGananciaBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/RegistroGanancia$RegistroGananciaBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/RegistroGanancia.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/RegistroGanancia.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Resena$ResenaBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Resena$ResenaBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Resena.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Resena.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Role.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/Role.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/TipoProducto$TipoProductoBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/TipoProducto$TipoProductoBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/TipoProducto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/TipoProducto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/User$UserBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/User$UserBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sv/edu/udb/InvestigacionDwf/model/entity/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/CarritoItemMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/CarritoItemMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/CarritoMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/CarritoMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/PedidoMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/generated-sources/annotations/sv/edu/udb/InvestigacionDwf/service/mapper/ProductoMapperImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +132,45 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JUnit.AuthControllerTest.executor": "Run",
+    "JUnit.AuthServiceImplTest.executor": "Run",
+    "JUnit.CarritoItemRepositoryTest.executor": "Run",
+    "JUnit.CarritoItemTest.executor": "Run",
+    "JUnit.CarritoRepositoryTest.executor": "Run",
+    "JUnit.CarritoTest.executor": "Run",
+    "JUnit.CuponRepositoryTest.executor": "Run",
+    "JUnit.CuponServiceImplTest.executor": "Run",
+    "JUnit.CuponTest.executor": "Run",
+    "JUnit.DireccionRepositoryTest.executor": "Run",
+    "JUnit.DireccionServiceImplTest.save_shouldThrowIfNull.executor": "Run",
+    "JUnit.DireccionTest.executor": "Run",
+    "JUnit.HistorialPedidoRepositoryTest.executor": "Run",
+    "JUnit.HistorialPedidoTest.executor": "Run",
+    "JUnit.HistorialPuntosRepositoryTest.executor": "Run",
+    "JUnit.HistorialPuntosTest.executor": "Run",
+    "JUnit.NotificacionRepositoryTest.executor": "Run",
+    "JUnit.NotificacionServiceImplTest.executor": "Run",
+    "JUnit.NotificacionTest.executor": "Run",
+    "JUnit.ParametroRepositoryTest.executor": "Run",
+    "JUnit.ParametroTest.executor": "Run",
+    "JUnit.PedidoRepositoryTest.executor": "Run",
+    "JUnit.PedidoTest.executor": "Run",
+    "JUnit.ProductoRepositoryTest.executor": "Run",
+    "JUnit.ProductoServiceImplTest.executor": "Run",
+    "JUnit.ProductoTest.executor": "Run",
+    "JUnit.ProductoTest.testConstructorAndGetters.executor": "Run",
+    "JUnit.ResenaRepositoryTest.executor": "Run",
+    "JUnit.ResenaTest.executor": "Run",
+    "JUnit.RoleRepositoryTest.executor": "Run",
+    "JUnit.RoleTest.executor": "Run",
+    "JUnit.RopaRepositoryTest.executor": "Run",
+    "JUnit.RopaTest.executor": "Run",
+    "JUnit.TipoProductoRepositoryTest.executor": "Run",
+    "JUnit.TipoProductoServiceImplTest.executor": "Run",
+    "JUnit.TipoProductoTest.executor": "Run",
+    "JUnit.UserRepositoryTest.executor": "Run",
+    "JUnit.UserTest.executor": "Run",
+    "Maven.InvestigacionDwf [clean,-DforkCount=0...].executor": "Debug",
     "Maven.InvestigacionDwf [clean].executor": "Run",
     "Maven.InvestigacionDwf [install].executor": "Run",
     "Maven.InvestigacionDwf [package].executor": "Run",
@@ -81,7 +187,7 @@
     "git-widget-placeholder": "Swagger",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/wamp64/www/ProyectoCatedraDWF",
+    "last_opened_file_path": "C:/Users/eduardo/OneDrive/Documentos/GitHub/ProyectoCatedraDWF2/InvestigacionDwf/src/main/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -104,11 +210,90 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF2\InvestigacionDwf\src\main\resources" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\eduardo\OneDrive\Documentos\GitHub\ProyectoCatedraDWF2\InvestigacionDwf\src\test\java\sv\edu\udb\InvestigacionDwf" />
       <recent name="C:\wamp64\www\ProyectoCatedraDWF\InvestigacionDwf\src\main\java\sv\edu\udb\InvestigacionDwf\documentacion" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.InvestigacionDwfApplicationTests">
+    <configuration name="CarritoItemRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf.repository" />
+      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.repository.CarritoItemRepositoryTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="InvestigacionDwfApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf" />
+      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.InvestigacionDwfApplicationTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ParametroRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf.repository" />
+      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.repository.ParametroRepositoryTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TipoProductoRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf.repository" />
+      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.repository.TipoProductoRepositoryTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="InvestigacionDwf" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sv.edu.udb.InvestigacionDwf.repository.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sv.edu.udb.InvestigacionDwf.repository" />
+      <option name="MAIN_CLASS_NAME" value="sv.edu.udb.InvestigacionDwf.repository.UserRepositoryTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Unnamed" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="InvestigacionDwf" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="sv.edu.udb.InvestigacionDwf.InvestigacionDwfApplication" />
@@ -116,12 +301,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.InvestigacionDwfApplicationTests" />
+        <item itemvalue="JUnit.UserRepositoryTest" />
+        <item itemvalue="JUnit.CarritoItemRepositoryTest" />
+        <item itemvalue="JUnit.TipoProductoRepositoryTest" />
+        <item itemvalue="JUnit.ParametroRepositoryTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.189" />
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.189" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
       </set>
     </attachedChunks>
   </component>
@@ -180,6 +374,7 @@
       <workItem from="1748219385131" duration="7491000" />
       <workItem from="1748228152876" duration="3745000" />
       <workItem from="1748231917682" duration="4986000" />
+      <workItem from="1748247395608" duration="2786000" />
     </task>
     <servers />
   </component>
