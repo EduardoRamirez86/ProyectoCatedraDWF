@@ -159,23 +159,27 @@ export default function PedidoCrud() {
             </table>
           </div>
         )}
-        <div className="flex justify-between items-center mt-6">
+        <div className="flex justify-center items-center gap-2 mt-8">
           <button
             onClick={handlePrev}
             disabled={page === 0}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+            className={`px-4 py-2 rounded-l-lg border border-indigo-200 bg-white text-indigo-600 font-semibold transition
+              ${page === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-indigo-50 hover:text-indigo-800"}`}
+            aria-label="Anterior"
           >
-            Anterior
+            <i className="fas fa-chevron-left"></i> Anterior
           </button>
-          <span className="text-gray-700">
-            Página {page + 1} de {totalPages}
+          <span className="px-4 py-2 bg-indigo-50 border-t border-b border-indigo-200 text-indigo-700 font-medium rounded-none select-none">
+            Página <span className="font-bold">{page + 1}</span> de <span className="font-bold">{totalPages}</span>
           </span>
           <button
             onClick={handleNext}
             disabled={page >= totalPages - 1}
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+            className={`px-4 py-2 rounded-r-lg border border-indigo-200 bg-white text-indigo-600 font-semibold transition
+              ${page >= totalPages - 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-indigo-50 hover:text-indigo-800"}`}
+            aria-label="Siguiente"
           >
-            Siguiente
+            Siguiente <i className="fas fa-chevron-right"></i>
           </button>
         </div>
       </div>

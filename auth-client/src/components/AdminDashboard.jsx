@@ -1,152 +1,144 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   getGananciasTotales,
   getGananciasPorPeriodo,
   getProductosMasVendidos,
 } from "../services/pedidoService";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
+import dayjs from "dayjs";
 
 export default function AdminDashboard() {
-  const [gananciasTotales, setGananciasTotales] = useState(null);
-  const [gananciasPeriodo, setGananciasPeriodo] = useState(null);
+  const [gananciasTotales, setGananciasTotales] = useState(0);
+  const [gananciasPeriodo, setGananciasPeriodo] = useState(0);
   const [productosMasVendidos, setProductosMasVendidos] = useState([]);
-  const [fechaInicio, setFechaInicio] = useState("");
-  const [fechaFin, setFechaFin] = useState("");
+
+  const [fechaInicio, setFechaInicio] = useState(dayjs().startOf("month").format("YYYY-MM-DD"));
+  const [fechaFin, setFechaFin] = useState(dayjs().format("YYYY-MM-DD"));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Para mostrar feedback de consulta de periodo
-  const [periodoMsg, setPeriodoMsg] = useState(null);
+  const fetchTopProducts = useCallback(async () => {
+    try {
+      const raw = await getProductosMasVendidos(5);
+      return Object.entries(raw).map(([nombre, cantidad]) => ({ nombre, cantidad }));
+    } catch {
+      return [];
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchDashboard = async () => {
+    const loadData = async () => {
       setLoading(true);
-      setError(null);
       try {
-        const [totales, masVendidos] = await Promise.all([
+        const [totales, top5, periodo] = await Promise.all([
           getGananciasTotales(),
-          getProductosMasVendidos(5),
+          fetchTopProducts(),
+          getGananciasPorPeriodo(fechaInicio, fechaFin),
         ]);
         setGananciasTotales(totales);
-        setProductosMasVendidos(
-          Object.entries(masVendidos).map(([nombre, cantidad]) => ({ nombre, cantidad }))
-        );
-      } catch (err) {
-        setError(err.message);
+        setProductosMasVendidos(top5);
+        setGananciasPeriodo(periodo);
+        setError(null);
+      } catch (e) {
+        setError(e.message || "Error al cargar datos");
       } finally {
         setLoading(false);
       }
     };
-    fetchDashboard();
-  }, []);
+    loadData();
+  }, [fetchTopProducts, fechaInicio, fechaFin]);
 
-  const handlePeriodo = async (e) => {
+  const handlePeriodo = async e => {
     e.preventDefault();
-    setGananciasPeriodo(null);
-    setPeriodoMsg(null);
-    setError(null);
-    if (!fechaInicio || !fechaFin) {
-      setPeriodoMsg("Selecciona ambas fechas.");
-      return;
-    }
     if (fechaFin < fechaInicio) {
-      setPeriodoMsg("La fecha final debe ser igual o posterior a la inicial.");
+      setError("La fecha final debe ser igual o posterior a la inicial.");
       return;
     }
+    setLoading(true);
     try {
-      const res = await getGananciasPorPeriodo(fechaInicio, fechaFin);
-      setGananciasPeriodo(res);
-      setPeriodoMsg(null);
-    } catch (err) {
-      setPeriodoMsg("No se pudo consultar el periodo.");
-      setError(err.message);
+      const periodo = await getGananciasPorPeriodo(fechaInicio, fechaFin);
+      setGananciasPeriodo(periodo);
+      setError(null);
+    } catch (e) {
+      setError(e.message || "Error al consultar periodo");
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex-grow flex items-center justify-center">
+        <div className="animate-spin h-12 w-12 border-4 border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-red-500 text-center mt-4">{error}</div>;
+  }
+
   return (
-    <div className="mb-8">
-      <h2 className="text-2xl font-bold text-indigo-700 mb-6 flex items-center gap-2">
-        <i className="fas fa-chart-line text-indigo-400"></i>
-        Dashboard de Ventas
-      </h2>
-      {loading ? (
-        <div className="flex justify-center items-center h-32">
-          <span className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mr-3"></span>
-          <span className="text-gray-500">Cargando estadísticas...</span>
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      {/* Metric Cards */}
+      <div className="space-y-6">
+        <div className="bg-gradient-to-r from-indigo-600 to-indigo-400 text-white rounded-xl p-6 shadow-lg">
+          <h3 className="text-lg font-semibold">Ganancias Totales</h3>
+          <p className="mt-2 text-3xl font-bold">
+            ${gananciasTotales.toLocaleString("es-SV", { minimumFractionDigits: 2 })}
+          </p>
         </div>
-      ) : error ? (
-        <div className="text-center text-red-500">{error}</div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          {/* Ganancias Totales */}
-          <div className="bg-white rounded-xl shadow p-6 border border-indigo-100 flex flex-col items-center">
-            <span className="text-gray-500 mb-2">Ganancias Totales</span>
-            <span className="text-3xl font-bold text-indigo-700">
-              ${Number(gananciasTotales ?? 0).toLocaleString("es-SV", { minimumFractionDigits: 2 })}
-            </span>
-            <span className="mt-2 text-xs text-gray-400">Acumulado histórico</span>
-          </div>
-          {/* Ganancias por periodo */}
-          <div className="bg-white rounded-xl shadow p-6 border border-indigo-100 flex flex-col items-center">
-            <form onSubmit={handlePeriodo} className="flex flex-col items-center gap-2 w-full">
-              <span className="text-gray-500 mb-2">Ganancias por periodo</span>
-              <div className="flex flex-col sm:flex-row gap-2 w-full">
-                <input
-                  type="date"
-                  value={fechaInicio}
-                  onChange={e => setFechaInicio(e.target.value)}
-                  className="border rounded px-2 py-1 w-full min-w-[140px] max-w-[180px] text-center"
-                  required
-                  placeholder="Fecha inicio"
-                  style={{ minWidth: 0 }}
-                />
-                <input
-                  type="date"
-                  value={fechaFin}
-                  onChange={e => setFechaFin(e.target.value)}
-                  className="border rounded px-2 py-1 w-full min-w-[140px] max-w-[180px] text-center"
-                  required
-                  placeholder="Fecha fin"
-                  style={{ minWidth: 0 }}
-                />
-              </div>
-              <button
-                type="submit"
-                className="mt-2 px-4 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
-              >
-                Consultar
-              </button>
-            </form>
-            {periodoMsg && (
-              <span className="mt-2 text-sm text-red-500">{periodoMsg}</span>
-            )}
-            {gananciasPeriodo !== null && !periodoMsg && (
-              <span className="mt-3 text-xl font-bold text-indigo-700">
-                ${Number(gananciasPeriodo).toLocaleString("es-SV", { minimumFractionDigits: 2 })}
-              </span>
-            )}
-          </div>
-          {/* Productos más vendidos */}
-          <div className="bg-white rounded-xl shadow p-6 border border-indigo-100">
-            <span className="text-gray-500 mb-2 block">Top 5 más vendidos</span>
-            <ul className="mt-2 space-y-2">
-              {productosMasVendidos.length === 0 ? (
-                <li className="text-gray-400">Sin datos</li>
-              ) : (
-                productosMasVendidos.map((p, i) => (
-                  <li key={i} className="flex justify-between items-center">
-                    <span className="font-medium text-indigo-800 truncate max-w-[120px]">{p.nombre}</span>
-                    <span className="text-gray-700 font-semibold">{p.cantidad} vendidos</span>
-                  </li>
-                ))
-              )}
-            </ul>
-            <div className="mt-4">
-              <i className="fas fa-trophy text-yellow-400 mr-2"></i>
-              <span className="text-xs text-gray-500">Basado en ventas históricas</span>
-            </div>
-          </div>
+        <div className="bg-gradient-to-r from-green-600 to-green-400 text-white rounded-xl p-6 shadow-lg">
+          <h3 className="text-lg font-semibold">
+            Ganancias ({dayjs(fechaInicio).format("D MMM")} - {dayjs(fechaFin).format("D MMM")})
+          </h3>
+          <p className="mt-2 text-3xl font-bold">
+            ${gananciasPeriodo.toLocaleString("es-SV", { minimumFractionDigits: 2 })}
+          </p>
+          <form onSubmit={handlePeriodo} className="mt-4 flex space-x-2 items-center">
+            <input
+              type="date"
+              className="rounded-lg px-3 py-1 text-gray-800"
+              value={fechaInicio}
+              onChange={e => setFechaInicio(e.target.value)}
+            />
+            <input
+              type="date"
+              className="rounded-lg px-3 py-1 text-gray-800"
+              value={fechaFin}
+              onChange={e => setFechaFin(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="bg-white text-green-700 px-4 py-1 rounded-lg font-semibold shadow hover:bg-green-50 transition"
+            >
+              Actualizar
+            </button>
+          </form>
         </div>
-      )}
+      </div>
+
+      {/* Top 5 Products Chart */}
+      <div className="bg-white rounded-xl p-6 shadow-lg">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Top 5 Productos</h3>
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart data={productosMasVendidos} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="nombre" tick={{ fontSize: 12 }} />
+            <YAxis />
+            <Tooltip formatter={value => [value, "Vendidos"]} />
+            <Bar dataKey="cantidad" fill="#6366F1" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }
