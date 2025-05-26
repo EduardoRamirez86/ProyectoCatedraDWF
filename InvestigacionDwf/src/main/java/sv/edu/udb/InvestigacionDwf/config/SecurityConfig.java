@@ -22,10 +22,10 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity // Habilita la seguridad a nivel de método con @PreAuthorize, etc.
 public class SecurityConfig {
 
-    private final JwtAuthFilter jwtAuthFilter;
+    private final JwtAuthFilter jwtAuthFilter; // Asegúrate de que JwtAuthFilter esté correctamente definido e inyectable
 
     public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
@@ -35,15 +35,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // 1) Habilitar CORS (usa corsConfigurationSource)
-                .cors(AbstractHttpConfigurer::disable)
+                // Se usa el Bean corsConfigurationSource definido abajo
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 // 2) Deshabilitar CSRF
                 .csrf(AbstractHttpConfigurer::disable)
                 // 3) Reglas de autorización
                 .authorizeHttpRequests(auth -> auth
                         // a) Permitir todos los preflights CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // b) Rutas públicas
+                        // b) Rutas públicas (sin autenticación)
                         .requestMatchers(HttpMethod.POST, "/auth/register", "/auth/login").permitAll()
+                        // Rutas de Swagger/OpenAPI
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/v3/api-docs.yaml",
@@ -53,68 +55,73 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/api-docs.yaml"
                         ).permitAll()
+                        // Rutas GET de acceso público (información general de productos, etc.)
                         .requestMatchers(HttpMethod.GET,
                                 "/auth/ropa/**",
                                 "/auth/producto/**",
                                 "/auth/tipoproducto/**",
-                                "/auth/carrito/**",
-                                "/auth/carrito-item/**",
-                                "/auth/pedido/**",
-                                "/auth/resenas/**",
-                                "/auth/notificacion/**",
-                                "/auth/direcciones/**",
-                                "/auth/historial-puntos/**",
-                                "/auth/historial-pedidos/**",
-                                "/auth/users/**",
-                                "/auth/parametros/**"
+                                "/auth/resenas/**", // GET para reseñas puede ser público
+                                "/auth/parametros/**" // GET para parámetros puede ser público
                         ).permitAll()
 
+                        // Acceso a la consola H2 y rutas de error
                         .requestMatchers("/h2-console/**", "/error").permitAll()
+
                         // c) Rutas protegidas (ADMIN)
+                        // Gestión de Usuarios (ADMIN)
+                        .requestMatchers(HttpMethod.GET,    "/auth/users/paginated").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/auth/users").hasRole("ADMIN") // listUsers() (no paginado)
+                        .requestMatchers(HttpMethod.POST,   "/auth/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/auth/users/{id}/admin").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/auth/users/{id}").hasRole("ADMIN")
+
+                        // Gestión de Ropa (ADMIN)
                         .requestMatchers(HttpMethod.POST,   "/auth/ropa/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,    "/auth/ropa/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/auth/ropa/**").hasRole("ADMIN")
-                        //Producto(ADMIN)
+                        // Gestión de Productos (ADMIN)
                         .requestMatchers(HttpMethod.POST,   "/auth/producto/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,    "/auth/producto/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/auth/producto/**").hasRole("ADMIN")
-                        //TipoProducto(ADMIN)
+                        // Gestión de Tipo de Producto (ADMIN)
                         .requestMatchers(HttpMethod.POST,   "/auth/tipoproducto/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,    "/auth/tipoproducto/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/auth/tipoproducto/**").hasRole("ADMIN")
-                        //Pedidos(ADMIN)(USER)
-                        .requestMatchers(HttpMethod.POST,   "/auth/pedido/**").hasAnyRole("ADMIN","USER")
-                        .requestMatchers(HttpMethod.PUT,    "/auth/pedido/**").hasAnyRole("ADMIN","USER")
-                        .requestMatchers(HttpMethod.DELETE, "/auth/pedido/**").hasAnyRole("ADMIN","USER")
-                        //Carrito(USER)(ADMIN)
-                        .requestMatchers(HttpMethod.POST,   "/auth/carrito/**").hasAnyRole("ADMIN","USER")
-                        .requestMatchers(HttpMethod.PUT,    "/auth/carrito/**").hasAnyRole("ADMIN","USER")
-                        .requestMatchers(HttpMethod.DELETE, "/auth/carrito/**").hasAnyRole("ADMIN","USER")
-                        //CarritoItem(USER)(ADMIN)
-                        .requestMatchers(HttpMethod.POST,   "/auth/carrito-item/**").hasAnyRole("ADMIN","USER")
-                        .requestMatchers(HttpMethod.PUT,    "/auth/carrito-item/**").hasAnyRole("ADMIN","USER")
-                        .requestMatchers(HttpMethod.DELETE, "/auth/carrito-item/**").hasAnyRole("ADMIN","USER")
-                        //Resena(USER)(ADMIN)
+
+                        // Rutas protegidas (ADMIN o USER)
+                        // Pedidos (ADMIN/USER) - Aplicar a todos los métodos
+                        .requestMatchers("/auth/pedido/**").hasAnyRole("ADMIN","USER")
+                        // Carrito (ADMIN/USER) - Aplicar a todos los métodos
+                        .requestMatchers("/auth/carrito/**").hasAnyRole("ADMIN","USER")
+                        // CarritoItem (ADMIN/USER) - Aplicar a todos los métodos
+                        .requestMatchers("/auth/carrito-item/**").hasAnyRole("ADMIN","USER")
+                        // Reseñas (ADMIN/USER) - POST, PUT, DELETE (GET ya es público)
                         .requestMatchers(HttpMethod.POST,   "/auth/resenas/**").hasAnyRole("ADMIN","USER")
                         .requestMatchers(HttpMethod.PUT,    "/auth/resenas/**").hasAnyRole("ADMIN","USER")
                         .requestMatchers(HttpMethod.DELETE, "/auth/resenas/**").hasAnyRole("ADMIN","USER")
-                        //Notificacion (USER)(ADMIN)
-                        .requestMatchers(HttpMethod.POST,   "/auth/notificacion").hasAnyRole("ADMIN","USER")
-                        .requestMatchers(HttpMethod.PUT,    "/auth/notificacion").hasAnyRole("ADMIN","USER")
-                        .requestMatchers(HttpMethod.DELETE, "/auth/notificacion").hasAnyRole("ADMIN","USER")
-                        //Direccion(USER)(ADMIN)
-                        .requestMatchers(HttpMethod.POST,   "/auth/direcciones/**").hasAnyRole("ADMIN","USER")
-                        .requestMatchers(HttpMethod.PUT,    "/auth/direcciones/**").hasAnyRole("ADMIN","USER")
-                        .requestMatchers(HttpMethod.DELETE, "/auth/direcciones/**").hasAnyRole("ADMIN","USER")
+                        // Notificaciones (ADMIN/USER) - Aplicar a todos los métodos
+                        .requestMatchers("/auth/notificacion/**").hasAnyRole("ADMIN","USER")
+                        // Direcciones (ADMIN/USER) - Aplicar a todos los métodos
+                        .requestMatchers("/auth/direcciones/**").hasAnyRole("ADMIN","USER")
+                        // Historial de Puntos (ADMIN/USER) - Aplicar a todos los métodos
+                        .requestMatchers("/auth/historial-puntos/**").hasAnyRole("ADMIN","USER")
+                        // Historial de Pedidos (ADMIN/USER) - Aplicar a todos los métodos
+                        .requestMatchers("/auth/historial-pedidos/**").hasAnyRole("ADMIN","USER")
 
-                        // d) El resto requiere autenticación
+
+                        // Acciones personales de Usuario (USER/ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/auth/users/{id}").hasAnyRole("ADMIN", "USER") // Obtener perfil propio
+                        .requestMatchers(HttpMethod.PUT, "/auth/users/{id}/profile").hasAnyRole("ADMIN", "USER") // Actualizar perfil propio
+                        .requestMatchers(HttpMethod.PUT, "/auth/users/{id}/password").hasAnyRole("ADMIN", "USER") // Cambiar contraseña
+
+                        // d) Cualquier otra solicitud requiere autenticación
                         .anyRequest().authenticated()
                 )
-                // 4) Desactivar form login
+                // 4) Desactivar el formulario de login predeterminado de Spring Security
                 .formLogin(AbstractHttpConfigurer::disable)
-                // 5) Permitir H2 console en iframe sameOrigin
+                // 5) Permitir H2 console en iframe (necesario para ver la consola de H2 en el navegador)
                 .headers(headers -> headers.frameOptions().sameOrigin())
-                // 6) Agregar filtro JWT
+                // 6) Agregar el filtro JWT antes del filtro de autenticación de nombre de usuario/contraseña
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -123,13 +130,13 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedOrigins(List.of("http://localhost:3000")); // Puedes añadir más orígenes si es necesario
         config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization","Content-Type")); // ← Debe incluir Authorization :contentReference[oaicite:5]{index=5}
-        config.setAllowCredentials(true);
+        config.setAllowedHeaders(List.of("Authorization","Content-Type")); // Asegúrate de incluir Authorization
+        config.setAllowCredentials(true); // Permite el envío de cookies y credenciales
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/**", config); // Aplica esta configuración a todas las rutas
         return source;
     }
 
@@ -141,6 +148,8 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        // Necesitas un UserDetailsService configurado para que AuthenticationManager funcione correctamente
+        // Aquí se asume que tu UserDetailsService ya está configurado (por ejemplo, en otra clase o implícitamente)
         return http
                 .getSharedObject(AuthenticationManagerBuilder.class)
                 .build();
