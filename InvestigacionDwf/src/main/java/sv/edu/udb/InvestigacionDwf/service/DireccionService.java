@@ -9,4 +9,6 @@ import java.util.List;
 public interface DireccionService {
     DireccionResponse save(DireccionRequest req, Long idUser);
     List<DireccionResponse> findByUser(Long idUser);
+
+    void delete(Long idDireccion);
 }

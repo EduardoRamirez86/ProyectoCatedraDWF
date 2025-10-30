@@ -52,10 +52,19 @@ public class SecurityConfig {
                         // público: listar ROPA, TIPOPRODUCTO, RESEÑAS, PARÁMETROS
                         .requestMatchers(HttpMethod.GET,
                                 "/auth/ropa/**",
+                                "/auth/producto/**",
                                 "/auth/tipoproducto/**",
                                 "/auth/resenas/**",
                                 "/auth/parametros/**"
                         ).permitAll()
+
+                        // En lugar de la línea genérica, separamos GET, POST, PUT, DELETE
+                        .requestMatchers(HttpMethod.GET,    "/auth/direcciones/**").hasAnyRole("ADMIN","USER")
+                        .requestMatchers(HttpMethod.POST,   "/auth/direcciones/**").hasAnyRole("ADMIN","USER")
+                        .requestMatchers(HttpMethod.PUT,    "/auth/direcciones/**").hasAnyRole("ADMIN","USER")
+                        .requestMatchers(HttpMethod.DELETE, "/auth/direcciones/**").hasAnyRole("ADMIN","USER") // ¡¡LA LÍNEA CLAVE!!
+                        // --- ----------------------------------------------------------------- ---
+
 
                         // ————————————————
                         // ADMIN Exclusivo: gestión de usuarios y tipos de producto
@@ -98,7 +107,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,   "/auth/resenas/**").hasAnyRole("ADMIN","USER")
                         .requestMatchers(HttpMethod.PUT,    "/auth/resenas/**").hasAnyRole("ADMIN","USER")
                         .requestMatchers(HttpMethod.DELETE, "/auth/resenas/**").hasAnyRole("ADMIN","USER")
-                        .requestMatchers("/auth/direcciones/**").hasAnyRole("ADMIN","USER")
+
+
+
                         .requestMatchers("/auth/historial-puntos/**").hasAnyRole("ADMIN","USER")
 
                         // ————————————————

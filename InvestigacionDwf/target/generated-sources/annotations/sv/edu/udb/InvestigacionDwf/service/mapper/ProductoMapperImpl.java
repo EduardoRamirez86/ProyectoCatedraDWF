@@ -2,7 +2,6 @@ package sv.edu.udb.InvestigacionDwf.service.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 import sv.edu.udb.InvestigacionDwf.dto.request.ProductoRequest;
@@ -12,8 +11,8 @@ import sv.edu.udb.InvestigacionDwf.model.entity.TipoProducto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-26T10:48:56-0600",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
+    date = "2025-10-29T23:32:07-0600",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.15 (Eclipse Adoptium)"
 )
 @Component
 public class ProductoMapperImpl extends ProductoMapper {
@@ -26,17 +25,19 @@ public class ProductoMapperImpl extends ProductoMapper {
 
         Producto.ProductoBuilder producto = Producto.builder();
 
-        producto.nombre( Objects.requireNonNull( request.getNombre() ) );
-        producto.descripcion( Objects.requireNonNull( request.getDescripcion() ) );
-        producto.precio( Objects.requireNonNull( request.getPrecio() ) );
-        producto.costo( Objects.requireNonNull( request.getCosto() ) );
-        producto.cantidad( Objects.requireNonNull( request.getCantidad() ) );
-        producto.imagen( Objects.requireNonNull( request.getImagen() ) );
-        producto.cantidadPuntos( Objects.requireNonNull( request.getCantidadPuntos() ) );
+        producto.nombre( request.getNombre() );
+        producto.descripcion( request.getDescripcion() );
+        producto.precio( request.getPrecio() );
+        producto.costo( request.getCosto() );
+        producto.cantidad( request.getCantidad() );
+        producto.imagen( request.getImagen() );
+        producto.cantidadPuntos( request.getCantidadPuntos() );
 
-        producto.tipoProducto( Objects.nonNull(request.getIdTipoProducto()) ? tipoProductoRepository.getReferenceById(request.getIdTipoProducto()) : null );
+        Producto productoResult = producto.build();
 
-        return producto.build();
+        linkTipoProducto( request, productoResult );
+
+        return productoResult;
     }
 
     @Override
@@ -47,18 +48,18 @@ public class ProductoMapperImpl extends ProductoMapper {
 
         ProductoResponse.ProductoResponseBuilder productoResponse = ProductoResponse.builder();
 
-        productoResponse.idTipoProducto( Objects.requireNonNull( productoTipoProductoIdTipoProducto( producto ) ) );
-        productoResponse.nombreTipo( Objects.requireNonNull( productoTipoProductoTipo( producto ) ) );
-        productoResponse.idProducto( Objects.requireNonNull( producto.getIdProducto() ) );
-        productoResponse.nombre( Objects.requireNonNull( producto.getNombre() ) );
-        productoResponse.descripcion( Objects.requireNonNull( producto.getDescripcion() ) );
-        productoResponse.precio( Objects.requireNonNull( producto.getPrecio() ) );
-        productoResponse.costo( Objects.requireNonNull( producto.getCosto() ) );
-        productoResponse.cantidad( Objects.requireNonNull( producto.getCantidad() ) );
-        productoResponse.imagen( Objects.requireNonNull( producto.getImagen() ) );
-        productoResponse.cantidadPuntos( Objects.requireNonNull( producto.getCantidadPuntos() ) );
-        productoResponse.fechaCreacion( Objects.requireNonNull( producto.getFechaCreacion() ) );
-        productoResponse.fechaActualizacion( Objects.requireNonNull( producto.getFechaActualizacion() ) );
+        productoResponse.idTipoProducto( productoTipoProductoIdTipoProducto( producto ) );
+        productoResponse.nombreTipo( productoTipoProductoTipo( producto ) );
+        productoResponse.idProducto( producto.getIdProducto() );
+        productoResponse.nombre( producto.getNombre() );
+        productoResponse.descripcion( producto.getDescripcion() );
+        productoResponse.precio( producto.getPrecio() );
+        productoResponse.costo( producto.getCosto() );
+        productoResponse.cantidad( producto.getCantidad() );
+        productoResponse.imagen( producto.getImagen() );
+        productoResponse.cantidadPuntos( producto.getCantidadPuntos() );
+        productoResponse.fechaCreacion( producto.getFechaCreacion() );
+        productoResponse.fechaActualizacion( producto.getFechaActualizacion() );
 
         return productoResponse.build();
     }
@@ -84,28 +85,28 @@ public class ProductoMapperImpl extends ProductoMapper {
         }
 
         if ( request.getNombre() != null ) {
-            producto.setNombre( Objects.requireNonNull( request.getNombre() ) );
+            producto.setNombre( request.getNombre() );
         }
         if ( request.getDescripcion() != null ) {
-            producto.setDescripcion( Objects.requireNonNull( request.getDescripcion() ) );
+            producto.setDescripcion( request.getDescripcion() );
         }
         if ( request.getPrecio() != null ) {
-            producto.setPrecio( Objects.requireNonNull( request.getPrecio() ) );
+            producto.setPrecio( request.getPrecio() );
         }
         if ( request.getCosto() != null ) {
-            producto.setCosto( Objects.requireNonNull( request.getCosto() ) );
+            producto.setCosto( request.getCosto() );
         }
         if ( request.getCantidad() != null ) {
-            producto.setCantidad( Objects.requireNonNull( request.getCantidad() ) );
+            producto.setCantidad( request.getCantidad() );
         }
         if ( request.getImagen() != null ) {
-            producto.setImagen( Objects.requireNonNull( request.getImagen() ) );
+            producto.setImagen( request.getImagen() );
         }
         if ( request.getCantidadPuntos() != null ) {
-            producto.setCantidadPuntos( Objects.requireNonNull( request.getCantidadPuntos() ) );
+            producto.setCantidadPuntos( request.getCantidadPuntos() );
         }
 
-        producto.setTipoProducto( Objects.nonNull(request.getIdTipoProducto()) ? tipoProductoRepository.getReferenceById(request.getIdTipoProducto()) : null );
+        linkTipoProducto( request, producto );
     }
 
     private Long productoTipoProductoIdTipoProducto(Producto producto) {

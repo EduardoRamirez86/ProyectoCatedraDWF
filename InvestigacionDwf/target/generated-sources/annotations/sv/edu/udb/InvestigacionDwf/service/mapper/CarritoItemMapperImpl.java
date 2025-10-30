@@ -12,8 +12,8 @@ import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-26T10:48:56-0600",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
+    date = "2025-10-23T21:07:47-0600",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.15 (Eclipse Adoptium)"
 )
 @Component
 public class CarritoItemMapperImpl extends CarritoItemMapper {
