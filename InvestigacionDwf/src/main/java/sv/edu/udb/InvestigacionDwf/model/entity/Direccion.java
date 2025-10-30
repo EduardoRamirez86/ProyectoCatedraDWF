@@ -22,6 +22,9 @@ public class Direccion {
     @JoinColumn(name = "id_user", nullable = false)
     private User user;
 
+    @Column(name = "activa", nullable = false)
+    private boolean activa = true;
+
     private String alias;           // “Casa”, “Trabajo”, etc.
     private String calle;           // Calle / dirección textual
     private String ciudad;

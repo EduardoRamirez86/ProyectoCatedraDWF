@@ -11,4 +11,8 @@ public interface DireccionService {
     List<DireccionResponse> findByUser(Long idUser);
 
     void delete(Long idDireccion);
+
+    DireccionResponse update(Long idDireccion, DireccionRequest req);
+
+
 }

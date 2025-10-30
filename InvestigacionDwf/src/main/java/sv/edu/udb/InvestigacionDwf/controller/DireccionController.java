@@ -1,9 +1,6 @@
-package sv.edu.udb.InvestigacionDwf.controller;
-
-import lombok.RequiredArgsConstructor;
+package sv.edu.udb.InvestigacionDwf.controller;import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-// --- 👇👇👇 ¡¡¡IMPORTA ESTO!!! ¡¡¡ES CLAVE!!! 👇👇👇 ---
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity; // ¡IMPORTANTE!
 import org.springframework.web.bind.annotation.*;
 import sv.edu.udb.InvestigacionDwf.dto.request.DireccionRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.DireccionResponse;
@@ -33,26 +30,18 @@ public class DireccionController {
         return serv.findByUser(idUser);
     }
 
-    // --- 👇👇👇 ¡¡¡EL MÉTODO QUE HA CAUSADO TODO ESTE SUFRIMIENTO, AHORA SÍ!!! 👇👇👇 ---
+    // --- 👇👇👇 ¡¡¡LA PUERTA QUE HEMOS ESTADO BUSCANDO!!! 👇👇👇 ---
     /**
-     * Endpoint para eliminar una dirección por su ID.
-     * Recibe el ID desde la URL.
-     * Llama al método delete del servicio, que ya contiene la lógica de validación.
-     * @param idDireccion El ID de la dirección a eliminar.
+     * Endpoint para eliminar una dirección individualmente.
+     * @param idDireccion El ID de la dirección a eliminar, obtenido de la URL.
      * @return Una respuesta HTTP 204 No Content si el borrado es exitoso.
-     *         El ExceptionHandler global se encargará de los errores (404 si no existe, 400 si el ID es nulo).
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long idDireccion) {
-        // Aquí llamamos al método delete de tu DireccionServiceImpl.
-        // Toda la lógica que escribiste (if Objects.isNull, if !repo.existsById)
-        // se ejecutará dentro de esta llamada.
+    @ResponseStatus(HttpStatus.NO_CONTENT) // Devuelve 204 si tiene éxito
+    public void delete(@PathVariable("id") Long idDireccion) {
+        // Llama al método 'delete' que YA EXISTE en tu DireccionServiceImpl.
+        // Toda tu lógica de validación se ejecutará.
         serv.delete(idDireccion);
-
-        // Si serv.delete() lanza una excepción, no llegará a esta línea.
-        // Si no lanza excepción, significa que el borrado fue exitoso.
-        // Devolvemos 204 No Content, que es la mejor práctica para un DELETE exitoso.
-        return ResponseEntity.noContent().build();
     }
-    // --- -------------------------------------------------------------------- ---
+    // --- -------------------------------------------------------- ---
 }
