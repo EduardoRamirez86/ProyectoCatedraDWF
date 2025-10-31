@@ -2,8 +2,6 @@ package sv.edu.udb.InvestigacionDwf.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-// import org.springframework.data.web.PagedResourcesAssembler; // ELIMINAR ESTA IMPORTACIÓN si no se usa
-// import org.springframework.hateoas.PagedModel; // ELIMINAR ESTA IMPORTACIÓN si no se usa
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +30,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserAssembler userAssembler;
 
-    // ELIMINAR la inyección de PagedResourcesAssembler del constructor
     public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
                            PasswordEncoder passwordEncoder, UserAssembler userAssembler) {
         this.userRepository = userRepository;
@@ -40,6 +37,8 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
         this.userAssembler = userAssembler;
     }
+
+    // ... (otros métodos sin cambios) ...
 
     @Override
     @Transactional(readOnly = true)
@@ -53,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public Page<UserResponse> findAllUsers(Pageable pageable) {
         Page<User> userPage = userRepository.findAll(pageable);
-        return userPage.map(userAssembler::toModel); // Usamos Page.map() con el UserAssembler
+        return userPage.map(userAssembler::toModel);
     }
 
     @Override
@@ -107,6 +106,12 @@ public class UserServiceImpl implements UserService {
             }
             user.setEmail(request.getNewEmail());
         }
+
+        // --- 👇👇👇 ¡¡¡LA LÍNEA DE CÓDIGO QUE FALTABA PARA LA VICTORIA!!! 👇👇👇 ---
+        if (request.getTelefono() != null) {
+            user.setTelefono(request.getTelefono());
+        }
+        // --- ----------------------------------------------------------------- ---
 
         User updated = userRepository.save(user);
         return userAssembler.toModel(updated);

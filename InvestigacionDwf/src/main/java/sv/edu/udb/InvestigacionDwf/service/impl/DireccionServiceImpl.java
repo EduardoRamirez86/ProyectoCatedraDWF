@@ -44,6 +44,7 @@ public class DireccionServiceImpl implements DireccionService {
         Direccion direccion = mapper.toEntity(req);
         direccion.setUser(user);
         // El campo 'activa' será 'true' por defecto gracias a la definición en la entidad.
+        direccion.setActiva(true);
 
         return mapper.toResponse(repo.save(direccion));
     }

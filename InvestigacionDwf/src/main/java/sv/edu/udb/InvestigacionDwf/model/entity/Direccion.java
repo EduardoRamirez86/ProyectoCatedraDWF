@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Data
 @NoArgsConstructor
@@ -23,6 +24,7 @@ public class Direccion {
     private User user;
 
     @Column(name = "activa", nullable = false)
+    @ColumnDefault("1")
     private boolean activa = true;
 
     private String alias;           // “Casa”, “Trabajo”, etc.
