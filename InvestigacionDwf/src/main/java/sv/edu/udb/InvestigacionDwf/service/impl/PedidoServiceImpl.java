@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sv.edu.udb.InvestigacionDwf.dto.request.PagoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.request.PedidoRequest;
+import sv.edu.udb.InvestigacionDwf.dto.response.PedidoItemDto;
 import sv.edu.udb.InvestigacionDwf.dto.response.PedidoResponse;
 import sv.edu.udb.InvestigacionDwf.exception.ResourceNotFoundException;
 import sv.edu.udb.InvestigacionDwf.model.entity.*;
@@ -596,5 +597,37 @@ public class PedidoServiceImpl implements PedidoService {
                 .build();
         notificacionRepository.save(n);
         logger.info("Notificación de cupón creada para usuario {}: Código {}", user.getUsername(), codigoCupon);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PedidoItemDto> getItemsByPedidoId(Long pedidoId) {
+        // Validación de nulidad para el ID
+        if (Objects.isNull(pedidoId)) {
+            logger.error("ID de pedido nulo para obtener items.");
+            throw new IllegalArgumentException("El ID del pedido no puede ser nulo.");
+        }
+
+        // Usamos el método getPedidoOrThrow que ya tienes para validar que el pedido existe
+        Pedido pedido = getPedidoOrThrow(pedidoId);
+
+        // Los PedidoItem ya están asociados directamente a la entidad Pedido.
+        // Simplemente los obtenemos.
+        List<PedidoItem> items = pedido.getPedidoItems();
+
+        if (items.isEmpty()) {
+            logger.warn("No se encontraron items para el pedido ID: {}", pedidoId);
+            return Collections.emptyList(); // Devuelve una lista vacía si no hay items
+        }
+
+        // Convierte cada entidad PedidoItem a un DTO PedidoItemDto
+        return items.stream()
+                .map(item -> new PedidoItemDto(
+                        item.getProducto().getIdProducto(),
+                        item.getProducto().getNombre(),
+                        item.getCantidad(),
+                        item.getPrecioUnitario()
+                ))
+                .collect(Collectors.toList());
     }
 }

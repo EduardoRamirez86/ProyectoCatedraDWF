@@ -6,15 +6,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sv.edu.udb.InvestigacionDwf.dto.request.PagoRequest;
 import sv.edu.udb.InvestigacionDwf.dto.request.PedidoRequest;
+import sv.edu.udb.InvestigacionDwf.dto.response.PedidoItemDto;
 import sv.edu.udb.InvestigacionDwf.dto.response.PedidoResponse;
 import sv.edu.udb.InvestigacionDwf.model.entity.Pedido;
 import sv.edu.udb.InvestigacionDwf.service.PedidoService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -101,7 +104,19 @@ public class PedidoController {
         return pedidoService.getProductosMasVendidos(limit);
     }
 
-    
+    /** * Endpoint para obtener todos los items (productos) de un pedido específico.
+     * ESTE ES EL ENDPOINT QUE NECESITAMOS EN EL FRONTEND.
+     *
+     * @param id El ID del pedido.
+     * @return Una lista de PedidoItemDto con los detalles de cada producto en el pedido.
+     */
+    @GetMapping("/{id}/items")
+    public ResponseEntity<List<PedidoItemDto>> getItemsByPedidoId(@PathVariable Long id) {
+        // Llama a un nuevo método en tu PedidoService para obtener los items.
+        List<PedidoItemDto> items = pedidoService.getItemsByPedidoId(id);
+        return ResponseEntity.ok(items);
+    }
+
 }
 
 
