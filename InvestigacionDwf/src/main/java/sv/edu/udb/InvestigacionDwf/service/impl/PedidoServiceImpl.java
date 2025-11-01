@@ -190,7 +190,7 @@ public class PedidoServiceImpl implements PedidoService {
                 .build();
 
         // Actualiza el estado del pedido a PENDIENTE (asumiendo que inicia en este estado)
-        pedido.actualizarEstado(EstadoPedido.PENDIENTE, user);
+        pedido.actualizarEstado(EstadoPedido.PAGADO, user);
 
         // --- Verificación y Asignación de Dirección de Entrega ---
         if (Objects.isNull(req.getIdDireccion())) {
@@ -448,7 +448,8 @@ public class PedidoServiceImpl implements PedidoService {
             logger.error("Objeto Pageable nulo para buscar todos los pedidos.");
             throw new IllegalArgumentException("La paginación no puede ser nula.");
         }
-        Page<Pedido> page = pedidoRepository.findAll(pageable);
+        Page<Pedido> page = pedidoRepository.findAllByPriority(pageable);
+
         return pagedResourcesAssembler.toModel(page, pedidoAssembler);
     }
 
@@ -500,8 +501,9 @@ public class PedidoServiceImpl implements PedidoService {
         // de pedidos que ya están en estado "ENTREGADO". Esto asegura que solo contamos ventas reales.
         List<Object[]> rawData = pedidoItemRepository.findTopSellingProductsRawByEstado(EstadoPedido.ENTREGADO, pageable);
 
+
         // Procesamos la lista de Object[] para construir el Map<String, Long>
-        Map<String, Long> productosMasVendidos = new HashMap<>();
+        Map<String, Long> productosMasVendidos = new LinkedHashMap<>();
         for (Object[] item : rawData) {
             Producto producto = (Producto) item[0];
             Long cantidadVendida = (Long) item[1];

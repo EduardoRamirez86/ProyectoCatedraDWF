@@ -2,21 +2,24 @@ package sv.edu.udb.InvestigacionDwf.service.mapper;
 
 import java.util.Objects;
 import javax.annotation.processing.Generated;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sv.edu.udb.InvestigacionDwf.dto.request.CarritoItemRequest;
 import sv.edu.udb.InvestigacionDwf.dto.response.CarritoItemResponse;
-import sv.edu.udb.InvestigacionDwf.dto.response.ProductoResponse;
 import sv.edu.udb.InvestigacionDwf.model.entity.Carrito;
 import sv.edu.udb.InvestigacionDwf.model.entity.CarritoItem;
 import sv.edu.udb.InvestigacionDwf.model.entity.Producto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-23T21:07:47-0600",
+    date = "2025-10-31T18:47:42-0600",
     comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.15 (Eclipse Adoptium)"
 )
 @Component
 public class CarritoItemMapperImpl extends CarritoItemMapper {
+
+    @Autowired
+    private ProductoMapper productoMapper;
 
     @Override
     public CarritoItem toEntity(CarritoItemRequest request) {
@@ -44,9 +47,9 @@ public class CarritoItemMapperImpl extends CarritoItemMapper {
 
         carritoItemResponse.idCarrito( Objects.requireNonNull( itemCarritoIdCarrito( item ) ) );
         carritoItemResponse.idProducto( Objects.requireNonNull( itemProductoIdProducto( item ) ) );
+        carritoItemResponse.producto( productoMapper.toResponse( item.getProducto() ) );
         carritoItemResponse.idCarritoItem( Objects.requireNonNull( item.getIdCarritoItem() ) );
         carritoItemResponse.cantidad( Objects.requireNonNull( item.getCantidad() ) );
-        carritoItemResponse.producto( productoToProductoResponse( item.getProducto() ) );
 
         return carritoItemResponse.build();
     }
@@ -79,26 +82,5 @@ public class CarritoItemMapperImpl extends CarritoItemMapper {
             return null;
         }
         return producto.getIdProducto();
-    }
-
-    protected ProductoResponse productoToProductoResponse(Producto producto) {
-        if ( producto == null ) {
-            return null;
-        }
-
-        ProductoResponse.ProductoResponseBuilder productoResponse = ProductoResponse.builder();
-
-        productoResponse.idProducto( Objects.requireNonNull( producto.getIdProducto() ) );
-        productoResponse.nombre( Objects.requireNonNull( producto.getNombre() ) );
-        productoResponse.descripcion( Objects.requireNonNull( producto.getDescripcion() ) );
-        productoResponse.precio( Objects.requireNonNull( producto.getPrecio() ) );
-        productoResponse.costo( Objects.requireNonNull( producto.getCosto() ) );
-        productoResponse.cantidad( Objects.requireNonNull( producto.getCantidad() ) );
-        productoResponse.imagen( Objects.requireNonNull( producto.getImagen() ) );
-        productoResponse.cantidadPuntos( Objects.requireNonNull( producto.getCantidadPuntos() ) );
-        productoResponse.fechaCreacion( Objects.requireNonNull( producto.getFechaCreacion() ) );
-        productoResponse.fechaActualizacion( Objects.requireNonNull( producto.getFechaActualizacion() ) );
-
-        return productoResponse.build();
     }
 }

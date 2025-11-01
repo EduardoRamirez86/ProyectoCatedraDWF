@@ -32,4 +32,31 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     // Si también quieres obtener la ganancia total sin importar el estado
     @Query("SELECT SUM(p.gananciaEstimada) FROM Pedido p")
     Optional<BigDecimal> sumAllGananciaEstimada();
+
+    /**
+     * Busca todos los pedidos y los ordena según una prioridad de estado personalizada,
+     * y luego por fecha de inicio descendente como criterio de desempate.
+     * La cláusula CASE asigna un número de prioridad a cada estado.
+     * Prioridad 1: PAGADO (más importante)
+     * Prioridad 2: ENVIADO
+     * Prioridad 3: EN_PROCESO
+     * Prioridad 4: PENDIENTE
+     * Prioridad 5: ENTREGADO
+     * Prioridad 6: CANCELADO (menos importante)
+     *
+     * @param pageable Objeto de paginación para limitar los resultados.
+     * @return una Página (Page) de Pedidos ordenados por prioridad.
+     */
+    @Query("SELECT p FROM Pedido p WHERE p.estado != sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido.CARRITO ORDER BY " +
+            "CASE p.estado " +
+            "WHEN sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido.PAGADO THEN 1 " +
+            "WHEN sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido.ENVIADO THEN 2 " +
+            "WHEN sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido.EN_PROCESO THEN 3 " +
+            "WHEN sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido.PENDIENTE THEN 4 " +
+            "WHEN sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido.ENTREGADO THEN 5 " +
+            "WHEN sv.edu.udb.InvestigacionDwf.model.enums.EstadoPedido.CANCELADO THEN 6 " +
+            "ELSE 7 " +
+            "END ASC, " +
+            "p.fechaInicio DESC")
+    Page<Pedido> findAllByPriority(Pageable pageable);
 }

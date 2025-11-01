@@ -16,7 +16,7 @@ import sv.edu.udb.InvestigacionDwf.repository.ProductoRepository;
 import java.util.Objects;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        uses = Objects.class)
+        uses = { Objects.class, ProductoMapper.class }) // Añadimos ProductoMapper para el mapeo anidado
 public abstract class CarritoItemMapper {
 
     @Autowired
@@ -27,42 +27,33 @@ public abstract class CarritoItemMapper {
 
     /**
      * Convierte un DTO de solicitud (CarritoItemRequest) a una entidad CarritoItem.
-     * Maneja la obtención de referencias a Carrito y Producto usando sus respectivos IDs.
-     * Realiza validaciones básicas de nulidad para los IDs esenciales.
-     *
-     * @param request El DTO de solicitud con los datos del ítem del carrito.
-     * @return Una nueva entidad CarritoItem.
-     * @throws IllegalArgumentException Si el request o sus IDs de carrito/producto son nulos.
+     * Usa getReferenceById para una asignación eficiente de claves foráneas.
      */
     @Mapping(target = "carrito", expression = "java(Objects.nonNull(request.getIdCarrito()) ? carritoRepository.getReferenceById(request.getIdCarrito()) : null)")
     @Mapping(target = "producto", expression = "java(Objects.nonNull(request.getIdProducto()) ? productoRepository.getReferenceById(request.getIdProducto()) : null)")
     public abstract CarritoItem toEntity(CarritoItemRequest request);
 
+    // --- 👇👇👇 ¡AQUÍ ESTÁ LA LÓGICA BLINDADA! 👇👇👇 ---
     /**
      * Convierte una entidad CarritoItem a un DTO de respuesta (CarritoItemResponse).
-     * Mapea los IDs de Carrito y Producto a partir de las entidades relacionadas.
-     * Realiza validaciones de nulidad para la entidad y sus relaciones esenciales.
-     *
-     * @param item La entidad CarritoItem a convertir.
-     * @return Un DTO CarritoItemResponse.
-     * @throws IllegalArgumentException Si la entidad item o sus relaciones (carrito, producto) son nulas.
+     * Es a prueba de nulos. Si `carrito` o `producto` son nulos en la entidad,
+     * los IDs correspondientes en la respuesta serán nulos, evitando el NullPointerException.
      */
     @Mapping(target = "idCarrito", source = "carrito.idCarrito")
     @Mapping(target = "idProducto", source = "producto.idProducto")
+    // Mapea la entidad anidada Producto a su DTO ProductResponse.
+    // MapStruct es lo suficientemente inteligente para manejar si `item.getProducto()` es null.
+    @Mapping(target = "producto", source = "producto")
     public abstract CarritoItemResponse toResponse(CarritoItem item);
+    // --- ----------------------------------------------- ---
+
 
     /**
      * Actualiza una entidad CarritoItem existente con los datos de un DTO de solicitud.
-     * Permite actualizar solo los campos que no son nulos en el request (estrategia de mapeo nulo ignorada).
-     * Maneja la actualización de referencias a Carrito y Producto si sus IDs se proporcionan.
-     *
-     * @param request El DTO de solicitud con los datos a actualizar.
-     * @param targetItem La entidad CarritoItem existente que se va a actualizar.
-     * @throws IllegalArgumentException Si el request o el targetItem son nulos.
      */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "carrito", expression = "java(Objects.nonNull(request.getIdCarrito()) ? carritoRepository.getReferenceById(request.getIdCarrito()) : targetItem.getCarrito())")
     @Mapping(target = "producto", expression = "java(Objects.nonNull(request.getIdProducto()) ? productoRepository.getReferenceById(request.getIdProducto()) : targetItem.getProducto())")
-    // ¡LA LÍNEA PROBLEMÁTICA SE ELIMINÓ AQUÍ!
     public abstract void updateEntityFromRequest(CarritoItemRequest request, @MappingTarget CarritoItem targetItem);
 }
+
