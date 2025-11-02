@@ -97,7 +97,7 @@ Para que los clientes (la app móvil y el frontend de React) puedan comunicarse 
 4.  **Ejecuta el Frontend:**
     ```bash
     npm start 
-    # o npm run dev si usas Vite
+    # o npm run dev
     ```
     Tu navegador se abrirá automáticamente en `http://localhost:3000`, mostrando la página web.
 
