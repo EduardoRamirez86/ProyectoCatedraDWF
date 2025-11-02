@@ -24,11 +24,11 @@ Este sistema dual da servicio tanto a la aplicación móvil **NOVA-e** como a la
 
 ### Frontend (Cliente Web - Puerto 3000)
 
-* **Framework:** React JS (usando Create React App o Vite).
-* **Gestión de Estado:** (Ej. Context API, Redux).
+* **Framework:** React JS (React App).
+* **Gestión de Estado:** (API).
 * **Enrutamiento:** React Router.
-* **Librería de Componentes:** (Ej. Material-UI, Bootstrap).
-* **Comunicación HTTP:** Axios o Fetch API.
+* **Librería de Componentes:** (Bootstrap).
+* **Comunicación HTTP:** Fetch API.
 
 ---
 
@@ -53,7 +53,7 @@ La API necesita una base de datos para funcionar.
 
 1.  **Crear la Base de Datos:** Abre tu cliente de MySQL (MySQL Workbench, DBeaver, etc.) y ejecuta:
     ```sql
-    CREATE DATABASE catedradwf;
+    CREATE DATABASE ecommerce_3;
     ```
 
 2.  **Configurar la Conexión de la API:** Abre el archivo **`application.properties`** en el proyecto de backend (`src/main/resources/`). Asegúrate de que las credenciales (`url`, `username`, `password`) coincidan con tu configuración local de MySQL.
