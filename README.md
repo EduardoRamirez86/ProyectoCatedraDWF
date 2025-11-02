@@ -1,4 +1,4 @@
-# Proyecto de Cátedra DWF -
+# Proyecto de Cátedra DWF - Ecommerce
 
 Este repositorio contiene el código fuente de la API REST desarrollada en Spring Boot. Esta API gestiona la lógica de negocio, la persistencia de datos y la autenticación para la aplicación de E-commerce "NOVA-e y una pagina WEB "Ecommerce" con react js".
 
