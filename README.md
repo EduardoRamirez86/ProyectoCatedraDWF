@@ -1,18 +1,57 @@
-Proyecto de Cátedra DWF - API REST (NOVA-e)Este repositorio contiene el código fuente de la API REST desarrollada en Spring Boot para el proyecto de la cátedra de Desarrollo Web Full-Stack. Esta API gestiona la lógica de negocio, la persistencia de datos y la autenticación para la aplicación de E-commerce "NOVA-e".Características Principales•Framework: Spring Boot 3•Seguridad: Spring Security con autenticación basada en JSON Web Tokens (JWT).•Base de Datos: MySQL.•ORM: Spring Data JPA (Hibernate).•Validación: spring-boot-starter-validation para DTOs.•Mapeo de Objetos: MapStruct para una conversión eficiente y limpia entre Entidades y DTOs.•Documentación: (Opcional, pero recomendado) Springdoc OpenAPI para generar documentación Swagger UI.🚀 Guía de Inicio Rápido: Pasos para Ejecutar el ProyectoPara poner en marcha la API en tu entorno local, sigue estos pasos sagrados al pie de la letra.1. PrerrequisitosAsegúrate de tener instalado el siguiente software en tu sistema:•Java Development Kit (JDK): Versión 17 o superior.•Apache Maven: Versión 3.6 o superior (para la gestión de dependencias y construcción del proyecto).•MySQL Server: Versión 8 o superior.•Ngrok: Una cuenta (incluso la gratuita) y el ejecutable de Ngrok descargado.•Un IDE: Como IntelliJ IDEA o Visual Studio Code con las extensiones de Java.2. Configuración de la Base de Datos MySQLLa API necesita una base de datos para funcionar.1.Crear la Base de Datos: Abre tu cliente de MySQL (MySQL Workbench, DBeaver, o la línea de comandos) y ejecuta la siguiente instrucción para crear una base de datos vacía.CREATE DATABASE nova_e_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;2.Configurar la Conexión: Abre el archivo application.properties que se encuentra en src/main/resources/. Busca la sección de spring.datasource y asegúrate de que las credenciales coincidan con tu configuración local de MySQL.Propertiesproperties
-    # ===============================================
-    # =        CONFIGURACIÓN DE BASE DE DATOS       =
-    # ===============================================
-    spring.datasource.url=jdbc:mysql://localhost:3306/nova_e_db?useSSL=false&serverTimezone=UTC
-    spring.datasource.username=root # <-- ¡PON TU USUARIO DE MYSQL AQUÍ!
-    spring.datasource.password=tu_contraseña_secreta # <-- ¡PON TU CONTRASEÑA DE MYSQL AQUÍ!
+# Proyecto de Cátedra DWF - API REST (NOVA-e)
 
-    # Configuración de JPA/Hibernate
-    spring.jpa.hibernate.ddl-auto=update # 'update' crea/actualiza el esquema al arrancar.
-    spring.jpa.show-sql=true # Muestra las queries SQL en la consola. Útil para depuración.bash git clone https://URL-DE-TU-REPOSITORIO.git cd ProyectoCatedraDWF ```2.Construye el Proyecto con Maven: Abre una terminal en la raíz del proyecto y ejecuta:Shell Scriptbash
-    git clone https://URL-DE-TU-REPOSITORIO.git
-    cd ProyectoCatedraDWFEsto descargará todas las dependencias y compilará el código.3.Ejecuta la Aplicación: Puedes hacerlo desde tu IDE (buscando la clase principal con el método main y ejecutándola) o directamente desde la terminal con Maven:mvn clean installSession Status                online
-Account                       tu_email@gmail.com (Plan: Free)
-Forwarding                    https://PALABRAS-ALEATORIAS.ngrok-free.dev -> http://localhost:8080
-```
+Este repositorio contiene el código fuente de la API REST desarrollada en Spring Boot para el proyecto de la cátedra de Desarrollo Web Full-Stack. Esta API gestiona la lógica de negocio, la persistencia de datos y la autenticación para la aplicación de E-commerce "NOVA-e".
 
-La URL `https://PALABRAS-ALEATORIAS.ngrok-free.dev` es la nueva dirección pública de tu API.4.Actualiza la Aplicación Cliente (Android): Copia esa URL y pégala en el archivo NetworkModule.kt de tu proyecto de Android, en la constante BASE_URL.¡ATENCIÓN! La versión gratuita de Ngrok genera una URL nueva cada vez que reinicias el túnel. Deberás repetir este último paso (actualizar la URL en la app de Android) cada vez que reinicies Ngrok.✅ ¡Listo para la Batalla!Si has seguido todos los pasos, tu ecosistema está completo:•Tu API está corriendo en localhost:8080.•Tu base de datos MySQL está conectada y poblada.•Ngrok está creando un puente desde una URL pública hasta tu API.•Tu aplicación móvil está configurada para usar esa URL pública.¡Tu sistema está operativo! ¡Tu orden ha sido ejecutada!
+## ✨ Características Principales
+
+- **Framework:** Spring Boot 3
+- **Seguridad:** Spring Security con autenticación basada en JSON Web Tokens (JWT).
+- **Base de Datos:** MySQL.
+- **ORM:** Spring Data JPA (Hibernate).
+- **Validación:** `spring-boot-starter-validation` para DTOs.
+- **Mapeo de Objetos:** MapStruct para una conversión eficiente y limpia entre Entidades y DTOs.
+
+---
+
+## 🚀 Guía de Inicio Rápido: Pasos para Ejecutar el Proyecto
+
+Para poner en marcha la API en tu entorno local, sigue estos pasos sagrados al pie de la letra.
+
+### 1. Prerrequisitos
+
+Asegúrate de tener instalado el siguiente software en tu sistema:
+
+- **Java Development Kit (JDK):** Versión 17 o superior.
+- **Apache Maven:** Versión 3.6 o superior (para la gestión de dependencias y construcción del proyecto).
+- **MySQL Server:** Versión 8 o superior.
+- **Ngrok:** Una cuenta (incluso la gratuita) y el ejecutable de [Ngrok](https://ngrok.com/download) descargado.
+- **Un IDE:** Como IntelliJ IDEA o Visual Studio Code con las extensiones de Java.
+
+### 2. Configuración de la Base de Datos MySQL
+
+La API necesita una base de datos para funcionar.
+
+1.  **Crear la Base de Datos:** Abre tu cliente de MySQL (MySQL Workbench, DBeaver, o la línea de comandos) y ejecuta la siguiente instrucción para crear una base de datos vacía.
+
+    
+2.  **Configurar la Conexión:** Abre el archivo `application.properties` que se encuentra en `src/main/resources/`. Busca la sección de `spring.datasource` y **asegúrate de que las credenciales coincidan con tu configuración local de MySQL**.
+
+    
+### 3. Inyección de Datos Iniciales (¡Importante!)
+
+Este proyecto utiliza un sistema para inyectar datos esenciales al arrancar la aplicación por primera vez (o cuando la base de datos está vacía). Estos datos incluyen:
+
+- Roles de usuario (`ROLE_USER`, `ROLE_ADMIN`).
+- Tipos de producto iniciales.
+- Un usuario administrador por defecto.
+
+No necesitas hacer nada para que esto funcione, pero **tenlo en mente**. Al ejecutar la aplicación, tus tablas `roles`, `tipo_producto` y `users` se poblarán automáticamente. Si vacías la base de datos, estos datos se reinsertarán en el siguiente arranque.
+
+### 4. Construir y Ejecutar la API
+
+1.  **Clona el Repositorio:**    
+2.  **Construye el Proyecto con Maven:** Abre una terminal en la raíz del proyecto y ejecuta:
+
+    Esto descargará todas las dependencias y compilará el código.
+3.  **Ejecuta la Aplicación:** Puedes hacerlo desde tu IDE (buscando la clase principal con el método `main` y ejecutándola) o directamente desde la terminal con Maven:
+    
