@@ -1,6 +1,6 @@
 # Proyecto de Cátedra DWF -
 
-Este repositorio contiene el código fuente de la API REST desarrollada en Spring Boot para el proyecto de la cátedra de Desarrollo Web Full-Stack. Esta API gestiona la lógica de negocio, la persistencia de datos y la autenticación para la aplicación de E-commerce "NOVA-e y una pagina WEB "Ecommerce" con react js".
+Este repositorio contiene el código fuente de la API REST desarrollada en Spring Boot. Esta API gestiona la lógica de negocio, la persistencia de datos y la autenticación para la aplicación de E-commerce "NOVA-e y una pagina WEB "Ecommerce" con react js".
 
 ## ✨ Características Principales
 
