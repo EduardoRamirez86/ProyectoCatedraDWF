@@ -8,7 +8,7 @@ import { BASE_API_URL } from '../config/apiConfig'; // <-- IMPORTAMOS LA URL BAS
 const BASE_URL_ROOT = BASE_API_URL.replace('/auth', ''); 
 
 // Construcción de los endpoints:
-const API_URL  = `${BASE_URL_ROOT}/producto`;     // Queda: https://...ngrok.dev/producto
+const API_URL  = `${BASE_URL_ROOT}/producto`;     // Queda: https://...ngrok.dev/producto
 const TIPO_URL = `${BASE_URL_ROOT}/tipoproducto`;
 
 const getToken = () => secureGetItem('token');
@@ -34,15 +34,14 @@ export const getAllProductosPaged = async (page = 0, size = 10) => {
   }
 
   const data = await resp.json();
-  // Igual que PedidoCrud: items, page, size, totalPages, totalElements
-  const items    = data._embedded?.productoResponseList || [];
+  const items    = data._embedded?.productoResponseList || [];
   const pageInfo = data.page || {};
 
   return {
     items,
-    page:          pageInfo.number     ?? 0,
-    size:          pageInfo.size       ?? size,
-    totalPages:    pageInfo.totalPages ?? 1,
+    page:          pageInfo.number     ?? 0,
+    size:          pageInfo.size       ?? size,
+    totalPages:    pageInfo.totalPages ?? 1,
     totalElements: pageInfo.totalElements ?? items.length,
   };
 };
@@ -66,7 +65,8 @@ export const getAllProductos = async () => {
 export const getRecommendedProductos = async (idUser) => {
   if (!idUser) return [];
 
-  const resp = await fetch(`http://localhost:8080/auth/producto/recomendados/${idUser}`);
+  // 🔴 CORRECCIÓN: Usar API_URL centralizada en lugar de localhost:8080
+  const resp = await fetch(`${API_URL}/recomendados/${idUser}`);
   
   if (resp.status === 204 || resp.status === 404) return [];
 
@@ -114,7 +114,7 @@ export const createProducto = async (producto) => {
   const resp = await fetch(API_URL, {
     method: 'POST',
     headers: {
-      'Content-Type':  'application/json',
+      'Content-Type':  'application/json',
       'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify(payload)
@@ -143,7 +143,7 @@ export const updateProducto = async (id, producto) => {
   const resp = await fetch(`${API_URL}/${id}`, {
     method: 'PUT',
     headers: {
-      'Content-Type':  'application/json',
+      'Content-Type':  'application/json',
       'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify(payload)
