@@ -10,6 +10,8 @@ import { secureSetItem, secureRemoveItem } from '../utils/secureStorage';
 export default function Login() {
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
+  // 1. AÑADIR ESTADO para controlar la visibilidad de la contraseña
+  const [showPassword, setShowPassword] = useState(false);
   const { userData, login } = useContext(AuthContext);
   const { setCarrito } = useContext(CartContext);
   const navigate = useNavigate();
@@ -119,12 +121,14 @@ export default function Login() {
             {/* Contraseña */}
             <div className="relative">
               <input
-                type="password"
+                // 3. CAMBIAR TIPO: dinámico basado en el estado
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                className="floating-input peer w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                // 2. AÑADIR pr-10: más padding a la derecha para que el texto no se solape con el icono
+                className="floating-input peer w-full px-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 placeholder=" "
                 required
               />
@@ -137,6 +141,22 @@ export default function Login() {
               >
                 <i className="fas fa-lock mr-2"></i>Contraseña
               </label>
+
+              {/* 4. AÑADIR BOTÓN TOGGLE */}
+              <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+                <button
+                  type="button" // Evita que el botón envíe el formulario
+                  onClick={() => setShowPassword(prev => !prev)}
+                  className="text-gray-500 hover:text-blue-600 focus:outline-none"
+                  title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                >
+                  {showPassword ? (
+                    <i className="fas fa-eye-slash"></i>
+                  ) : (
+                    <i className="fas fa-eye"></i>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Botón submit */}
