@@ -1,7 +1,16 @@
 import { secureGetItem } from '../utils/secureStorage';
+import { BASE_API_URL } from '../config/apiConfig'; // <-- IMPORTAMOS LA URL BASE
 
-const API_URL  = "http://localhost:8080/auth/producto";
-const TIPO_URL = "http://localhost:8080/auth/tipoproducto";
+// Paso 1: Definir las URLs base a partir de BASE_API_URL.
+// La mayoría de tus URLs empiezan con /auth/producto o /auth/tipoproducto.
+
+// Eliminamos '/auth' de BASE_API_URL para obtener la base: https://figurately-sinuous-isla.ngrok-free.dev
+const BASE_URL_ROOT = BASE_API_URL.replace('/auth', ''); 
+
+// Construcción de los endpoints:
+const API_URL  = `${BASE_URL_ROOT}/producto`;     // Queda: https://...ngrok.dev/producto
+const TIPO_URL = `${BASE_URL_ROOT}/tipoproducto`;
+
 const getToken = () => secureGetItem('token');
 
 /**
