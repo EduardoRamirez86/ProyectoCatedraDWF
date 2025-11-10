@@ -11,8 +11,8 @@ import sv.edu.udb.InvestigacionDwf.model.entity.TipoProducto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-10-29T23:32:07-0600",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.15 (Eclipse Adoptium)"
+    date = "2025-11-10T10:32:09-0600",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 17.0.14 (JetBrains s.r.o.)"
 )
 @Component
 public class ProductoMapperImpl extends ProductoMapper {

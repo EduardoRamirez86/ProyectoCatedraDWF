@@ -2,6 +2,7 @@ import { secureGetItem } from '../utils/secureStorage';
 
 const API_URL = "http://localhost:8080/auth/pedido";
 
+
 const handleResponse = async (resp) => {
   const contentType = resp.headers.get("content-type");
   const isJson = contentType && contentType.includes("application/json");
