@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
-import { getAllProductosPaged, createProducto, updateProducto, deleteProducto } from "../services/productoService";
+// 1. Importar el servicio 'getAllTiposProductos'
+import { 
+  getAllProductosPaged, 
+  createProducto, 
+  updateProducto, 
+  deleteProducto,
+  getAllTiposProductos // <-- IMPORTADO
+} from "../services/productoService";
 import { AuthContext } from "../context/AuthContext";
 
 export default function ProductoCrud() {
@@ -13,17 +20,19 @@ export default function ProductoCrud() {
   const [size] = useState(10);
   const [search, setSearch] = useState("");
 
+  // 2. Nuevo estado para almacenar los tipos de producto
+  const [tiposProducto, setTiposProducto] = useState([]);
+
   const { userData } = useContext(AuthContext);
   const roles = Array.isArray(userData?.roles) ? userData.roles : [userData?.roles];
   const isAdmin = roles.includes("ROLE_ADMIN");
 
-  // --- Lógica de paginación igual a PedidoCrud ---
+  // --- Lógica de paginación
   const fetchProductos = async (pageNum = 0) => {
     setLoading(true);
     setError(null);
     try {
       const result = await getAllProductosPaged(pageNum, size);
-      // result: { items, page, size, totalPages, totalElements }
       setProductos(result.items || []);
       setPage(result.page ?? 0);
       setTotalPages(result.totalPages ?? 1);
@@ -33,11 +42,30 @@ export default function ProductoCrud() {
       setLoading(false);
     }
   };
+  
+  // 3. Nueva función para cargar los tipos de producto
+  const fetchTiposProducto = async () => {
+    try {
+        const data = await getAllTiposProductos();
+        // Asumimos que 'data' es el array de tipos.
+        // Si 'data' es un objeto HATEOAS, necesitarías: data._embedded?.tipoProductoList || []
+        setTiposProducto(data); 
+    } catch (err) {
+        console.error("Error al cargar Tipos de Producto:", err.message);
+        // Opcional: Mostrar un error al usuario
+        // setError("Error al cargar tipos de producto: " + err.message); 
+    }
+  };
 
   useEffect(() => {
     fetchProductos(page);
     // eslint-disable-next-line
   }, [page, size]);
+
+  // 4. Nuevo useEffect para cargar los tipos al montar el componente
+  useEffect(() => {
+    fetchTiposProducto();
+  }, []); // El array vacío asegura que se ejecute solo una vez
 
   const handleEdit = (producto) => {
     if (!isAdmin) return;
@@ -76,7 +104,8 @@ export default function ProductoCrud() {
         (p.nombre || "").toLowerCase().includes(search.toLowerCase())
       )
     : productos;
-
+    
+  // Ajustar el 'loading' para esperar ambas cargas si es necesario
   if (loading) return <p className="text-center">Cargando productos...</p>;
   if (error)   return <p className="text-center text-red-500">{error}</p>;
 
@@ -199,18 +228,27 @@ export default function ProductoCrud() {
           producto={editProducto}
           onClose={() => setModalOpen(false)}
           onSave={async prod => {
-            if (prod.idProducto) await updateProducto(prod.idProducto, prod);
-            else              await createProducto(prod);
-            setModalOpen(false);
-            fetchProductos(page);
+            try { // <-- Añadido try/catch para manejar errores del modal
+              if (prod.idProducto) await updateProducto(prod.idProducto, prod);
+              else                 await createProducto(prod);
+              
+              setModalOpen(false);
+              fetchProductos(page); // Recargar la tabla
+            } catch (err) {
+              alert("Error al guardar: " + err.message); // Mostrar error si el guardado falla
+            }
           }}
-          tiposProducto={[]} // Si tienes tipos, pásalos aquí
+          // 5. Pasar el estado de tipos al modal
+          tiposProducto={tiposProducto} 
         />
       )}
     </div>
   );
 }
 
+// ----------------------------------------------------
+//          COMPONENTE MODAL (SIN CAMBIOS)
+// ----------------------------------------------------
 function ProductoModal({ producto, onClose, onSave, tiposProducto }) {
   const [form, setForm] = useState(
     producto || {
@@ -221,17 +259,16 @@ function ProductoModal({ producto, onClose, onSave, tiposProducto }) {
       cantidad: "",
       imagen: "",
       cantidadPuntos: "",
-      idTipoProducto: "",
+      idTipoProducto: "", // Esto debe coincidir con el valor del <option>
     }
   );
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
-  const handleTipoChange = (e) => {
-    setForm({ ...form, idTipoProducto: e.target.value });
-  };
+  
+  // 'handleTipoChange' no es necesario si usas 'handleChange' 
+  // en el select y el 'name' es "idTipoProducto"
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -326,16 +363,18 @@ function ProductoModal({ producto, onClose, onSave, tiposProducto }) {
           <div>
             <label className="block text-sm font-medium mb-1">Tipo de Producto</label>
             <select
-              name="idTipoProducto"
+              name="idTipoProducto" // <-- Asegúrate que el 'name' coincida
               value={form.idTipoProducto}
-              onChange={handleTipoChange}
+              onChange={handleChange} // <-- Usa handleChange normal
               className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
               required
             >
               <option value="">Selecciona un tipo</option>
+              {/* 6. Renderizar las opciones desde la prop */}
               {tiposProducto && tiposProducto.map(tp => (
                 <option key={tp.idTipoProducto} value={tp.idTipoProducto}>
-                  {tp.nombre}
+                  {/* Asumiendo que el campo se llama 'tipo' según tu mapper */}
+                  {tp.tipo || tp.nombre} 
                 </option>
               ))}
             </select>
